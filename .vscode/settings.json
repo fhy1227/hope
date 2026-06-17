@@ -1,0 +1,13 @@
+{
+  "files.exclude": {
+    "**/*.uid": true
+  },
+  "search.exclude": {
+    "**/*.uid": true
+  },
+  "editor.formatOnSave": true,
+  "[csharp]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-dotnettools.csharp"
+  }
+}

@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cprojectile01"]
+
+[ext_resource type="Script" path="res://scripts/entities/Projectile.cs" id="1_proj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_proj"]
+radius = 5.0
+
+[node name="Projectile" type="Area2D"]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_proj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_proj")
+
+[node name="Visual" type="Polygon2D" parent="."]
+color = Color(1, 0.9, 0.3, 1)
+polygon = PackedVector2Array(-5, 0, 0, -4, 8, 0, 0, 4)

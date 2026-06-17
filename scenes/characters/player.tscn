@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://cplayer001"]
+
+[ext_resource type="Script" path="res://scripts/entities/Player.cs" id="1_player"]
+[ext_resource type="Script" path="res://scripts/components/HealthComponent.cs" id="2_health"]
+[ext_resource type="Script" path="res://scripts/components/WeaponComponent.cs" id="3_weapon"]
+[ext_resource type="PackedScene" uid="uid://cprojectile01" path="res://scenes/entities/projectile.tscn" id="4_projectile"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(24, 24)
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 1
+collision_mask = 2
+script = ExtResource("1_player")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="Visual" type="Polygon2D" parent="."]
+color = Color(0.34902, 0.713725, 1, 1)
+polygon = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_health")
+MaxHealth = 10
+
+[node name="WeaponComponent" type="Node" parent="."]
+script = ExtResource("3_weapon")
+ProjectileScene = ExtResource("4_projectile")
+ProjectileContainerPath = NodePath("../../../Projectiles")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true

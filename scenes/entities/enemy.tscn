@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cenemy001"]
+
+[ext_resource type="Script" uid="uid://bv2u2n0clw6cq" path="res://scripts/entities/Enemy.cs" id="1_enemy"]
+[ext_resource type="Script" uid="uid://dne76t0demnsa" path="res://scripts/components/HealthComponent.cs" id="2_health"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_enemy"]
+size = Vector2(22, 22)
+
+[node name="Enemy" type="CharacterBody2D" unique_id=1438416656]
+collision_layer = 2
+script = ExtResource("1_enemy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=345678040]
+shape = SubResource("RectangleShape2D_enemy")
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=1051946009]
+color = Color(0.95, 0.35, 0.35, 1)
+polygon = PackedVector2Array(-11, -11, 11, -11, 11, 11, -11, 11)
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1363926979]
+script = ExtResource("2_health")

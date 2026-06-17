@@ -1,0 +1,13 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# C# / .NET
+.mono/
+data_*/
+mono_crash.*
+*.dll
+*.pdb
+bin/
+obj/
+.vs/

@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cgameworld01"]
+
+[ext_resource type="Script" path="res://scripts/systems/GameWorld.cs" id="1_gw"]
+[ext_resource type="Script" path="res://scripts/systems/RunManager.cs" id="2_run"]
+[ext_resource type="Script" path="res://scripts/systems/WaveManager.cs" id="3_wave"]
+[ext_resource type="Script" path="res://scripts/systems/EnemySpawner.cs" id="4_spawner"]
+[ext_resource type="PackedScene" uid="uid://cplayer001" path="res://scenes/characters/player.tscn" id="5_player"]
+[ext_resource type="PackedScene" uid="uid://cenemy001" path="res://scenes/entities/enemy.tscn" id="6_enemy"]
+[ext_resource type="PackedScene" uid="uid://cpickup001" path="res://scenes/entities/pickup.tscn" id="7_pickup"]
+
+[node name="GameWorld" type="Node2D"]
+script = ExtResource("1_gw")
+
+[node name="Background" type="Polygon2D" parent="."]
+color = Color(0.12, 0.14, 0.18, 1)
+polygon = PackedVector2Array(-1200, -1200, 1200, -1200, 1200, 1200, -1200, 1200)
+
+[node name="Entities" type="Node2D" parent="."]
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Projectiles" type="Node2D" parent="."]
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="RunManager" type="Node" parent="."]
+script = ExtResource("2_run")
+PlayerScene = ExtResource("5_player")
+PickupScene = ExtResource("7_pickup")
+PlayerContainerPath = NodePath("../Entities")
+PickupContainerPath = NodePath("../Pickups")
+
+[node name="WaveManager" type="Node" parent="RunManager"]
+script = ExtResource("3_wave")
+
+[node name="EnemySpawner" type="Node" parent="RunManager"]
+script = ExtResource("4_spawner")
+EnemyScene = ExtResource("6_enemy")
+EnemyContainerPath = NodePath("../../Enemies")
