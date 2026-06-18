@@ -35,3 +35,4 @@ script = ExtResource("3_wave")
 script = ExtResource("4_spawner")
 EnemyScene = ExtResource("6_enemy")
 EnemyContainerPath = NodePath("../../Enemies")
+BaseSpawnInterval = 1.2

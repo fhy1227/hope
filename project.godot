@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="hope"
-run/main_scene="uid://bec7ds7r6b4js"
+run/main_scene="uid://cmainmenu01"
 config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -20,11 +20,6 @@ config/icon="res://icon.svg"
 EventBus="*res://scripts/autoload/EventBus.cs"
 GameManager="*res://scripts/autoload/GameManager.cs"
 AudioManager="*res://scripts/autoload/AudioManager.cs"
-UIManager="*res://addons/GodotUIFramework/source/ui_manager.gd"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/GodotUIFramework/plugin.cfg")
 
 [dotnet]
 

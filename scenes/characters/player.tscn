@@ -1,33 +1,44 @@
 [gd_scene format=3 uid="uid://cplayer001"]
 
-[ext_resource type="Script" path="res://scripts/entities/Player.cs" id="1_player"]
-[ext_resource type="Script" path="res://scripts/components/HealthComponent.cs" id="2_health"]
-[ext_resource type="Script" path="res://scripts/components/WeaponComponent.cs" id="3_weapon"]
-[ext_resource type="PackedScene" uid="uid://cprojectile01" path="res://scenes/entities/projectile.tscn" id="4_projectile"]
+[ext_resource type="Script" uid="uid://cjdxfm25rk550" path="res://scripts/entities/Player.cs" id="1_player"]
+[ext_resource type="Script" uid="uid://dne76t0demnsa" path="res://scripts/components/HealthComponent.cs" id="2_health"]
+[ext_resource type="Script" uid="uid://b1g2ct6e7aki" path="res://scripts/components/PlayerWeaponController.cs" id="3_weapons"]
+[ext_resource type="PackedScene" uid="uid://cweaponslot1" path="res://scenes/weapons/weapon_slot.tscn" id="4_slot"]
+[ext_resource type="PackedScene" uid="uid://cprojectile01" path="res://scenes/entities/projectile.tscn" id="5_projectile"]
+[ext_resource type="PackedScene" uid="uid://dmjoh412e01lx" path="res://scenes/ui/unit_health_bar.tscn" id="6_healthbar"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(24, 24)
 
-[node name="Player" type="CharacterBody2D"]
-collision_layer = 1
+[node name="Player" type="CharacterBody2D" unique_id=819641215]
 collision_mask = 2
 script = ExtResource("1_player")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1418928993]
 shape = SubResource("RectangleShape2D_player")
 
-[node name="Visual" type="Polygon2D" parent="."]
+[node name="Visual" type="Polygon2D" parent="." unique_id=908346654]
 color = Color(0.34902, 0.713725, 1, 1)
 polygon = PackedVector2Array(-12, -12, 12, -12, 12, 12, -12, 12)
 
-[node name="HealthComponent" type="Node" parent="."]
+[node name="HealthComponent" type="Node" parent="." unique_id=649574742]
 script = ExtResource("2_health")
 MaxHealth = 10
 
-[node name="WeaponComponent" type="Node" parent="."]
-script = ExtResource("3_weapon")
-ProjectileScene = ExtResource("4_projectile")
-ProjectileContainerPath = NodePath("../../../Projectiles")
+[node name="UnitHealthBar" parent="." unique_id=498570480 instance=ExtResource("6_healthbar")]
+BarSize = Vector2(32, 5)
+YOffset = -20.0
+FillColor = Color(0.35, 0.85, 1, 1)
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="WeaponSlots" type="Node2D" parent="." unique_id=2078125436]
+script = ExtResource("3_weapons")
+ProjectileScene = ExtResource("5_projectile")
+
+[node name="Slot0" parent="WeaponSlots" unique_id=148000165 instance=ExtResource("4_slot")]
+SlotOffset = Vector2(-22, -6)
+
+[node name="Slot1" parent="WeaponSlots" unique_id=922194646 instance=ExtResource("4_slot")]
+SlotOffset = Vector2(22, -6)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=53454829]
 position_smoothing_enabled = true

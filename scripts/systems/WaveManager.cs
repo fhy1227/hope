@@ -7,11 +7,6 @@ namespace Hope.Systems;
 /// </summary>
 public partial class WaveManager : Node
 {
-    public override void _Ready()
-    {
-        ProcessMode = ProcessModeEnum.Always;
-    }
-
     [Export]
     public float WaveDuration { get; set; } = 20f;
 
@@ -22,9 +17,16 @@ public partial class WaveManager : Node
     public float TimeRemaining { get; private set; }
     public bool IsRunning { get; private set; }
 
+    private bool _gamePaused;
+
+    public void SetPaused(bool paused)
+    {
+        _gamePaused = paused;
+    }
+
     public override void _Process(double delta)
     {
-        if (!IsRunning)
+        if (!IsRunning || _gamePaused)
         {
             return;
         }

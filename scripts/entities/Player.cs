@@ -14,7 +14,7 @@ public partial class Player : CharacterBody2D
 
 	private StateMachine _stateMachine;
 	private HealthComponent _health;
-	private WeaponComponent _weapon;
+	private PlayerWeaponController _weapons;
 	private RunStats _stats = new();
 	private float _invincibilityTimer;
 
@@ -26,14 +26,15 @@ public partial class Player : CharacterBody2D
 
 		_health = GetNode<HealthComponent>("HealthComponent");
 		_health.IsPlayer = true;
-		_weapon = GetNode<WeaponComponent>("WeaponComponent");
+		_weapons = GetNode<PlayerWeaponController>("WeaponSlots");
 	}
 
 	public void Initialize(RunStats stats)
 	{
 		_stats = stats;
 		ApplyStats(stats, refillHealth: true);
-		_weapon.BindStats(_stats);
+		_weapons.SetupDefaultLoadout();
+		_weapons.BindStats(_stats);
 
 		_health.Died += OnDied;
 
@@ -48,7 +49,7 @@ public partial class Player : CharacterBody2D
 		_stats = stats;
 		Speed = stats.Speed;
 		_health.SetMaxHealth(stats.MaxHealth, refillHealth);
-		_weapon.BindStats(_stats);
+		_weapons.BindStats(_stats);
 	}
 
 	public override void _PhysicsProcess(double delta)

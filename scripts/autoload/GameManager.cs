@@ -28,7 +28,7 @@ public partial class GameManager : Node
 
     public override void _Ready()
     {
-        ChangeState(GameState.Playing);
+        ChangeState(GameState.Boot);
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -66,11 +66,11 @@ public partial class GameManager : Node
 
     public void ChangeScene(string path)
     {
-        CallDeferred(SceneTree.MethodName.ChangeSceneToFile, path);
+        GetTree().CallDeferred(SceneTree.MethodName.ChangeSceneToFile, path);
     }
 
     public void ReloadCurrentScene()
     {
-        CallDeferred(SceneTree.MethodName.ReloadCurrentScene);
+        GetTree().CallDeferred(SceneTree.MethodName.ReloadCurrentScene);
     }
 }

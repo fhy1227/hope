@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cgamehud01"]
+[gd_scene load_steps=2 format=3 uid="uid://cgamehud01"]
 
 [ext_resource type="Script" path="res://scripts/ui/GameHud.cs" id="1_hud"]
-[ext_resource type="Script" path="res://addons/GodotUIFramework/source/core/components/ui_scene_component.gd" id="2_scene"]
 
 [node name="GameHud" type="Control"]
 layout_mode = 3
@@ -53,6 +52,3 @@ text = "金币 0"
 unique_name_in_owner = true
 layout_mode = 2
 text = "战斗中"
-
-[node name="UISceneComponent" type="Node" parent="."]
-script = ExtResource("2_scene")

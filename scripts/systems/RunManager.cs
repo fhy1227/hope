@@ -25,9 +25,9 @@ public partial class RunManager : Node
 
 	private WaveManager? _waveManager;
 	private EnemySpawner? _enemySpawner;
-	private Node2D? _playerContainer;
-	private Node2D? _pickupContainer;
-	private Player? _player;
+	private Node2D _playerContainer;
+	private Node2D _pickupContainer;
+	private Player _player;
 	private RunStats _stats = new();
 	private RunPhase _phase = RunPhase.Combat;
 
@@ -36,8 +36,9 @@ public partial class RunManager : Node
 
 	public override void _Ready()
 	{
+		GameManager.Instance?.ChangeState(GameState.Playing);
+
 		AddToGroup("run_manager");
-		ProcessMode = ProcessModeEnum.Always;
 
 		_waveManager = GetNode<WaveManager>("WaveManager");
 		_enemySpawner = GetNode<EnemySpawner>("EnemySpawner");
@@ -47,6 +48,7 @@ public partial class RunManager : Node
 		_waveManager.WaveCompleted += OnWaveCompleted;
 		_enemySpawner.EnemyDefeated += OnEnemyDefeated;
 		Hope.EventBus.Instance!.PlayerDied += OnPlayerDied;
+		Hope.EventBus.Instance.GameStateChanged += OnGameStateChanged;
 
 		SpawnPlayer();
 		StartNextWave();
@@ -57,7 +59,15 @@ public partial class RunManager : Node
 		if (Hope.EventBus.Instance != null)
 		{
 			Hope.EventBus.Instance.PlayerDied -= OnPlayerDied;
+			Hope.EventBus.Instance.GameStateChanged -= OnGameStateChanged;
 		}
+	}
+
+	private void OnGameStateChanged(int state)
+	{
+		var paused = (GameState)state == GameState.Paused;
+		_waveManager?.SetPaused(paused);
+		_enemySpawner?.SetPaused(paused);
 	}
 
 	public IReadOnlyList<ShopUpgrade> RollShopOptions(int count = 3)

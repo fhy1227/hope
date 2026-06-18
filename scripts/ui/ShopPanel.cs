@@ -9,7 +9,6 @@ namespace Hope.UI;
 /// </summary>
 public partial class ShopPanel : PanelContainer
 {
-    private Node _sceneComponent = null!;
     private VBoxContainer _optionsBox = null!;
     private Label _titleLabel = null!;
     private RunManager? _runManager;
@@ -18,7 +17,6 @@ public partial class ShopPanel : PanelContainer
     {
         ProcessMode = ProcessModeEnum.Always;
 
-        _sceneComponent = GetNode("UISceneComponent");
         _optionsBox = GetNode<VBoxContainer>("%OptionsBox");
         _titleLabel = GetNode<Label>("%TitleLabel");
 
@@ -26,8 +24,20 @@ public partial class ShopPanel : PanelContainer
         ZIndex = 100;
         MouseFilter = MouseFilterEnum.Ignore;
 
-        _sceneComponent.Connect("shown", Callable.From(OnShown));
         CallDeferred(MethodName.BindRunManager);
+
+        if (EventBus.Instance != null)
+        {
+            EventBus.Instance.RunPhaseChanged += OnRunPhaseChanged;
+        }
+    }
+
+    public override void _ExitTree()
+    {
+        if (EventBus.Instance != null)
+        {
+            EventBus.Instance.RunPhaseChanged -= OnRunPhaseChanged;
+        }
     }
 
     private void BindRunManager()
@@ -36,10 +46,28 @@ public partial class ShopPanel : PanelContainer
         if (_runManager == null)
         {
             GD.PushError("ShopPanel: RunManager not found.");
+            return;
+        }
+
+        if (_runManager.Phase == RunPhase.Shop)
+        {
+            ShowShop();
         }
     }
 
-    private void OnShown()
+    private void OnRunPhaseChanged(int phase)
+    {
+        if ((RunPhase)phase == RunPhase.Shop)
+        {
+            ShowShop();
+            return;
+        }
+
+        Visible = false;
+        MouseFilter = MouseFilterEnum.Ignore;
+    }
+
+    private void ShowShop()
     {
         RefreshOptions();
         Visible = true;

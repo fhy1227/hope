@@ -31,6 +31,7 @@ public partial class EnemySpawner : Node
     private float _spawnTimer;
     private int _wave;
     private bool _active;
+    private bool _gamePaused;
 
     public override void _Ready()
     {
@@ -54,9 +55,14 @@ public partial class EnemySpawner : Node
         _active = false;
     }
 
+    public void SetPaused(bool paused)
+    {
+        _gamePaused = paused;
+    }
+
     public override void _PhysicsProcess(double delta)
     {
-        if (!_active || EnemyScene == null || _player == null)
+        if (!_active || _gamePaused || EnemyScene == null || _player == null)
         {
             return;
         }

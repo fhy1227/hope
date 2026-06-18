@@ -1,0 +1,300 @@
+using System.Collections.Generic;
+using Godot;
+using Hope.Core;
+using Hope.Entities;
+
+namespace Hope.Components;
+
+/// <summary>
+/// 单个武器槽：视图朝向目标，远程开火 / 近战挥砍或直刺。
+/// </summary>
+public partial class WeaponSlot : Node2D
+{
+    [Export]
+    public Vector2 SlotOffset { get; set; } = Vector2.Right * 20f;
+
+    private Node2D _pivot = null!;
+    private Polygon2D _rangedVisual = null!;
+    private Polygon2D _meleeVisual = null!;
+    private Marker2D _muzzle = null!;
+    private Area2D _meleeHitbox = null!;
+    private CollisionShape2D _meleeShape = null!;
+
+    private Node2D _owner = null!;
+    private Node2D _projectileContainer = null!;
+    private RunStats _stats = new();
+    private WeaponData? _weapon;
+    private float _cooldown;
+    private bool _attacking;
+    private readonly HashSet<ulong> _hitThisSwing = [];
+
+    public WeaponData? EquippedWeapon => _weapon;
+
+    public override void _Ready()
+    {
+        _pivot = GetNode<Node2D>("Pivot");
+        _rangedVisual = GetNode<Polygon2D>("Pivot/RangedVisual");
+        _meleeVisual = GetNode<Polygon2D>("Pivot/MeleeVisual");
+        _muzzle = GetNode<Marker2D>("Pivot/Muzzle");
+        _meleeHitbox = GetNode<Area2D>("Pivot/MeleeHitbox");
+        _meleeShape = GetNode<CollisionShape2D>("Pivot/MeleeHitbox/CollisionShape2D");
+
+        _meleeHitbox.Monitoring = false;
+        _meleeHitbox.BodyEntered += OnMeleeBodyEntered;
+        _meleeHitbox.AreaEntered += OnMeleeAreaEntered;
+
+        Position = SlotOffset;
+        SetPhysicsProcess(true);
+    }
+
+    public void Initialize(Node2D owner, Node2D projectileContainer)
+    {
+        _owner = owner;
+        _projectileContainer = projectileContainer;
+    }
+
+    public void Equip(WeaponData weapon)
+    {
+        _weapon = weapon;
+        _cooldown = 0f;
+        _attacking = false;
+        _meleeHitbox.Monitoring = false;
+
+        _rangedVisual.Visible = weapon.Type == WeaponType.Ranged;
+        _meleeVisual.Visible = weapon.Type == WeaponType.Melee;
+
+        var visual = weapon.Type == WeaponType.Ranged ? (CanvasItem)_rangedVisual : _meleeVisual;
+        visual.Modulate = weapon.VisualColor;
+
+        if (weapon.Type == WeaponType.Melee)
+        {
+            ConfigureMeleeHitbox(weapon);
+        }
+    }
+
+    public void BindStats(RunStats stats)
+    {
+        _stats = stats;
+    }
+
+    public override void _PhysicsProcess(double delta)
+    {
+        if (_weapon == null || _owner == null)
+        {
+            return;
+        }
+
+        if (!_attacking)
+        {
+            AimAtNearestTarget();
+        }
+
+        if (_attacking)
+        {
+            return;
+        }
+
+        _cooldown -= (float)delta;
+        if (_cooldown > 0f)
+        {
+            return;
+        }
+
+        var target = FindNearestEnemy();
+        if (target == null)
+        {
+            return;
+        }
+
+        if (_weapon.Type == WeaponType.Ranged)
+        {
+            FireRanged(target);
+        }
+        else
+        {
+            StartMeleeAttack(target);
+        }
+
+        _cooldown = GetAttackInterval();
+    }
+
+    private void AimAtNearestTarget()
+    {
+        var target = FindNearestEnemy();
+        if (target == null)
+        {
+            return;
+        }
+
+        var direction = target.GlobalPosition - _pivot.GlobalPosition;
+        if (direction.LengthSquared() < 0.01f)
+        {
+            return;
+        }
+
+        _pivot.Rotation = direction.Angle();
+    }
+
+    private float GetAttackRange()
+    {
+        if (_weapon == null)
+        {
+            return 0f;
+        }
+
+        return _weapon.Type == WeaponType.Ranged
+            ? _stats.WeaponRange * (_weapon.Range / 340f)
+            : _weapon.Range;
+    }
+
+    private float GetAttackInterval()
+    {
+        var speed = Mathf.Max(_stats.AttackSpeed * _weapon!.AttackSpeedScale, 0.1f);
+        return 1f / speed;
+    }
+
+    private int GetDamage()
+    {
+        return Mathf.Max(1, Mathf.RoundToInt(_stats.Damage * _weapon!.DamageScale));
+    }
+
+    private Node2D? FindNearestEnemy()
+    {
+        var enemies = GetTree().GetNodesInGroup("enemies");
+        Node2D? nearest = null;
+        var range = GetAttackRange();
+        var bestDistance = range * range;
+
+        foreach (var node in enemies)
+        {
+            if (node is not Node2D enemy || !GodotObject.IsInstanceValid(enemy))
+            {
+                continue;
+            }
+
+            var distance = _owner.GlobalPosition.DistanceSquaredTo(enemy.GlobalPosition);
+            if (distance > bestDistance)
+            {
+                continue;
+            }
+
+            bestDistance = distance;
+            nearest = enemy;
+        }
+
+        return nearest;
+    }
+
+    private void FireRanged(Node2D target)
+    {
+        if (_weapon?.ProjectileScene == null)
+        {
+            return;
+        }
+
+        var direction = target.GlobalPosition - _muzzle.GlobalPosition;
+        if (direction.LengthSquared() < 0.01f)
+        {
+            return;
+        }
+
+        var projectile = _weapon.ProjectileScene.Instantiate<Projectile>();
+        _projectileContainer.AddChild(projectile);
+        projectile.GlobalPosition = _muzzle.GlobalPosition;
+        projectile.Launch(direction, _stats.ProjectileSpeed, GetDamage());
+    }
+
+    private void StartMeleeAttack(Node2D target)
+    {
+        if (_weapon == null)
+        {
+            return;
+        }
+
+        _attacking = true;
+        _hitThisSwing.Clear();
+
+        var direction = (target.GlobalPosition - _pivot.GlobalPosition).Normalized();
+        var baseAngle = direction.Angle();
+        _pivot.Rotation = baseAngle;
+
+        _meleeHitbox.Monitoring = true;
+
+        var tween = CreateTween();
+        if (_weapon.MeleeStyle == MeleeStyle.Swing)
+        {
+            tween.TweenProperty(_pivot, "rotation", baseAngle + Mathf.DegToRad(55f), 0.07)
+                .SetTrans(Tween.TransitionType.Quad)
+                .SetEase(Tween.EaseType.Out);
+            tween.TweenProperty(_pivot, "rotation", baseAngle - Mathf.DegToRad(25f), 0.09)
+                .SetTrans(Tween.TransitionType.Quad)
+                .SetEase(Tween.EaseType.InOut);
+            tween.TweenProperty(_pivot, "rotation", baseAngle, 0.05);
+        }
+        else
+        {
+            var startPos = Vector2.Zero;
+            var thrust = Vector2.FromAngle(baseAngle) * 22f;
+            tween.TweenProperty(_pivot, "position", thrust, 0.06)
+                .SetTrans(Tween.TransitionType.Quad)
+                .SetEase(Tween.EaseType.Out);
+            tween.TweenProperty(_pivot, "position", startPos, 0.08)
+                .SetTrans(Tween.TransitionType.Quad)
+                .SetEase(Tween.EaseType.In);
+        }
+
+        tween.Finished += EndMeleeAttack;
+    }
+
+    private void EndMeleeAttack()
+    {
+        _meleeHitbox.Monitoring = false;
+        _attacking = false;
+        _pivot.Position = Vector2.Zero;
+    }
+
+    private void ConfigureMeleeHitbox(WeaponData weapon)
+    {
+        if (_meleeShape.Shape is not RectangleShape2D rectangle)
+        {
+            return;
+        }
+
+        if (weapon.MeleeStyle == MeleeStyle.Thrust)
+        {
+            rectangle.Size = new Vector2(weapon.Range * 0.85f, 14f);
+            _meleeShape.Position = new Vector2(weapon.Range * 0.42f, 0f);
+        }
+        else
+        {
+            rectangle.Size = new Vector2(weapon.Range * 0.75f, 22f);
+            _meleeShape.Position = new Vector2(weapon.Range * 0.38f, 0f);
+        }
+    }
+
+    private void OnMeleeBodyEntered(Node2D body)
+    {
+        TryDamageEnemy(body);
+    }
+
+    private void OnMeleeAreaEntered(Area2D area)
+    {
+        TryDamageEnemy(area);
+    }
+
+    private void TryDamageEnemy(Node node)
+    {
+        if (!_attacking || node is not Enemy enemy)
+        {
+            return;
+        }
+
+        var id = enemy.GetInstanceId();
+        if (!_hitThisSwing.Add(id))
+        {
+            return;
+        }
+
+        enemy.GetNodeOrNull<HealthComponent>("HealthComponent")?.TakeDamage(GetDamage());
+    }
+}
