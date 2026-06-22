@@ -24,7 +24,7 @@ description: 从 tools/config/ 下的 xlsx 配置表生成 Hope.Config 命名空
 任务进度:
 - [ ] 1. 读取 xlsx 表头（Row 1-5）
 - [ ] 2. 确定类名与输出路径
-- [ ] 3. 生成属性与 XML 注释
+- [ ] 3. 生成属性与 XML 注释（含必须的 `Id` 主键字段）
 - [ ] 4. 生成 FromDict 反序列化逻辑
 - [ ] 5. 写入 `scripts/config/{Name}Config.cs`（输出目录固定为 `scripts/config/`）
 ```
@@ -71,6 +71,35 @@ for c in range(1, ws.max_column + 1):
 - 命名空间：`Hope.Config`
 - JSON 表名 = 类名去掉 `Config` 后转 snake_case（与 `ConfigManager` 一致）
 
+### Id 主键字段（必须）
+
+每个生成的 `*Config.cs` **必须**包含 `Id` 属性，作为配置行主键。
+
+| xlsx 字段名（Row 1） | C# 属性名 | FromDict 的 dict 键 |
+|---------------------|-----------|---------------------|
+| `id` | `Id` | `dict["id"]` |
+| `Id` | `Id` | `dict["Id"]` |
+| `ID` | `Id` | `dict["ID"]` |
+
+规则：
+
+- 识别主键列时，将 `id` / `Id` / `ID` 视为同一字段（大小写不敏感匹配）
+- C# 属性名**固定**为 `Id`，不按常规规则变成 `ID` 或其他形式
+- `FromDict` 中 `dict` 键必须使用 xlsx Row 1 的**原始字段名**（与 JSON 导出键一致），属性赋值到 `Id`
+- 类型通常跟随 xlsx Row 2（多为 `int`）；若表无主键列，应报错或向用户确认，不得省略 `Id`
+
+示例（xlsx 字段名为 `id`）：
+
+```csharp
+/// <summary>
+/// id
+/// </summary>
+public int Id { get; set; }
+
+// FromDict:
+Id = (int)dict["id"];
+```
+
 ### Step 3: 文件模板
 
 以 [scripts/config/ItemConfig.cs](scripts/config/ItemConfig.cs) 为基准：
@@ -110,6 +139,8 @@ public partial class {Name}Config : IConfigData
 ### snake_case → PascalCase
 
 `main_type` → `MainType`，`value_rewards` → `ValueRewards`。`dict` 键保持 snake_case。
+
+**例外：** 主键列 `id` / `Id` / `ID` 统一映射为 C# 属性 `Id`（见上文「Id 主键字段」）。
 
 ### comma 标签
 
@@ -199,6 +230,7 @@ else if (dict["extra"].VariantType == Variant.Type.String
 ## 生成后检查
 
 - [ ] 类名与 xlsx 对应，`partial class`，实现 `IConfigData`
+- [ ] **必须**包含 `Id` 属性；xlsx 的 `id` / `Id` / `ID` 列已正确映射，`FromDict` 使用原始 dict 键
 - [ ] 所有非 ignore 字段均有属性 + `FromDict` 赋值
 - [ ] `table` / `json` 字段使用 Godot 集合并处理 Array/String 双分支
 - [ ] `comma` 字段使用 C# 数组并遍历 `GodotArray`

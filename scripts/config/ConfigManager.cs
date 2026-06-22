@@ -11,6 +11,7 @@ namespace Hope.Config;
 /// </summary>
 public interface IConfigData
 {
+	int Id { get; set; }
 	void FromDict(GodotDictionary dict);
 }
 
@@ -98,11 +99,12 @@ public static class ConfigManager
 	}
 
 	/// <summary>
-	/// 获取单行数据
+	/// 根据 Id 获取单行数据
 	/// </summary>
-	public static GodotDictionary GetRow(string tableName, string key)
+	public static GodotDictionary GetRow(string tableName, int id)
 	{
 		EnsureLoaded();
+		var key = id.ToString();
 		if (_tableDicts.TryGetValue(tableName, out var dict)
 			&& dict.TryGetValue(key, out var row))
 		{
@@ -134,14 +136,14 @@ public static class ConfigManager
 	}
 
 	/// <summary>
-	/// 根据 key 获取单条泛型配置
+	/// 根据 Id 获取单条泛型配置
 	/// </summary>
-	public static T? Get<T>(string key) where T : IConfigData, new()
+	public static T? Get<T>(int id) where T : IConfigData, new()
 	{
 		EnsureLoaded();
 		var tableName = GetTableName<T>();
 
-		var row = GetRow(tableName, key);
+		var row = GetRow(tableName, id);
 		if (row.Count == 0) return default;
 
 		var config = new T();
