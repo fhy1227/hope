@@ -12,11 +12,12 @@ config_version=5
 
 config/name="hope"
 run/main_scene="uid://cmainmenu01"
-config/features=PackedStringArray("4.6", "C#", "GL Compatibility")
+config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
+ConfigBootstrap="*res://scripts/autoload/ConfigBootstrap.cs"
 EventBus="*res://scripts/autoload/EventBus.cs"
 GameManager="*res://scripts/autoload/GameManager.cs"
 AudioManager="*res://scripts/autoload/AudioManager.cs"
