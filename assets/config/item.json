@@ -6,110 +6,45 @@
       "id": 1001,
       "name": "ItemName_1001",
       "desc": "ItemDesc_1001",
-      "icon": "ui://common/armycard2",
-      "getway": null,
-      "main_type": 1,
+      "icon": null,
       "type": 0,
       "usable": 0,
-      "use_on_sys": null,
-      "tags": null,
-      "value": null,
-      "value1": null,
-      "value_rewards": null,
       "stacklimit": 99999,
       "quality": 2,
-      "timelimit": null,
-      "sort": 0,
-      "maxlv_to_money": null,
-      "red_dots_cond": null,
-      "test_json": "{\"x\":1,\"y\":2}"
+      "sort": 0
     },
     "1002": {
       "id": 1002,
       "name": "ItemName_1002",
       "desc": "ItemDesc_1002",
-      "icon": "ui://common/armycard3",
-      "getway": null,
-      "main_type": 1,
+      "icon": null,
       "type": 0,
       "usable": 0,
-      "use_on_sys": null,
-      "tags": null,
-      "value": null,
-      "value1": null,
-      "value_rewards": null,
       "stacklimit": 99999,
       "quality": 3,
-      "timelimit": null,
-      "sort": 0,
-      "maxlv_to_money": null,
-      "red_dots_cond": null,
-      "test_json": null
+      "sort": 0
     },
     "1003": {
       "id": 1003,
       "name": "ItemName_1003",
       "desc": "ItemDesc_1003",
-      "icon": "ui://common/armycard4",
-      "getway": null,
-      "main_type": 1,
+      "icon": null,
       "type": 0,
       "usable": 0,
-      "use_on_sys": null,
-      "tags": null,
-      "value": null,
-      "value1": null,
-      "value_rewards": null,
       "stacklimit": 99999,
       "quality": 4,
-      "timelimit": null,
-      "sort": 0,
-      "maxlv_to_money": null,
-      "red_dots_cond": null,
-      "test_json": null
+      "sort": 0
     },
     "1004": {
       "id": 1004,
       "name": "ItemName_1004",
       "desc": "ItemDesc_1004",
-      "icon": "ui://common/itemIcon1004",
-      "getway": [
-        [
-          1,
-          9
-        ],
-        [
-          1,
-          3
-        ],
-        [
-          1,
-          15
-        ],
-        [
-          3,
-          1
-        ],
-        [
-          2,
-          303
-        ]
-      ],
-      "main_type": 1,
+      "icon": null,
       "type": 0,
       "usable": 0,
-      "use_on_sys": null,
-      "tags": null,
-      "value": null,
-      "value1": null,
-      "value_rewards": null,
       "stacklimit": 99999,
       "quality": 5,
-      "timelimit": null,
-      "sort": 0,
-      "maxlv_to_money": null,
-      "red_dots_cond": null,
-      "test_json": null
+      "sort": 0
     }
   },
   "_list": [
@@ -117,110 +52,45 @@
       "id": 1001,
       "name": "ItemName_1001",
       "desc": "ItemDesc_1001",
-      "icon": "ui://common/armycard2",
-      "getway": null,
-      "main_type": 1,
+      "icon": null,
       "type": 0,
       "usable": 0,
-      "use_on_sys": null,
-      "tags": null,
-      "value": null,
-      "value1": null,
-      "value_rewards": null,
       "stacklimit": 99999,
       "quality": 2,
-      "timelimit": null,
-      "sort": 0,
-      "maxlv_to_money": null,
-      "red_dots_cond": null,
-      "test_json": "{\"x\":1,\"y\":2}"
+      "sort": 0
     },
     {
       "id": 1002,
       "name": "ItemName_1002",
       "desc": "ItemDesc_1002",
-      "icon": "ui://common/armycard3",
-      "getway": null,
-      "main_type": 1,
+      "icon": null,
       "type": 0,
       "usable": 0,
-      "use_on_sys": null,
-      "tags": null,
-      "value": null,
-      "value1": null,
-      "value_rewards": null,
       "stacklimit": 99999,
       "quality": 3,
-      "timelimit": null,
-      "sort": 0,
-      "maxlv_to_money": null,
-      "red_dots_cond": null,
-      "test_json": null
+      "sort": 0
     },
     {
       "id": 1003,
       "name": "ItemName_1003",
       "desc": "ItemDesc_1003",
-      "icon": "ui://common/armycard4",
-      "getway": null,
-      "main_type": 1,
+      "icon": null,
       "type": 0,
       "usable": 0,
-      "use_on_sys": null,
-      "tags": null,
-      "value": null,
-      "value1": null,
-      "value_rewards": null,
       "stacklimit": 99999,
       "quality": 4,
-      "timelimit": null,
-      "sort": 0,
-      "maxlv_to_money": null,
-      "red_dots_cond": null,
-      "test_json": null
+      "sort": 0
     },
     {
       "id": 1004,
       "name": "ItemName_1004",
       "desc": "ItemDesc_1004",
-      "icon": "ui://common/itemIcon1004",
-      "getway": [
-        [
-          1,
-          9
-        ],
-        [
-          1,
-          3
-        ],
-        [
-          1,
-          15
-        ],
-        [
-          3,
-          1
-        ],
-        [
-          2,
-          303
-        ]
-      ],
-      "main_type": 1,
+      "icon": null,
       "type": 0,
       "usable": 0,
-      "use_on_sys": null,
-      "tags": null,
-      "value": null,
-      "value1": null,
-      "value_rewards": null,
       "stacklimit": 99999,
       "quality": 5,
-      "timelimit": null,
-      "sort": 0,
-      "maxlv_to_money": null,
-      "red_dots_cond": null,
-      "test_json": null
+      "sort": 0
     }
   ]
 }
