@@ -1,0 +1,223 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Hope.Config;
+using Hope.Entities;
+
+namespace Hope.Systems;
+
+/// <summary>
+/// 装备管理 - Autoload 单例
+/// 负责：穿戴/卸下装备、计算属性加成并应用到 RunStats
+/// </summary>
+public partial class EquipManager : Node
+{
+    public static EquipManager Instance { get; private set; }
+
+    /// <summary> 装备槽状态：slotType -> List of equipped ItemInstances </summary>
+    private readonly Dictionary<int, List<Core.ItemInstance>> _equipped = new();
+
+    /// <summary> 装备变更信号（UI 订阅） </summary>
+    [Signal] public delegate void EquipmentChangedEventHandler();
+
+    /// <summary> 当前装备带来的属性加成（缓存） </summary>
+    public EquipStatBonus CurrentBonus { get; private set; } = new();
+
+    public override void _Ready()
+    {
+        if (Instance != null && Instance != this)
+        {
+            QueueFree();
+            return;
+        }
+        Instance = this;
+
+        // 初始化所有装备槽
+        var slots = ConfigManager.GetAll<Config.EquipSlotConfig>();
+        foreach (var slot in slots)
+        {
+            _equipped[slot.Id] = new List<Core.ItemInstance>();
+        }
+
+        GD.Print($"[EquipManager] 初始化完成，装备槽数量: {_equipped.Count}");
+    }
+
+    // ── 公共查询 ─────────────────────────────────────────────────────
+
+    /// <summary> 获取某槽位已装备物品列表 </summary>
+    public IReadOnlyList<Core.ItemInstance> GetEquipped(int slotType)
+    {
+        if (_equipped.TryGetValue(slotType, out var list))
+            return list.AsReadOnly();
+        return System.Array.Empty<Core.ItemInstance>().ToList().AsReadOnly();
+    }
+
+    /// <summary> 获取所有已装备物品（展平） </summary>
+    public List<Core.ItemInstance> GetAllEquipped()
+    {
+        var result = new List<Core.ItemInstance>();
+        foreach (var kv in _equipped)
+            result.AddRange(kv.Value);
+        return result;
+    }
+
+    // ── 穿戴 / 卸下 ─────────────────────────────────────────────────
+
+    /// <summary>
+    /// 穿戴装备（自动从背包移除；单槽位已满时自动替换旧装备）
+    /// </summary>
+    public bool Equip(Core.ItemInstance item)
+    {
+        if (!item.IsEquip)
+        {
+            GD.PrintErr("[EquipManager] 该物品不是装备");
+            return false;
+        }
+
+        var slotType = item.Config.SlotType;
+        if (!_equipped.ContainsKey(slotType))
+        {
+            GD.PrintErr($"[EquipManager] 未知装备槽类型: {slotType}");
+            return false;
+        }
+
+        var slotConfig = ConfigManager.Get<Config.EquipSlotConfig>(slotType);
+        if (slotConfig == null) return false;
+
+        if (_equipped[slotType].Count >= slotConfig.MaxCount)
+        {
+            if (slotConfig.MaxCount == 1)
+            {
+                var old = _equipped[slotType][0];
+                _equipped[slotType].Clear();
+                InventoryManager.Instance?.AddItemInstance(old);
+                GD.Print($"[EquipManager] 替换旧装备: {old.Config.NameKey}");
+            }
+            else
+            {
+                GD.Print($"[EquipManager] 装备槽 {slotType} 已满 ({slotConfig.MaxCount} 件)");
+                return false;
+            }
+        }
+
+        _equipped[slotType].Add(item);
+        InventoryManager.Instance?.RemoveItem(item.Uid);
+
+        GD.Print($"[EquipManager] 穿戴: {item.Config.NameKey} (槽位 {slotType})");
+        EmitSignal(SignalName.EquipmentChanged);
+        RecalcBonus();
+        return true;
+    }
+
+    /// <summary>
+    /// 卸下装备（放回背包）
+    /// </summary>
+    public bool Unequip(string uid)
+    {
+        foreach (var kv in _equipped)
+        {
+            var item = kv.Value.Find(i => i.Uid == uid);
+            if (item != null)
+            {
+                kv.Value.Remove(item);
+
+                InventoryManager.Instance?.AddItemInstance(item);
+
+                GD.Print($"[EquipManager] 卸下: {item.Config.NameKey}");
+                EmitSignal(SignalName.EquipmentChanged);
+                RecalcBonus();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 卸下某槽位指定索引的装备
+    /// </summary>
+    public bool UnequipAt(int slotType, int index)
+    {
+        if (!_equipped.TryGetValue(slotType, out var list) || index < 0 || index >= list.Count)
+            return false;
+
+        var item = list[index];
+        list.RemoveAt(index);
+        InventoryManager.Instance?.AddItemInstance(item);
+
+        GD.Print($"[EquipManager] 卸下: {item.Config.NameKey}");
+        EmitSignal(SignalName.EquipmentChanged);
+        RecalcBonus();
+        return true;
+    }
+
+    // ── 属性加成计算 ─────────────────────────────────────────────────
+
+    /// <summary>
+    /// 重新计算装备属性加成
+    /// </summary>
+    private void RecalcBonus()
+    {
+        var bonus = new EquipStatBonus();
+
+        foreach (var item in GetAllEquipped())
+        {
+            if (item.Config == null) continue;
+            bonus.Hp     += item.Config.StatHp;
+            bonus.Damage += item.Config.StatDamage;
+            bonus.Speed  += item.Config.StatSpeed;
+            bonus.Crit   += item.Config.StatCrit;
+            bonus.Armor  += item.Config.StatArmor;
+        }
+
+        CurrentBonus = bonus;
+        GD.Print($"[EquipManager] 属性加成: HP+{bonus.Hp} 伤害x{bonus.Damage:F2} 速度x{bonus.Speed:F2} 暴击+{bonus.Crit:F2} 护甲+{bonus.Armor}");
+
+        // 应用到 RunStats
+        ApplyToRunStats();
+    }
+
+    /// <summary>
+    /// 将当前加成应用到 RunStats（Player 的单局属性）
+    /// </summary>
+    private void ApplyToRunStats()
+    {
+        var player = GetTree()?.GetFirstNodeInGroup("player") as Player;
+        if (player == null)
+        {
+            GD.Print("[EquipManager] 未找到 player 节点，暂存加成");
+            return;
+        }
+
+        // 通过 RunStats 或直接修改 Player 属性
+        // 这里假设 Player 有 ApplyEquipBonus 方法
+        // 后续由用户根据实际 Player.cs 实现
+        GD.Print("[EquipManager] 装备属性已重新计算，等待集成到 Player");
+    }
+
+    // ── 对局重置 ─────────────────────────────────────────────────────
+
+    /// <summary>
+    /// 清空所有装备（新对局 / 回主菜单时调用）
+    /// </summary>
+    public void Clear()
+    {
+        foreach (var kv in _equipped)
+            kv.Value.Clear();
+        CurrentBonus = new EquipStatBonus();
+        EmitSignal(SignalName.EquipmentChanged);
+        GD.Print("[EquipManager] 已清空所有装备");
+    }
+}
+
+/// <summary>
+/// 装备属性加成（值类型）
+/// </summary>
+public struct EquipStatBonus
+{
+    public int   Hp;
+    public float Damage;
+    public float Speed;
+    public float Crit;
+    public int   Armor;
+}
