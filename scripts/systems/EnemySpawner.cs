@@ -110,11 +110,11 @@ public partial class EnemySpawner : Node
         return _player.GlobalPosition + offset;
     }
 
-    private void OnEnemyKilled(int gold, Vector2 position)
+    private void OnEnemyKilled(int gold, Vector2 position, string enemyType)
     {
-        EmitSignal(SignalName.EnemyDefeated, gold, position);
+        EmitSignal(SignalName.EnemyDefeated, gold, position, enemyType);
     }
 
     [Signal]
-    public delegate void EnemyDefeatedEventHandler(int gold, Vector2 position);
+    public delegate void EnemyDefeatedEventHandler(int gold, Vector2 position, string enemyType);
 }

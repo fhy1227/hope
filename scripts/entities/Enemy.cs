@@ -21,6 +21,10 @@ public partial class Enemy : CharacterBody2D
     [Export]
     public int GoldDrop { get; set; } = 1;
 
+    /// <summary> 敌人类型，对应 drop_table.enemy_type（* 表示通用规则） </summary>
+    [Export]
+    public string EnemyType { get; set; } = "normal";
+
     private HealthComponent _health;
     private Node2D _target;
     private float _contactTimer;
@@ -82,10 +86,10 @@ public partial class Enemy : CharacterBody2D
             visual.Modulate = new Color(1f, 1f, 1f, 0.2f);
         }
 
-        EmitSignal(SignalName.EnemyKilled, GoldDrop, GlobalPosition);
+        EmitSignal(SignalName.EnemyKilled, GoldDrop, GlobalPosition, EnemyType);
         CallDeferred(Node.MethodName.QueueFree);
     }
 
     [Signal]
-    public delegate void EnemyKilledEventHandler(int gold, Vector2 position);
+    public delegate void EnemyKilledEventHandler(int gold, Vector2 position, string enemyType);
 }

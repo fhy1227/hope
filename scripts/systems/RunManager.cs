@@ -155,20 +155,46 @@ public partial class RunManager : Node
 		SetPhase(RunPhase.Shop);
 	}
 
-	private void OnEnemyDefeated(int gold, Vector2 position)
+	private void OnEnemyDefeated(int gold, Vector2 position, string enemyType)
 	{
 		if (PickupScene == null)
 		{
 			AddGold(gold);
+			ApplyDropTable(enemyType, position);
 			return;
 		}
 
-		var pickup = PickupScene.Instantiate<Pickup>();
+		SpawnGoldPickup(gold, position);
+		ApplyDropTable(enemyType, position);
+	}
+
+	private void SpawnGoldPickup(int gold, Vector2 position)
+	{
+		var pickup = PickupScene!.Instantiate<Pickup>();
 		pickup.GlobalPosition = position;
 		pickup.GoldAmount = gold;
 		pickup.SetTarget(_player);
 		pickup.Collected += OnPickupCollected;
-		_pickupContainer.AddChild(pickup);
+		Callable.From(() => _pickupContainer.AddChild(pickup)).CallDeferred();
+	}
+
+	private void ApplyDropTable(string enemyType, Vector2 position)
+	{
+		if (PickupScene == null)
+			return;
+
+		foreach (var drop in DropTableResolver.RollDrops(enemyType))
+			SpawnItemPickup(drop.ItemId, drop.Count, position);
+	}
+
+	private void SpawnItemPickup(int configId, int count, Vector2 position)
+	{
+		var pickup = PickupScene!.Instantiate<Pickup>();
+		pickup.GlobalPosition = position;
+		pickup.ItemConfigId = configId;
+		pickup.ItemCount = count;
+		pickup.SetTarget(_player);
+		Callable.From(() => _pickupContainer.AddChild(pickup)).CallDeferred();
 	}
 
 	private void OnPickupCollected(int amount)
