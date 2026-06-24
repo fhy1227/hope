@@ -52,3 +52,69 @@ text = "金币 0"
 unique_name_in_owner = true
 layout_mode = 2
 text = "战斗中"
+
+[node name="StatsMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -196.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 296.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+
+[node name="StatsPanel" type="PanelContainer" parent="StatsMargin"]
+layout_mode = 2
+
+[node name="StatsVBox" type="VBoxContainer" parent="StatsMargin/StatsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="StatsTitle" type="Label" parent="StatsMargin/StatsPanel/StatsVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "属性"
+horizontal_alignment = 1
+
+[node name="StatHpLabel" type="Label" parent="StatsMargin/StatsPanel/StatsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "生命上限 -"
+
+[node name="StatDamageLabel" type="Label" parent="StatsMargin/StatsPanel/StatsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "伤害 -"
+
+[node name="StatAttackSpeedLabel" type="Label" parent="StatsMargin/StatsPanel/StatsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "攻速 -"
+
+[node name="StatSpeedLabel" type="Label" parent="StatsMargin/StatsPanel/StatsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "移速 -"
+
+[node name="StatRangeLabel" type="Label" parent="StatsMargin/StatsPanel/StatsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "射程 -"
+
+[node name="StatProjectileSpeedLabel" type="Label" parent="StatsMargin/StatsPanel/StatsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "弹道 -"
+
+[node name="StatCritLabel" type="Label" parent="StatsMargin/StatsPanel/StatsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "暴击 -"
+
+[node name="StatArmorLabel" type="Label" parent="StatsMargin/StatsPanel/StatsVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "护甲 -"
