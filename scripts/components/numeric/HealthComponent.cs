@@ -82,12 +82,33 @@ public partial class HealthComponent : Node
             return;
         }
 
-        CurrentHealth = Mathf.Min(CurrentHealth + amount, MaxHealth);
+        SetCurrentHealth(CurrentHealth + amount);
+    }
+
+    public void SetCurrentHealth(int current)
+    {
+        var clamped = Mathf.Clamp(current, 0, MaxHealth);
+        if (CurrentHealth == clamped)
+        {
+            return;
+        }
+
+        CurrentHealth = clamped;
         EmitSignal(SignalName.Changed, CurrentHealth, MaxHealth);
 
         if (IsPlayer)
         {
             Hope.EventBus.Instance?.EmitHealthChanged(CurrentHealth, MaxHealth);
+        }
+
+        if (CurrentHealth == 0)
+        {
+            EmitSignal(SignalName.Died);
+
+            if (IsPlayer)
+            {
+                Hope.EventBus.Instance?.EmitPlayerDied();
+            }
         }
     }
 }

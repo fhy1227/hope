@@ -1,18 +1,21 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Hope.Core;
 
-namespace Hope.Core;
+namespace Hope.Components;
 
 /// <summary>
-/// 数值容器：存储基础值与当前值，支持合并、快照与变更通知。
+/// 数值容器节点：存储基础值与当前值，支持合并、快照与变更通知。
 /// </summary>
-public class NumericComponent
+public partial class NumericComponent : Node
 {
     private readonly Dictionary<NumericType, float> _numeric = new();
     private readonly Dictionary<NumericType, float> _oriNumeric = new();
 
-    /// <summary>数值变更时触发（type, 新值）。</summary>
+    [Signal]
+    public delegate void ValueChangedEventHandler(int numericType, float value);
+
     public event Action<NumericType, float>? Changed;
 
     public void Clear()
@@ -64,7 +67,6 @@ public class NumericComponent
         }
     }
 
-    /// <summary>将 other 的所有属性累加到当前组件。</summary>
     public void AddOtherNumeric(NumericComponent other)
     {
         foreach (var kv in other._numeric)
@@ -73,7 +75,7 @@ public class NumericComponent
         }
     }
 
-    /// <summary>合并多个 NumericComponent 的加总（返回新实例）。</summary>
+    /// <summary>合并多个 NumericComponent 的加总（返回未入树的临时节点，仅用于计算）。</summary>
     public static NumericComponent GetTotal(params NumericComponent[] args)
     {
         var ret = new NumericComponent();
@@ -121,11 +123,11 @@ public class NumericComponent
                 _numeric[numericType] = value;
             }
 
-            Changed?.Invoke(numericType, this[numericType]);
+            NotifyChanged(numericType, this[numericType]);
 
             if (numericType == NumericType.MaxHealth)
             {
-                Changed?.Invoke(NumericType.Health, this[NumericType.Health]);
+                NotifyChanged(NumericType.Health, this[NumericType.Health]);
             }
         }
     }
@@ -150,7 +152,6 @@ public class NumericComponent
         _numeric[NumericType.MaxHealth] = maxHealth;
     }
 
-    /// <summary>从 RunStats 写入基础数值并建立原始快照（不触发 Changed）。</summary>
     public void InitFromRunStats(RunStats stats, bool refillHealth = true)
     {
         Clear();
@@ -164,7 +165,6 @@ public class NumericComponent
         InitOriNumeric();
     }
 
-    /// <summary>将当前数值回写到 RunStats（不含 Health）。</summary>
     public void ApplyToRunStats(RunStats stats)
     {
         stats.MaxHealth = (int)this[NumericType.MaxHealth];
@@ -173,5 +173,31 @@ public class NumericComponent
         stats.Speed = this[NumericType.MoveSpeed];
         stats.WeaponRange = this[NumericType.WeaponRange];
         stats.ProjectileSpeed = this[NumericType.ProjectileSpeed];
+    }
+
+    public void UpdateBaseFromRunStats(RunStats stats)
+    {
+        _oriNumeric[NumericType.MaxHealth] = stats.MaxHealth;
+        _oriNumeric[NumericType.Damage] = stats.Damage;
+        _oriNumeric[NumericType.AttackSpeed] = stats.AttackSpeed;
+        _oriNumeric[NumericType.MoveSpeed] = stats.Speed;
+        _oriNumeric[NumericType.WeaponRange] = stats.WeaponRange;
+        _oriNumeric[NumericType.ProjectileSpeed] = stats.ProjectileSpeed;
+    }
+
+    public void InitFromConfig(int maxHealth, float moveSpeed, float damage, bool refillHealth = true)
+    {
+        Clear();
+        _numeric[NumericType.MaxHealth] = maxHealth;
+        _numeric[NumericType.Health] = refillHealth ? maxHealth : 0f;
+        _numeric[NumericType.MoveSpeed] = moveSpeed;
+        _numeric[NumericType.Damage] = damage;
+        InitOriNumeric();
+    }
+
+    private void NotifyChanged(NumericType type, float value)
+    {
+        EmitSignal(SignalName.ValueChanged, (int)type, value);
+        Changed?.Invoke(type, value);
     }
 }

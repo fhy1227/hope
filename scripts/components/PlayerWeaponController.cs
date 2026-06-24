@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Components;
 using Hope.Core;
 
 namespace Hope.Components;
@@ -16,7 +17,6 @@ public partial class PlayerWeaponController : Node2D
 
     private WeaponSlot _slot0 = null!;
     private WeaponSlot _slot1 = null!;
-    private RunStats _stats = new();
     private Node2D _owner = null!;
 
     public WeaponSlot Slot0 => _slot0;
@@ -38,13 +38,6 @@ public partial class PlayerWeaponController : Node2D
         // _slot0.Equip(WeaponData.CreatePistol(ProjectileScene));
         _slot0.Equip(WeaponData.CreateSword());
         _slot1.Equip(WeaponData.CreateSpear());
-    }
-
-    public void BindStats(RunStats stats)
-    {
-        _stats = stats;
-        _slot0.BindStats(_stats);
-        _slot1.BindStats(_stats);
     }
 
     public void EquipWeapon(int slotIndex, WeaponData weapon)

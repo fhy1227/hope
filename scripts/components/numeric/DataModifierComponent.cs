@@ -1,20 +1,24 @@
 using System.Collections.Generic;
 using Godot;
+using Hope.Core;
 
-namespace Hope.Core;
+namespace Hope.Components;
 
 /// <summary>
-/// 数据修改器：对 NumericComponent 的指定属性施加常量/百分比加成。
+/// 数据修改器节点：对 NumericComponent 施加常量/百分比加成。
 /// 公式：final = ori * (1 + sumPercent / 100) + sumConstant
 /// </summary>
-public class DataModifierComponent
+public partial class DataModifierComponent : Node
 {
-    private readonly NumericComponent _numeric;
+    [Export]
+    public NodePath NumericPath { get; set; } = new("../NumericComponent");
+
+    private NumericComponent _numeric = null!;
     private readonly Dictionary<int, List<DataModifier>> _modifiers = new();
 
-    public DataModifierComponent(NumericComponent numeric)
+    public override void _Ready()
     {
-        _numeric = numeric;
+        _numeric = GetNode<NumericComponent>(NumericPath);
     }
 
     public void Clear() => _modifiers.Clear();
@@ -124,7 +128,6 @@ public class DataModifierComponent
         return updated;
     }
 
-    /// <summary>重新计算所有已注册修改器并写回 NumericComponent。</summary>
     public void RecalculateAll()
     {
         foreach (var key in _modifiers.Keys)

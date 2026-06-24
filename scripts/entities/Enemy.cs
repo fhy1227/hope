@@ -1,6 +1,5 @@
 using Godot;
 using Hope.Components;
-using Hope.Core;
 
 namespace Hope.Entities;
 
@@ -9,12 +8,6 @@ namespace Hope.Entities;
 /// </summary>
 public partial class Enemy : CharacterBody2D
 {
-    [Export]
-    public float Speed { get; set; } = 90f;
-
-    [Export]
-    public int ContactDamage { get; set; } = 1;
-
     [Export]
     public float ContactCooldown { get; set; } = 0.6f;
 
@@ -26,6 +19,7 @@ public partial class Enemy : CharacterBody2D
     public string EnemyType { get; set; } = "normal";
 
     private HealthComponent _health;
+    private EnemyStatsComponent _statsComponent;
     private Node2D _target;
     private float _contactTimer;
 
@@ -33,6 +27,7 @@ public partial class Enemy : CharacterBody2D
     {
         AddToGroup("enemies");
         _health = GetNode<HealthComponent>("HealthComponent");
+        _statsComponent = GetNode<EnemyStatsComponent>("EnemyStatsComponent");
         _health.Died += OnDied;
     }
 
@@ -40,6 +35,8 @@ public partial class Enemy : CharacterBody2D
     {
         _target = target;
     }
+
+    public void TakeDamage(int amount) => _statsComponent.TakeDamage(amount);
 
     public override void _PhysicsProcess(double delta)
     {
@@ -53,7 +50,7 @@ public partial class Enemy : CharacterBody2D
         var toTarget = _target.GlobalPosition - GlobalPosition;
         if (toTarget.LengthSquared() > 4f)
         {
-            Velocity = toTarget.Normalized() * Speed;
+            Velocity = toTarget.Normalized() * _statsComponent.GetMoveSpeed();
             MoveAndSlide();
         }
 
@@ -67,7 +64,7 @@ public partial class Enemy : CharacterBody2D
             var collider = GetSlideCollision(i).GetCollider();
             if (collider is Player player)
             {
-                player.TakeContactDamage(ContactDamage);
+                player.TakeContactDamage((int)_statsComponent.GetContactDamage());
                 _contactTimer = ContactCooldown;
                 break;
             }

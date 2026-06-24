@@ -22,7 +22,7 @@ public partial class WeaponSlot : Node2D
 
     private Node2D _owner = null!;
     private Node2D _projectileContainer = null!;
-    private RunStats _stats = new();
+    private NumericComponent? _numeric;
     private WeaponData? _weapon;
     private float _cooldown;
     private bool _attacking;
@@ -51,6 +51,7 @@ public partial class WeaponSlot : Node2D
     {
         _owner = owner;
         _projectileContainer = projectileContainer;
+        _numeric = owner.GetNodeOrNull<NumericComponent>("NumericComponent");
     }
 
     public void Equip(WeaponData weapon)
@@ -72,14 +73,9 @@ public partial class WeaponSlot : Node2D
         }
     }
 
-    public void BindStats(RunStats stats)
-    {
-        _stats = stats;
-    }
-
     public override void _PhysicsProcess(double delta)
     {
-        if (_weapon == null || _owner == null)
+        if (_weapon == null || _owner == null || _numeric == null)
         {
             return;
         }
@@ -143,19 +139,19 @@ public partial class WeaponSlot : Node2D
         }
 
         return _weapon.Type == WeaponType.Ranged
-            ? _stats.WeaponRange * (_weapon.Range / 340f)
+            ? _numeric![NumericType.WeaponRange] * (_weapon.Range / 340f)
             : _weapon.Range;
     }
 
     private float GetAttackInterval()
     {
-        var speed = Mathf.Max(_stats.AttackSpeed * _weapon!.AttackSpeedScale, 0.1f);
+        var speed = Mathf.Max(_numeric![NumericType.AttackSpeed] * _weapon!.AttackSpeedScale, 0.1f);
         return 1f / speed;
     }
 
     private int GetDamage()
     {
-        return Mathf.Max(1, Mathf.RoundToInt(_stats.Damage * _weapon!.DamageScale));
+        return Mathf.Max(1, Mathf.RoundToInt(_numeric![NumericType.Damage] * _weapon!.DamageScale));
     }
 
     private Node2D? FindNearestEnemy()
@@ -201,7 +197,7 @@ public partial class WeaponSlot : Node2D
         var projectile = _weapon.ProjectileScene.Instantiate<Projectile>();
         _projectileContainer.AddChild(projectile);
         projectile.GlobalPosition = _muzzle.GlobalPosition;
-        projectile.Launch(direction, _stats.ProjectileSpeed, GetDamage());
+        projectile.Launch(direction, _numeric![NumericType.ProjectileSpeed], GetDamage());
     }
 
     private void StartMeleeAttack(Node2D target)
@@ -295,6 +291,6 @@ public partial class WeaponSlot : Node2D
             return;
         }
 
-        enemy.GetNodeOrNull<HealthComponent>("HealthComponent")?.TakeDamage(GetDamage());
+        enemy.TakeDamage(GetDamage());
     }
 }

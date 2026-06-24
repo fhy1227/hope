@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hope.Components;
 using Hope.Config;
 using Hope.Entities;
 
@@ -189,10 +190,14 @@ public partial class EquipManager : Node
             return;
         }
 
-        // 通过 RunStats 或直接修改 Player 属性
-        // 这里假设 Player 有 ApplyEquipBonus 方法
-        // 后续由用户根据实际 Player.cs 实现
-        GD.Print("[EquipManager] 装备属性已重新计算，等待集成到 Player");
+        var stats = player.GetNodeOrNull<PlayerStatsComponent>("PlayerStatsComponent");
+        if (stats == null)
+        {
+            GD.Print("[EquipManager] 未找到 PlayerStatsComponent，暂存加成");
+            return;
+        }
+
+        stats.ApplyEquipModifiers(CurrentBonus);
     }
 
     // ── 对局重置 ─────────────────────────────────────────────────────

@@ -9,13 +9,10 @@ namespace Hope.Entities;
 /// </summary>
 public partial class Player : CharacterBody2D
 {
-	[Export]
-	public float Speed { get; set; } = 200f;
-
 	private StateMachine _stateMachine;
 	private HealthComponent _health;
+	private PlayerStatsComponent _statsComponent;
 	private PlayerWeaponController _weapons;
-	private RunStats _stats = new();
 	private float _invincibilityTimer;
 
 	public override void _Ready()
@@ -26,15 +23,14 @@ public partial class Player : CharacterBody2D
 
 		_health = GetNode<HealthComponent>("HealthComponent");
 		_health.IsPlayer = true;
+		_statsComponent = GetNode<PlayerStatsComponent>("PlayerStatsComponent");
 		_weapons = GetNode<PlayerWeaponController>("WeaponSlots");
 	}
 
 	public void Initialize(RunStats stats)
 	{
-		_stats = stats;
-		ApplyStats(stats, refillHealth: true);
+		_statsComponent.ApplyStats(stats, refillHealth: true);
 		_weapons.SetupDefaultLoadout();
-		_weapons.BindStats(_stats);
 
 		_health.Died += OnDied;
 
@@ -46,11 +42,10 @@ public partial class Player : CharacterBody2D
 
 	public void ApplyStats(RunStats stats, bool refillHealth)
 	{
-		_stats = stats;
-		Speed = stats.Speed;
-		_health.SetMaxHealth(stats.MaxHealth, refillHealth);
-		_weapons.BindStats(_stats);
+		_statsComponent.ApplyStats(stats, refillHealth);
 	}
+
+	public float GetMoveSpeed() => _statsComponent.GetMoveSpeed();
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -65,7 +60,7 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
-		_health.TakeDamage(amount);
+		_statsComponent.TakeContactDamage(amount);
 		_invincibilityTimer = 0.4f;
 		FlashDamage();
 	}
@@ -152,7 +147,7 @@ public partial class Player : CharacterBody2D
 				return;
 			}
 
-			_player.Velocity = input * _player.Speed;
+			_player.Velocity = input * _player.GetMoveSpeed();
 			_player.MoveAndSlide();
 		}
 	}
