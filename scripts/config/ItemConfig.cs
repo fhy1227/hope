@@ -9,24 +9,23 @@ namespace Hope.Config;
 /// </summary>
 public partial class ItemConfig : IConfigData
 {
-
     /// <summary>
-    /// id  // [!mode]
+    /// id
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    /// name  // @text [client]
+    /// name_key
     /// </summary>
-    public string Name { get; set; }
+    public string NameKey { get; set; }
 
     /// <summary>
-    /// desc  // @text [client]
+    /// desc_key
     /// </summary>
-    public string Desc { get; set; }
+    public string DescKey { get; set; }
 
     /// <summary>
-    /// icon  // [client]
+    /// icon
     /// </summary>
     public string Icon { get; set; }
 
@@ -36,35 +35,71 @@ public partial class ItemConfig : IConfigData
     public int Type { get; set; }
 
     /// <summary>
-    /// usable
+    /// rarity
     /// </summary>
-    public int Usable { get; set; }
+    public int Rarity { get; set; }
 
     /// <summary>
-    /// stacklimit
+    /// slot_type
     /// </summary>
-    public int Stacklimit { get; set; }
+    public int SlotType { get; set; }
 
     /// <summary>
-    /// quality
+    /// level_req
     /// </summary>
-    public int Quality { get; set; }
+    public int LevelReq { get; set; }
 
     /// <summary>
-    /// sort  // [client]
+    /// stat_hp
     /// </summary>
-    public int Sort { get; set; }
+    public int StatHp { get; set; }
+
+    /// <summary>
+    /// stat_damage
+    /// </summary>
+    public float StatDamage { get; set; }
+
+    /// <summary>
+    /// stat_speed
+    /// </summary>
+    public float StatSpeed { get; set; }
+
+    /// <summary>
+    /// stat_crit
+    /// </summary>
+    public float StatCrit { get; set; }
+
+    /// <summary>
+    /// stat_armor
+    /// </summary>
+    public int StatArmor { get; set; }
+
+    /// <summary>
+    /// stack_limit
+    /// </summary>
+    public int StackLimit { get; set; }
+
+    /// <summary>
+    /// sell_price
+    /// </summary>
+    public int SellPrice { get; set; }
 
     public void FromDict(GodotDictionary dict)
     {
         Id = (int)dict["id"];
-        Name = (string)dict["name"];
-        Desc = (string)dict["desc"];
+        NameKey = (string)dict["name_key"];
+        DescKey = (string)dict["desc_key"];
         Icon = (string)dict["icon"];
         Type = (int)dict["type"];
-        Usable = (int)dict["usable"];
-        Stacklimit = (int)dict["stacklimit"];
-        Quality = (int)dict["quality"];
-        Sort = (int)dict["sort"];
+        Rarity = (int)dict["rarity"];
+        SlotType = (int)dict["slot_type"];
+        LevelReq = (int)dict["level_req"];
+        StatHp = (int)dict["stat_hp"];
+        StatDamage = (float)dict["stat_damage"];
+        StatSpeed = (float)dict["stat_speed"];
+        StatCrit = (float)dict["stat_crit"];
+        StatArmor = (int)dict["stat_armor"];
+        StackLimit = (int)dict["stack_limit"];
+        SellPrice = (int)dict["sell_price"];
     }
 }

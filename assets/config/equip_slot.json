@@ -1,0 +1,68 @@
+{
+  "_key": "id",
+  "_count": 5,
+  "_dict": {
+    "1": {
+      "id": 1,
+      "name_key": "slot.weapon",
+      "icon": "res://assets/icons/slot_weapon.png",
+      "max_count": 2
+    },
+    "2": {
+      "id": 2,
+      "name_key": "slot.helmet",
+      "icon": "res://assets/icons/slot_helmet.png",
+      "max_count": 1
+    },
+    "3": {
+      "id": 3,
+      "name_key": "slot.armor",
+      "icon": "res://assets/icons/slot_armor.png",
+      "max_count": 1
+    },
+    "4": {
+      "id": 4,
+      "name_key": "slot.boots",
+      "icon": "res://assets/icons/slot_boots.png",
+      "max_count": 1
+    },
+    "5": {
+      "id": 5,
+      "name_key": "slot.amulet",
+      "icon": "res://assets/icons/slot_amulet.png",
+      "max_count": 1
+    }
+  },
+  "_list": [
+    {
+      "id": 1,
+      "name_key": "slot.weapon",
+      "icon": "res://assets/icons/slot_weapon.png",
+      "max_count": 2
+    },
+    {
+      "id": 2,
+      "name_key": "slot.helmet",
+      "icon": "res://assets/icons/slot_helmet.png",
+      "max_count": 1
+    },
+    {
+      "id": 3,
+      "name_key": "slot.armor",
+      "icon": "res://assets/icons/slot_armor.png",
+      "max_count": 1
+    },
+    {
+      "id": 4,
+      "name_key": "slot.boots",
+      "icon": "res://assets/icons/slot_boots.png",
+      "max_count": 1
+    },
+    {
+      "id": 5,
+      "name_key": "slot.amulet",
+      "icon": "res://assets/icons/slot_amulet.png",
+      "max_count": 1
+    }
+  ]
+}
