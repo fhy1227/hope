@@ -1,0 +1,76 @@
+---
+description: Godot 4.7 C# 开发规范与项目约定
+globs: "**/*.cs"
+alwaysApply: false
+---
+
+# Godot 4.7 C# 开发规范
+
+## 脚本结构
+
+- 所有挂载到节点的脚本必须声明 `public partial class X : NodeBaseType`
+- 生命周期方法使用 `override`：`_Ready`、`_Process(double delta)`、`_PhysicsProcess(double delta)`
+- Godot 4 中 `delta` 类型为 `double`，参与 float 运算时显式转换：`(float)delta`
+- 节点实例化用 `PackedScene.Instantiate<T>()`，禁止 `new NodeType()`
+
+```csharp
+// ❌ BAD
+var enemy = new Enemy();
+
+// ✅ GOOD
+var enemy = enemyScene.Instantiate<Enemy>();
+```
+
+## 节点引用与 Export
+
+- 在 `_Ready` 中缓存子节点引用，避免每帧 `GetNode`
+- 需在编辑器调整的参数用 `[Export]`；跨场景复用的组件优先拆成独立 Node 脚本
+
+```csharp
+private HealthComponent _health;
+
+public override void _Ready()
+{
+    _health = GetNode<HealthComponent>("HealthComponent");
+}
+```
+
+## 信号（Signal）
+
+- 使用 `[Signal] public delegate void XxxEventHandler(...)` 声明
+- 发射：`EmitSignal(SignalName.Xxx, args)`；订阅：`signalName += Handler` 或在 `_Ready` 中 `Connect`
+
+## 项目架构约定
+
+| 目录 | 用途 |
+|------|------|
+| `scripts/autoload/` | 全局单例（Autoload），如 EventBus、GameManager |
+| `scripts/components/` | 可复用组件，挂到任意节点下 |
+| `scripts/config/` | 配置表 C# 类（由 xlsx 自动生成，勿手改） |
+| `scripts/core/` | 纯数据、枚举、常量、工具类 |
+| `scripts/entities/` | 场景实体（Player、Enemy 等） |
+| `scripts/systems/` | 游戏系统逻辑 |
+| `scripts/ui/` | UI 控件脚本 |
+
+- 命名空间：`Hope`、`Hope.Entities`、`Hope.Components`、`Hope.Config`、`Hope.Core`
+- 场景路径集中定义在 `ScenePaths`；碰撞层使用 `CollisionLayers` 常量
+- 跨模块通信优先走 `EventBus`，避免实体间直接硬引用
+- Autoload 单例模式：`public static X? Instance { get; private set; }`，在 `_EnterTree` / `_ExitTree` 中赋值与清理
+
+## 物理与分组
+
+- 用 `AddToGroup("group_name")` 标记实体，查询用 `GetTree().GetNodesInGroup()`
+- `CollisionLayer` / `CollisionMask` 通过 `CollisionLayers` 静态字段设置，禁止魔法数字
+
+## 资源与配置
+
+- 资源路径统一 `res://` 前缀；运行时加载用 `GD.Load<T>("res://...")`
+- 配置数据从 `ConfigManager` 读取，不硬编码数值
+- `assets/config/*.json` 与 `scripts/config/*Config.cs` 由工具链生成，修改请改 `tools/config/*.xlsx`
+
+## C# 风格
+
+- 公开成员 PascalCase；私有字段 `_camelCase`
+- 启用 nullable：`Type?` 表示可空引用；Autoload 访问用 `?.`
+- 仅对非显而易见的业务逻辑添加中文 XML 注释
+- 保持最小改动：匹配周边文件的缩进与命名风格
