@@ -44,6 +44,9 @@ public partial class EquipManager : Node
         GD.Print($"[EquipManager] 初始化完成，装备槽数量: {_equipped.Count}");
     }
 
+    /// <summary> 武器槽类型（equip_slot.json id=1） </summary>
+    public const int WeaponSlotType = 1;
+
     // ── 公共查询 ─────────────────────────────────────────────────────
 
     /// <summary> 获取某槽位已装备物品列表 </summary>
@@ -61,6 +64,28 @@ public partial class EquipManager : Node
         foreach (var kv in _equipped)
             result.AddRange(kv.Value);
         return result;
+    }
+
+    // ── 默认装备（不经过背包） ───────────────────────────────────────
+
+    /// <summary>
+    /// 直接设置某槽位的默认装备（新对局开局用，不从背包扣除）。
+    /// </summary>
+    public void SetDefaultEquipment(int slotType, IReadOnlyList<int> configIds)
+    {
+        if (!_equipped.ContainsKey(slotType))
+        {
+            return;
+        }
+
+        _equipped[slotType].Clear();
+        foreach (var configId in configIds)
+        {
+            _equipped[slotType].Add(new Core.ItemInstance { ConfigId = configId });
+        }
+
+        RecalcBonus();
+        EmitSignal(SignalName.EquipmentChanged);
     }
 
     // ── 穿戴 / 卸下 ─────────────────────────────────────────────────
@@ -88,18 +113,10 @@ public partial class EquipManager : Node
 
         if (_equipped[slotType].Count >= slotConfig.MaxCount)
         {
-            if (slotConfig.MaxCount == 1)
-            {
-                var old = _equipped[slotType][0];
-                _equipped[slotType].Clear();
-                InventoryManager.Instance?.AddItemInstance(old);
-                GD.Print($"[EquipManager] 替换旧装备: {old.Config.NameKey}");
-            }
-            else
-            {
-                GD.Print($"[EquipManager] 装备槽 {slotType} 已满 ({slotConfig.MaxCount} 件)");
-                return false;
-            }
+            var old = _equipped[slotType][0];
+            _equipped[slotType].RemoveAt(0);
+            InventoryManager.Instance?.AddItemInstance(old);
+            GD.Print($"[EquipManager] 替换旧装备: {old.Config.NameKey}");
         }
 
         _equipped[slotType].Add(item);

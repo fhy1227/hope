@@ -27,6 +27,7 @@ public partial class Pickup : Area2D
 
     private Node2D _target;
     private bool   _magnetized;
+    private bool   _blockedByFullInventory;
 
     public override void _Ready()
     {
@@ -44,6 +45,13 @@ public partial class Pickup : Area2D
 
         var offset   = _target.GlobalPosition - GlobalPosition;
         var distance = offset.Length();
+
+        if (_blockedByFullInventory)
+        {
+            if (distance > MagnetRange)
+                _blockedByFullInventory = false;
+            return;
+        }
 
         if (!_magnetized && distance <= MagnetRange)
             _magnetized = true;
@@ -71,6 +79,9 @@ public partial class Pickup : Area2D
         // ── 物品拾取 ──────────────────────────────
         if (ItemConfigId > 0)
         {
+            if (_blockedByFullInventory)
+                return;
+
             var ok = Hope.Systems.InventoryManager.Instance?.AddItem(ItemConfigId, ItemCount) ?? false;
             if (ok)
             {
@@ -80,8 +91,9 @@ public partial class Pickup : Area2D
             }
             else
             {
+                _blockedByFullInventory = true;
+                _magnetized = false;
                 GD.Print("[Pickup] 背包已满，无法拾取物品");
-                // 不销毁，等背包有空位再拾取
             }
             return;
         }

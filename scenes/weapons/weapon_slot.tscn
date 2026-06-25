@@ -10,6 +10,11 @@ script = ExtResource("1_slot")
 
 [node name="Pivot" type="Node2D" parent="." unique_id=313043169]
 
+[node name="IconVisual" type="Sprite2D" parent="Pivot" unique_id=1847291056]
+visible = false
+rotation = -0.785398
+scale = Vector2(0.28, 0.28)
+
 [node name="RangedVisual" type="Polygon2D" parent="Pivot" unique_id=1232012886]
 color = Color(1, 0.85, 0.3, 1)
 polygon = PackedVector2Array(-5, -3, 12, -2, 16, 0, 12, 2, -5, 3)

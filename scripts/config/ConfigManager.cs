@@ -63,10 +63,14 @@ public static class ConfigManager
 			if (parseResult.VariantType != Variant.Type.Dictionary) continue;
 
 			var root = parseResult.AsGodotDictionary();
-			if (root.TryGetValue("_list", out var listVar))
-				_tableLists[configName] = listVar.AsGodotArray();
 			if (root.TryGetValue("_dict", out var dictVar))
-				_tableDicts[configName] = dictVar.AsGodotDictionary();
+			{
+				var dict = dictVar.AsGodotDictionary();
+				_tableDicts[configName] = dict;
+				_tableLists[configName] = root.TryGetValue("_list", out var listVar)
+					? listVar.AsGodotArray()
+					: BuildListFromDict(dict);
+			}
 			count++;
 		}
 		dir.ListDirEnd();
@@ -81,7 +85,18 @@ public static class ConfigManager
 	}
 
 	/// <summary>
-	/// 获取配置表原始列表 (_list)
+	/// 从 _dict 的值构建列表（保持 JSON 键插入顺序）
+	/// </summary>
+	private static GodotArray BuildListFromDict(GodotDictionary dict)
+	{
+		var list = new GodotArray();
+		foreach (var kv in dict)
+			list.Add(kv.Value);
+		return list;
+	}
+
+	/// <summary>
+	/// 获取配置表列表（运行时由 _dict 生成，或兼容旧版 _list）
 	/// </summary>
 	public static GodotArray GetList(string tableName)
 	{

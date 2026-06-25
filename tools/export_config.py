@@ -225,7 +225,6 @@ def export_json(sheet_name: str, data: dict):
     key_field = fields[0][0]
 
     result_dict = OrderedDict()
-    result_list = []
     for row in rows:
         item = OrderedDict()
         for i, (f_name, f_type, f_tag, f_mode) in enumerate(fields):
@@ -234,13 +233,11 @@ def export_json(sheet_name: str, data: dict):
         item_key = str(row[0]) if row and row[0] is not None else ""
         if item_key:
             result_dict[item_key] = item
-        result_list.append(item)
 
     output = {
         "_key": key_field,
-        "_count": len(result_list),
+        "_count": len(result_dict),
         "_dict": result_dict,
-        "_list": result_list,
     }
 
     OUTPUT_JSON_DIR.mkdir(parents=True, exist_ok=True)
@@ -249,7 +246,7 @@ def export_json(sheet_name: str, data: dict):
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 
-    print(f"  [OK] JSON -> {out_path.name}  ({len(result_list)} 条记录)")
+    print(f"  [OK] JSON -> {out_path.name}  ({len(result_dict)} 条记录)")
     return output
 
 

@@ -14,6 +14,7 @@ public partial class WeaponSlot : Node2D
     public Vector2 SlotOffset { get; set; } = Vector2.Right * 20f;
 
     private Node2D _pivot = null!;
+    private Sprite2D _iconVisual = null!;
     private Polygon2D _rangedVisual = null!;
     private Polygon2D _meleeVisual = null!;
     private Marker2D _muzzle = null!;
@@ -33,6 +34,7 @@ public partial class WeaponSlot : Node2D
     public override void _Ready()
     {
         _pivot = GetNode<Node2D>("Pivot");
+        _iconVisual = GetNode<Sprite2D>("Pivot/IconVisual");
         _rangedVisual = GetNode<Polygon2D>("Pivot/RangedVisual");
         _meleeVisual = GetNode<Polygon2D>("Pivot/MeleeVisual");
         _muzzle = GetNode<Marker2D>("Pivot/Muzzle");
@@ -61,16 +63,33 @@ public partial class WeaponSlot : Node2D
         _attacking = false;
         _meleeHitbox.Monitoring = false;
 
-        _rangedVisual.Visible = weapon.Type == WeaponType.Ranged;
-        _meleeVisual.Visible = weapon.Type == WeaponType.Melee;
-
-        var visual = weapon.Type == WeaponType.Ranged ? (CanvasItem)_rangedVisual : _meleeVisual;
-        visual.Modulate = weapon.VisualColor;
+        UpdateVisual(weapon);
 
         if (weapon.Type == WeaponType.Melee)
         {
             ConfigureMeleeHitbox(weapon);
         }
+    }
+
+    private void UpdateVisual(WeaponData weapon)
+    {
+        var hasIcon = !string.IsNullOrEmpty(weapon.IconPath);
+        if (hasIcon)
+        {
+            var texture = GD.Load<Texture2D>(weapon.IconPath);
+            _iconVisual.Texture = texture;
+            _iconVisual.Visible = texture != null;
+            _rangedVisual.Visible = false;
+            _meleeVisual.Visible = false;
+            return;
+        }
+
+        _iconVisual.Visible = false;
+        _rangedVisual.Visible = weapon.Type == WeaponType.Ranged;
+        _meleeVisual.Visible = weapon.Type == WeaponType.Melee;
+
+        var visual = weapon.Type == WeaponType.Ranged ? (CanvasItem)_rangedVisual : _meleeVisual;
+        visual.Modulate = weapon.VisualColor;
     }
 
     public override void _PhysicsProcess(double delta)

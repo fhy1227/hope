@@ -37,42 +37,5 @@
       "drop_weight": 5,
       "min_item_level": 20
     }
-  },
-  "_list": [
-    {
-      "id": 1,
-      "name_key": "quality.normal",
-      "color_hex": "A0A0A0",
-      "drop_weight": 100,
-      "min_item_level": 1
-    },
-    {
-      "id": 2,
-      "name_key": "quality.magic",
-      "color_hex": "3072F3",
-      "drop_weight": 60,
-      "min_item_level": 5
-    },
-    {
-      "id": 3,
-      "name_key": "quality.rare",
-      "color_hex": "F5A623",
-      "drop_weight": 30,
-      "min_item_level": 10
-    },
-    {
-      "id": 4,
-      "name_key": "quality.legendary",
-      "color_hex": "A335EE",
-      "drop_weight": 10,
-      "min_item_level": 15
-    },
-    {
-      "id": 5,
-      "name_key": "quality.unique",
-      "color_hex": "FFD700",
-      "drop_weight": 5,
-      "min_item_level": 20
-    }
-  ]
+  }
 }

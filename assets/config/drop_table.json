@@ -43,7 +43,7 @@
       "enemy_type": "boss",
       "item_id": 0,
       "rarity": 0,
-      "drop_rate": 1.0,
+      "drop_rate": 1,
       "min_count": 2,
       "max_count": 3
     },
@@ -56,61 +56,5 @@
       "min_count": 1,
       "max_count": 1
     }
-  },
-  "_list": [
-    {
-      "id": 1,
-      "enemy_type": "*",
-      "item_id": 0,
-      "rarity": 0,
-      "drop_rate": 0.3,
-      "min_count": 1,
-      "max_count": 1
-    },
-    {
-      "id": 2,
-      "enemy_type": "*",
-      "item_id": 0,
-      "rarity": 2,
-      "drop_rate": 0.15,
-      "min_count": 1,
-      "max_count": 1
-    },
-    {
-      "id": 3,
-      "enemy_type": "*",
-      "item_id": 0,
-      "rarity": 3,
-      "drop_rate": 0.05,
-      "min_count": 1,
-      "max_count": 1
-    },
-    {
-      "id": 4,
-      "enemy_type": "elite",
-      "item_id": 0,
-      "rarity": 0,
-      "drop_rate": 0.5,
-      "min_count": 1,
-      "max_count": 2
-    },
-    {
-      "id": 5,
-      "enemy_type": "boss",
-      "item_id": 0,
-      "rarity": 0,
-      "drop_rate": 1.0,
-      "min_count": 2,
-      "max_count": 3
-    },
-    {
-      "id": 10,
-      "enemy_type": "boss",
-      "item_id": 1005,
-      "rarity": 0,
-      "drop_rate": 0.3,
-      "min_count": 1,
-      "max_count": 1
-    }
-  ]
+  }
 }

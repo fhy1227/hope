@@ -1,14 +1,16 @@
 using Godot;
-using Hope.Components;
 using Hope.Core;
+using Hope.Systems;
 
 namespace Hope.Components;
 
 /// <summary>
-/// 管理玩家两个武器槽，默认装备远程 + 近战。
+/// 管理玩家两个武器槽，与 EquipManager 武器槽同步。
 /// </summary>
 public partial class PlayerWeaponController : Node2D
 {
+    private const int DefaultWeaponId = 1030;
+
     [Export]
     public PackedScene? ProjectileScene { get; set; }
 
@@ -31,13 +33,55 @@ public partial class PlayerWeaponController : Node2D
         var projectileContainer = ResolveProjectileContainer();
         _slot0.Initialize(_owner, projectileContainer);
         _slot1.Initialize(_owner, projectileContainer);
+
+        if (EquipManager.Instance != null)
+        {
+            EquipManager.Instance.EquipmentChanged += RefreshFromEquipment;
+        }
+    }
+
+    public override void _ExitTree()
+    {
+        if (EquipManager.Instance != null)
+        {
+            EquipManager.Instance.EquipmentChanged -= RefreshFromEquipment;
+        }
     }
 
     public void SetupDefaultLoadout()
     {
-        // _slot0.Equip(WeaponData.CreatePistol(ProjectileScene));
-        _slot0.Equip(WeaponData.CreateSword());
-        _slot1.Equip(WeaponData.CreateSpear());
+        var equipped = EquipManager.Instance?.GetEquipped(EquipManager.WeaponSlotType);
+        if (equipped == null || equipped.Count == 0)
+        {
+            EquipManager.Instance?.SetDefaultEquipment(
+                EquipManager.WeaponSlotType,
+                [DefaultWeaponId, DefaultWeaponId]);
+        }
+        else
+        {
+            RefreshFromEquipment();
+        }
+    }
+
+    public void RefreshFromEquipment()
+    {
+        var items = EquipManager.Instance?.GetEquipped(EquipManager.WeaponSlotType);
+        if (items == null)
+        {
+            return;
+        }
+
+        for (var i = 0; i < 2; i++)
+        {
+            if (i < items.Count)
+            {
+                var weapon = WeaponData.FromItemConfig(items[i].ConfigId, ProjectileScene);
+                if (weapon != null)
+                {
+                    GetSlot(i).Equip(weapon);
+                }
+            }
+        }
     }
 
     public void EquipWeapon(int slotIndex, WeaponData weapon)

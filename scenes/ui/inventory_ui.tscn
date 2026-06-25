@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cinventoryui01"]
+[gd_scene format=3 uid="uid://c74ugq7y80vmi"]
 
-[ext_resource type="Script" path="res://scripts/ui/InventoryUI.cs" id="1_inv"]
+[ext_resource type="Script" uid="uid://cun3ty5lmeu0" path="res://scripts/ui/InventoryUI.cs" id="1_inv"]
 
-[node name="InventoryUI" type="Control"]
+[node name="InventoryUI" type="Control" unique_id=1463402532]
+process_mode = 3
+z_index = 110
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,3 +13,203 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_inv")
+
+[node name="Bg" type="ColorRect" parent="." unique_id=1015878552]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=75002359]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MainPanel" type="Panel" parent="Center" unique_id=1010744767]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(700, 450)
+layout_mode = 2
+
+[node name="MainVBox" type="VBoxContainer" parent="Center/MainPanel" unique_id=177511997]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Header" type="HBoxContainer" parent="Center/MainPanel/MainVBox" unique_id=838314921]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Center/MainPanel/MainVBox/Header" unique_id=1498667491]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "  背包与装备"
+
+[node name="CloseButton" type="Button" parent="Center/MainPanel/MainVBox/Header" unique_id=1189985364]
+unique_name_in_owner = true
+process_mode = 3
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+text = "X"
+
+[node name="Content" type="HBoxContainer" parent="Center/MainPanel/MainVBox" unique_id=189595775]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EquipColumn" type="VBoxContainer" parent="Center/MainPanel/MainVBox/Content" unique_id=107687112]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EquipTitleLabel" type="Label" parent="Center/MainPanel/MainVBox/Content/EquipColumn" unique_id=1659110980]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "  装 备"
+
+[node name="WeaponSlot1" type="HBoxContainer" parent="Center/MainPanel/MainVBox/Content/EquipColumn" unique_id=477254184]
+layout_mode = 2
+
+[node name="SlotLabel" type="Label" parent="Center/MainPanel/MainVBox/Content/EquipColumn/WeaponSlot1" unique_id=783950201]
+custom_minimum_size = Vector2(60, 30)
+layout_mode = 2
+text = "武器 1"
+
+[node name="EquipSlot_1_0" type="Button" parent="Center/MainPanel/MainVBox/Content/EquipColumn/WeaponSlot1" unique_id=640853163]
+unique_name_in_owner = true
+process_mode = 3
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_icon = true
+
+[node name="WeaponSlot2" type="HBoxContainer" parent="Center/MainPanel/MainVBox/Content/EquipColumn" unique_id=401624359]
+layout_mode = 2
+
+[node name="SlotLabel" type="Label" parent="Center/MainPanel/MainVBox/Content/EquipColumn/WeaponSlot2" unique_id=218697648]
+custom_minimum_size = Vector2(60, 30)
+layout_mode = 2
+text = "武器 2"
+
+[node name="EquipSlot_1_1" type="Button" parent="Center/MainPanel/MainVBox/Content/EquipColumn/WeaponSlot2" unique_id=612157948]
+unique_name_in_owner = true
+process_mode = 3
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_icon = true
+
+[node name="HelmetSlot" type="HBoxContainer" parent="Center/MainPanel/MainVBox/Content/EquipColumn" unique_id=1274821906]
+layout_mode = 2
+
+[node name="SlotLabel" type="Label" parent="Center/MainPanel/MainVBox/Content/EquipColumn/HelmetSlot" unique_id=867000065]
+custom_minimum_size = Vector2(60, 30)
+layout_mode = 2
+text = "头盔 1"
+
+[node name="EquipSlot_2_0" type="Button" parent="Center/MainPanel/MainVBox/Content/EquipColumn/HelmetSlot" unique_id=1095468110]
+unique_name_in_owner = true
+process_mode = 3
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_icon = true
+
+[node name="ArmorSlot" type="HBoxContainer" parent="Center/MainPanel/MainVBox/Content/EquipColumn" unique_id=978445410]
+layout_mode = 2
+
+[node name="SlotLabel" type="Label" parent="Center/MainPanel/MainVBox/Content/EquipColumn/ArmorSlot" unique_id=287981883]
+custom_minimum_size = Vector2(60, 30)
+layout_mode = 2
+text = "护甲 1"
+
+[node name="EquipSlot_3_0" type="Button" parent="Center/MainPanel/MainVBox/Content/EquipColumn/ArmorSlot" unique_id=949404601]
+unique_name_in_owner = true
+process_mode = 3
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_icon = true
+
+[node name="BootsSlot" type="HBoxContainer" parent="Center/MainPanel/MainVBox/Content/EquipColumn" unique_id=261620226]
+layout_mode = 2
+
+[node name="SlotLabel" type="Label" parent="Center/MainPanel/MainVBox/Content/EquipColumn/BootsSlot" unique_id=1101176402]
+custom_minimum_size = Vector2(60, 30)
+layout_mode = 2
+text = "靴子 1"
+
+[node name="EquipSlot_4_0" type="Button" parent="Center/MainPanel/MainVBox/Content/EquipColumn/BootsSlot" unique_id=1123894085]
+unique_name_in_owner = true
+process_mode = 3
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_icon = true
+
+[node name="AmuletSlot" type="HBoxContainer" parent="Center/MainPanel/MainVBox/Content/EquipColumn" unique_id=460344849]
+layout_mode = 2
+
+[node name="SlotLabel" type="Label" parent="Center/MainPanel/MainVBox/Content/EquipColumn/AmuletSlot" unique_id=1709805929]
+custom_minimum_size = Vector2(60, 30)
+layout_mode = 2
+text = "饰品 1"
+
+[node name="EquipSlot_5_0" type="Button" parent="Center/MainPanel/MainVBox/Content/EquipColumn/AmuletSlot" unique_id=1147408804]
+unique_name_in_owner = true
+process_mode = 3
+custom_minimum_size = Vector2(90, 90)
+layout_mode = 2
+size_flags_horizontal = 3
+expand_icon = true
+
+[node name="VSeparator" type="VSeparator" parent="Center/MainPanel/MainVBox/Content" unique_id=123140051]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InvColumn" type="VBoxContainer" parent="Center/MainPanel/MainVBox/Content" unique_id=210403674]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InventoryLabel" type="Label" parent="Center/MainPanel/MainVBox/Content/InvColumn" unique_id=1309128012]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "  背 包"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Center/MainPanel/MainVBox/Content/InvColumn" unique_id=1772512410]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InventoryGrid" type="GridContainer" parent="Center/MainPanel/MainVBox/Content/InvColumn/ScrollContainer" unique_id=2108344536]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 5
+
+[node name="EmptyLabel" type="Label" parent="Center/MainPanel/MainVBox/Content/InvColumn/ScrollContainer/InventoryGrid" unique_id=830530223]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "
+  背包空空如也...
+  去打怪掉装备吧！"
+autowrap_mode = 3
+
+[node name="FooterLabel" type="Label" parent="Center/MainPanel/MainVBox" unique_id=1893323425]
+layout_mode = 2
+text = "点击背包物品穿戴 | 点击已装备物品卸下 | I 键关闭"
+horizontal_alignment = 1

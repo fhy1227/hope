@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cgameworld01" path="res://scenes/systems/game_world.tscn" id="1_gw"]
 [ext_resource type="PackedScene" uid="uid://cgamehud01" path="res://scenes/ui/game_hud.tscn" id="2_hud"]
 [ext_resource type="PackedScene" uid="uid://cshoppanel1" path="res://scenes/ui/shop_panel.tscn" id="3_shop"]
-[ext_resource type="PackedScene" path="res://scenes/ui/inventory_ui.tscn" id="4_inv"]
+[ext_resource type="PackedScene" uid="uid://c74ugq7y80vmi" path="res://scenes/ui/inventory_ui.tscn" id="4_inv"]
 
 [node name="Main" type="Node" unique_id=665280721]
 

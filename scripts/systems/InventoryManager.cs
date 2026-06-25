@@ -90,12 +90,14 @@ public partial class InventoryManager : Node
         }
 
         // 剩余数量开新槽位
+        var modified = false;
         while (count > 0)
         {
             if (_items.Count >= MaxSlots)
             {
                 GD.Print("[InventoryManager] 背包已满！");
-                EmitSignal(SignalName.InventoryChanged);
+                if (modified)
+                    EmitSignal(SignalName.InventoryChanged);
                 return false;
             }
 
@@ -112,10 +114,12 @@ public partial class InventoryManager : Node
             }
 
             _items.Add(newItem);
+            modified = true;
             EmitSignal(SignalName.ItemObtained, newItem);
         }
 
-        EmitSignal(SignalName.InventoryChanged);
+        if (modified)
+            EmitSignal(SignalName.InventoryChanged);
         return true;
     }
 
