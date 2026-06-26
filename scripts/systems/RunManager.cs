@@ -183,16 +183,18 @@ public partial class RunManager : Node
 		if (PickupScene == null)
 			return;
 
-		foreach (var drop in DropTableResolver.RollDrops(enemyType))
-			SpawnItemPickup(drop.ItemId, drop.Count, position);
+		var wave = _waveManager?.CurrentWave ?? _stats.Wave;
+		foreach (var drop in DropTableResolver.RollDrops(enemyType, wave))
+			SpawnItemPickup(drop, position);
 	}
 
-	private void SpawnItemPickup(int configId, int count, Vector2 position)
+	private void SpawnItemPickup(DropTableResolver.DropResult drop, Vector2 position)
 	{
 		var pickup = PickupScene!.Instantiate<Pickup>();
 		pickup.GlobalPosition = position;
-		pickup.ItemConfigId = configId;
-		pickup.ItemCount = count;
+		pickup.ItemConfigId = drop.ItemId;
+		pickup.ItemCount = drop.Count;
+		pickup.DropInstance = drop.Instance;
 		pickup.SetTarget(_player);
 		Callable.From(() => _pickupContainer.AddChild(pickup)).CallDeferred();
 	}

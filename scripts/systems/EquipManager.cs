@@ -181,11 +181,12 @@ public partial class EquipManager : Node
         foreach (var item in GetAllEquipped())
         {
             if (item.Config == null) continue;
-            bonus.Hp     += item.Config.StatHp;
-            bonus.Damage += item.Config.StatDamage;
-            bonus.Speed  += item.Config.StatSpeed;
-            bonus.Crit   += item.Config.StatCrit;
-            bonus.Armor  += item.Config.StatArmor;
+            var itemBonus = item.ComputeStatBonus();
+            bonus.Hp     += itemBonus.Hp;
+            bonus.Damage += itemBonus.Damage;
+            bonus.Speed  += itemBonus.Speed;
+            bonus.Crit   += itemBonus.Crit;
+            bonus.Armor  += itemBonus.Armor;
         }
 
         CurrentBonus = bonus;

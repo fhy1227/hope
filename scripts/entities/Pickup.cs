@@ -22,6 +22,9 @@ public partial class Pickup : Area2D
     [Export]
     public int ItemCount { get; set; } = 1;
 
+    /// <summary> 带随机词条的完整物品实例（D4 掉落；优先于 ItemConfigId） </summary>
+    public Core.ItemInstance? DropInstance { get; set; }
+
     [Export] public float MagnetRange  { get; set; } = 80f;
     [Export] public float MagnetSpeed  { get; set; } = 280f;
 
@@ -77,15 +80,24 @@ public partial class Pickup : Area2D
     private void Collect()
     {
         // ── 物品拾取 ──────────────────────────────
-        if (ItemConfigId > 0)
+        if (DropInstance != null || ItemConfigId > 0)
         {
             if (_blockedByFullInventory)
                 return;
 
-            var ok = Hope.Systems.InventoryManager.Instance?.AddItem(ItemConfigId, ItemCount) ?? false;
+            bool ok;
+            if (DropInstance != null)
+            {
+                ok = Hope.Systems.InventoryManager.Instance?.AddItemInstance(DropInstance) ?? false;
+            }
+            else
+            {
+                ok = Hope.Systems.InventoryManager.Instance?.AddItem(ItemConfigId, ItemCount) ?? false;
+            }
+
             if (ok)
             {
-                var cfg = ConfigManager.Get<ItemConfig>(ItemConfigId);
+                var cfg = DropInstance?.Config ?? ConfigManager.Get<ItemConfig>(ItemConfigId);
                 GD.Print($"[Pickup] 拾取物品: {cfg?.NameKey ?? ItemConfigId.ToString()}");
                 QueueFree();
             }

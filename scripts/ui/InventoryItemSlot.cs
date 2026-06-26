@@ -18,7 +18,7 @@ public partial class InventoryItemSlot : Button
 
         InventoryUI.ApplyItemIcon(this, item);
 
-        var color = InventoryUI.GetQualityColor(config.Rarity);
+        var color = InventoryUI.GetQualityColor(item.EffectiveRarity);
         AddThemeColorOverride("font_color", color);
         Text = config.StackLimit > 1 && item.Count > 1 ? $"x{item.Count}" : "";
         TooltipText = InventoryUI.BuildItemTooltip(item);

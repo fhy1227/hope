@@ -151,7 +151,7 @@ public partial class InventoryUI : Control
                     var item = equipped[i];
                     ApplyItemIcon(buttons[i], item);
                     buttons[i].Text = item.Count > 1 ? $"x{item.Count}" : "";
-                    var color = GetQualityColor(item.Config.Rarity);
+                    var color = GetQualityColor(item.EffectiveRarity);
                     buttons[i].AddThemeColorOverride("font_color", color);
                     buttons[i].TooltipText = BuildItemTooltip(item);
                 }
@@ -267,18 +267,26 @@ public partial class InventoryUI : Control
         var cfg = item.Config;
         if (cfg == null) return "未知物品";
 
+        var rarity = item.EffectiveRarity;
+        var bonus = item.ComputeStatBonus();
+
         var lines = new List<string>
         {
-            $"[{GetQualityName(cfg.Rarity)}] {cfg.NameKey}",
+            $"[{GetQualityName(rarity)}] {cfg.NameKey}",
             cfg.DescKey,
             "---",
+            $"物品等级: {item.ItemLevel}",
             $"类型: {GetSlotName(cfg.SlotType)}"
         };
-        if (cfg.StatHp     > 0) lines.Add($"生命: +{cfg.StatHp}");
-        if (cfg.StatDamage > 0) lines.Add($"伤害: x{cfg.StatDamage:F2}");
-        if (cfg.StatSpeed  > 0) lines.Add($"速度: x{cfg.StatSpeed:F2}");
-        if (cfg.StatCrit   > 0) lines.Add($"暴击: +{cfg.StatCrit:F2}");
-        if (cfg.StatArmor  > 0) lines.Add($"护甲: +{cfg.StatArmor}");
+        if (bonus.Hp     > 0) lines.Add($"生命: +{bonus.Hp}");
+        if (bonus.Damage > 0) lines.Add($"伤害: x{bonus.Damage:F2}");
+        if (bonus.Speed  > 0) lines.Add($"速度: x{bonus.Speed:F2}");
+        if (bonus.Crit   > 0) lines.Add($"暴击: +{bonus.Crit:F2}");
+        if (bonus.Armor  > 0) lines.Add($"护甲: +{bonus.Armor}");
+
+        foreach (var affix in item.Affixes)
+            lines.Add($"+ {affix.AffixId}: {affix.Value:F2}");
+
         if (cfg.SellPrice  > 0) lines.Add($"售价: {cfg.SellPrice} 金币");
 
         return string.Join("\n", lines);
