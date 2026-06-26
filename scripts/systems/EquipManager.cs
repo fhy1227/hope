@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hope.Components;
 using Hope.Config;
+using Hope.Core;
 using Hope.Entities;
 
 namespace Hope.Systems;
@@ -201,10 +202,10 @@ public partial class EquipManager : Node
     /// </summary>
     private void ApplyToRunStats()
     {
-        var player = GetTree()?.GetFirstNodeInGroup("player") as Player;
+        var player = Main.Instance?.Run?.Player;
         if (player == null)
         {
-            GD.Print("[EquipManager] 未找到 player 节点，暂存加成");
+            GD.Print("[EquipManager] 未找到 player，暂存加成");
             return;
         }
 

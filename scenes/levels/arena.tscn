@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://carena01"]
+
+[ext_resource type="Script" path="res://scripts/levels/BaseLevel.cs" id="1_level"]
+
+[node name="Arena" type="Node2D"]
+script = ExtResource("1_level")
+
+[node name="SpawnPoint" type="Marker2D" parent="."]

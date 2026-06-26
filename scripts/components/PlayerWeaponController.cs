@@ -15,7 +15,7 @@ public partial class PlayerWeaponController : Node2D
     public PackedScene? ProjectileScene { get; set; }
 
     [Export]
-    public NodePath ProjectileContainerPath { get; set; } = new("../../../Projectiles");
+    public NodePath ProjectileContainerPath { get; set; } = new("../../../Effects/Projectiles");
 
     private WeaponSlot _slot0 = null!;
     private WeaponSlot _slot1 = null!;
@@ -103,13 +103,13 @@ public partial class PlayerWeaponController : Node2D
             return GetNode<Node2D>(ProjectileContainerPath);
         }
 
-        var world = _owner.GetParent()?.GetParent();
-        if (world != null && world.HasNode("Projectiles"))
+        var projectiles = Main.Instance?.World.Projectiles;
+        if (projectiles != null)
         {
-            return world.GetNode<Node2D>("Projectiles");
+            return projectiles;
         }
 
-        GD.PushError("PlayerWeaponController: Projectiles container not found.");
+        GD.PushError("PlayerWeaponController: Projectiles container not found. Set ProjectileContainerPath or ensure Main scene is loaded.");
         return _owner;
     }
 }

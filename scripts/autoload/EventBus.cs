@@ -36,6 +36,7 @@ public partial class EventBus : Node
     public override void _EnterTree()
     {
         Instance = this;
+        ProcessMode = ProcessModeEnum.Always;
     }
 
     public override void _ExitTree()

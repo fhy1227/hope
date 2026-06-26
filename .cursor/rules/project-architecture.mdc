@@ -1,0 +1,22 @@
+---
+description: Hope 项目架构契约（AI 必读）
+alwaysApply: true
+---
+
+# Hope 架构契约
+
+修改场景结构、新增 UI 层、Autoload、或跨模块引用前，**必须先阅读** `docs/ARCHITECTURE.md`。
+
+## 硬性规则
+
+1. 对局根场景为 `scenes/main.tscn`，协调脚本 `Main.cs`（`Main.Instance`）
+2. 新 UI 挂到既定 `CanvasLayer`（`UiLayers.Hud/Overlay/Pause/Transition/Debug`），禁止随意新建层
+3. 跨模块用 `EventBus` 或 `Main.Instance`，禁止 `GetParent().GetParent()`
+4. 实体用 `PackedScene.Instantiate<T>()`，禁止 `new Enemy()` 等
+5. 关卡不拥有玩家；玩家由 `RunManager` 生成到 `Entities`，位置取自 `BaseLevel.SpawnPoint`
+6. 局内 Autoload 状态必须在 `Main.ResetRunState()` 重置
+7. 场景路径写入 `ScenePaths`；配置改 xlsx 不改生成文件
+
+## 目录速查
+
+`components/` 组件 · `dropSystem/` 掉落 · `levels/` 关卡 · `systems/` 系统 · `ui/` 界面 · `core/Main.cs` 协调入口

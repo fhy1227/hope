@@ -42,10 +42,10 @@ public partial class ShopPanel : PanelContainer
 
     private void BindRunManager()
     {
-        _runManager = GetTree().GetFirstNodeInGroup("run_manager") as RunManager;
+        _runManager = Main.Instance?.Run;
         if (_runManager == null)
         {
-            GD.PushError("ShopPanel: RunManager not found.");
+            GD.PushError("ShopPanel: Main.Instance.Run not found.");
             return;
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Godot;
 using Hope.Core;
 using Hope.Entities;
+using Hope.Levels;
 
 namespace Hope.Systems;
 
@@ -23,6 +24,9 @@ public partial class RunManager : Node
 	[Export]
 	public NodePath PickupContainerPath { get; set; } = new("../Pickups");
 
+	[Export]
+	public NodePath LevelsContainerPath { get; set; } = new("../Levels");
+
 	private WaveManager? _waveManager;
 	private EnemySpawner? _enemySpawner;
 	private Node2D _playerContainer;
@@ -33,6 +37,7 @@ public partial class RunManager : Node
 
 	public RunStats Stats => _stats;
 	public RunPhase Phase => _phase;
+	public Player? Player => IsInstanceValid(_player) ? _player : null;
 
 	public override void _Ready()
 	{
@@ -136,9 +141,24 @@ public partial class RunManager : Node
 		}
 
 		_player = PlayerScene.Instantiate<Player>();
+		_player.GlobalPosition = ResolveSpawnPosition();
 		_playerContainer.AddChild(_player);
 		_player.Initialize(_stats);
 		_enemySpawner.BindPlayer(_player);
+	}
+
+	private Vector2 ResolveSpawnPosition()
+	{
+		var levels = GetNode<Node2D>(LevelsContainerPath);
+		foreach (var child in levels.GetChildren())
+		{
+			if (child is BaseLevel level)
+			{
+				return level.GetSpawnGlobalPosition();
+			}
+		}
+
+		return Vector2.Zero;
 	}
 
 	private void StartNextWave()
