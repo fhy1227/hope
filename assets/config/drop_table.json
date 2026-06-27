@@ -43,7 +43,7 @@
       "enemy_type": "boss",
       "item_id": 0,
       "rarity": 0,
-      "drop_rate": 1,
+      "drop_rate": 1.0,
       "min_count": 2,
       "max_count": 3
     },

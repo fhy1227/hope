@@ -1,6 +1,8 @@
 using Godot;
 using Hope.Components;
+using Hope.Components.Actions;
 using Hope.Core;
+using Hope.Entities;
 
 namespace Hope.Entities;
 
@@ -13,7 +15,11 @@ public partial class Player : CharacterBody2D
 	private HealthComponent _health;
 	private PlayerStatsComponent _statsComponent;
 	private PlayerWeaponController _weapons;
+	private PlayerActionController _actions;
 	private float _invincibilityTimer;
+	private Vector2 _visualBaseScale = Vector2.One;
+
+	public bool IsInvincible => _invincibilityTimer > 0f || _actions.GrantsInvincibility;
 
 	public override void _Ready()
 	{
@@ -25,6 +31,14 @@ public partial class Player : CharacterBody2D
 		_health.IsPlayer = true;
 		_statsComponent = GetNode<PlayerStatsComponent>("PlayerStatsComponent");
 		_weapons = GetNode<PlayerWeaponController>("WeaponSlots");
+		_actions = GetNode<PlayerActionController>("PlayerActionController");
+		_actions.Bind(this);
+
+		var visual = GetNodeOrNull<Node2D>("Visual");
+		if (visual != null)
+		{
+			_visualBaseScale = visual.Scale;
+		}
 	}
 
 	public void Initialize(RunStats stats)
@@ -47,22 +61,89 @@ public partial class Player : CharacterBody2D
 
 	public float GetMoveSpeed() => _statsComponent.GetMoveSpeed();
 
-	public override void _PhysicsProcess(double delta)
+	public float GetEffectiveMoveSpeed() => GetMoveSpeed() * _actions.MoveSpeedMultiplier;
+
+	public int GetActionDamage(float multiplier = 1f)
 	{
-		_invincibilityTimer = Mathf.Max(_invincibilityTimer - (float)delta, 0f);
-		_stateMachine?.Update(delta);
+		var numeric = _statsComponent.GetNumeric();
+		return Mathf.Max(1, Mathf.RoundToInt(numeric[NumericType.Damage] * multiplier));
 	}
 
-	public void TakeContactDamage(int amount)
+	public void SetActionVisual(Color color, float scaleMultiplier = 1f)
 	{
-		if (_invincibilityTimer > 0f || amount <= 0)
+		var visual = GetNodeOrNull<Node2D>("Visual");
+		if (visual == null)
 		{
 			return;
 		}
 
+		visual.Modulate = color;
+		visual.Scale = _visualBaseScale * scaleMultiplier;
+	}
+
+	public void ResetActionVisual()
+	{
+		var visual = GetNodeOrNull<Node2D>("Visual");
+		if (visual == null)
+		{
+			return;
+		}
+
+		visual.Modulate = Colors.White;
+		visual.Scale = _visualBaseScale;
+	}
+
+	public void FlashActionRelease(Color color)
+	{
+		var visual = GetNodeOrNull<CanvasItem>("Visual");
+		if (visual == null)
+		{
+			return;
+		}
+
+		visual.Modulate = color;
+		var tween = CreateTween();
+		tween.TweenProperty(visual, "modulate", Colors.White, 0.12);
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		_invincibilityTimer = Mathf.Max(_invincibilityTimer - (float)delta, 0f);
+
+		var input = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+		_actions.SetLastMoveDirection(input);
+		_actions.UpdateActions(delta);
+
+		if (_actions.BlocksMovement)
+		{
+			if (!_actions.GrantsInvincibility)
+			{
+				Velocity = Vector2.Zero;
+			}
+
+			return;
+		}
+
+		_stateMachine?.Update(delta);
+	}
+
+	public bool TakeContactDamage(int amount, Enemy? source = null)
+	{
+		if (amount <= 0 || IsInvincible)
+		{
+			return false;
+		}
+
+		if (_actions.TryParry(source, out _))
+		{
+			return false;
+		}
+
+		_actions.OnPlayerHit();
 		_statsComponent.TakeContactDamage(amount);
 		_invincibilityTimer = 0.4f;
 		FlashDamage();
+		return true;
 	}
 
 	private void FlashDamage()
@@ -147,7 +228,7 @@ public partial class Player : CharacterBody2D
 				return;
 			}
 
-			_player.Velocity = input * _player.GetMoveSpeed();
+			_player.Velocity = input * _player.GetEffectiveMoveSpeed();
 			_player.MoveAndSlide();
 		}
 	}

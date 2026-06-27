@@ -31,6 +31,12 @@ public partial class EventBus : Node
     [Signal]
     public delegate void RunPhaseChangedEventHandler(int phase);
 
+    [Signal]
+    public delegate void PlayerActionStartedEventHandler(int actionId);
+
+    [Signal]
+    public delegate void PlayerActionEndedEventHandler(int actionId);
+
     public static EventBus? Instance { get; private set; }
 
     public override void _EnterTree()
@@ -85,5 +91,15 @@ public partial class EventBus : Node
     public void EmitRunPhaseChanged(int phase)
     {
         EmitSignal(SignalName.RunPhaseChanged, phase);
+    }
+
+    public void EmitPlayerActionStarted(int actionId)
+    {
+        EmitSignal(SignalName.PlayerActionStarted, actionId);
+    }
+
+    public void EmitPlayerActionEnded(int actionId)
+    {
+        EmitSignal(SignalName.PlayerActionEnded, actionId);
     }
 }

@@ -11,3 +11,6 @@ mono_crash.*
 bin/
 obj/
 .vs/
+
+# Workbuddy
+.workbuddy/

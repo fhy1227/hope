@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://ddci34hjmsvnk" path="res://scripts/components/numeric/NumericHealthSyncComponent.cs" id="9_health_sync"]
 [ext_resource type="Script" uid="uid://bkfp7sg2syanp" path="res://scripts/components/numeric/PlayerStatsComponent.cs" id="10_stats"]
 [ext_resource type="Script" uid="uid://b1g2ct6e7aki" path="res://scripts/components/PlayerWeaponController.cs" id="3_weapons"]
+[ext_resource type="Script" path="res://scripts/components/actions/PlayerActionController.cs" id="11_actions"]
 [ext_resource type="PackedScene" uid="uid://cweaponslot1" path="res://scenes/weapons/weapon_slot.tscn" id="4_slot"]
 [ext_resource type="PackedScene" uid="uid://cprojectile01" path="res://scenes/entities/projectile.tscn" id="5_projectile"]
 [ext_resource type="PackedScene" uid="uid://dmjoh412e01lx" path="res://scenes/ui/unit_health_bar.tscn" id="6_healthbar"]
@@ -40,6 +41,9 @@ script = ExtResource("9_health_sync")
 
 [node name="PlayerStatsComponent" type="Node" parent="."]
 script = ExtResource("10_stats")
+
+[node name="PlayerActionController" type="Node" parent="."]
+script = ExtResource("11_actions")
 
 [node name="UnitHealthBar" parent="." unique_id=498570480 instance=ExtResource("6_healthbar")]
 BarSize = Vector2(32, 5)

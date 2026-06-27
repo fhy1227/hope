@@ -22,6 +22,8 @@ public partial class Enemy : CharacterBody2D
     private EnemyStatsComponent _statsComponent;
     private Node2D _target;
     private float _contactTimer;
+    private float _stunTimer;
+    private Vector2 _knockbackVelocity;
 
     public override void _Ready()
     {
@@ -38,6 +40,21 @@ public partial class Enemy : CharacterBody2D
 
     public void TakeDamage(int amount) => _statsComponent.TakeDamage(amount);
 
+    public void ApplyStun(float duration)
+    {
+        _stunTimer = Mathf.Max(_stunTimer, duration);
+    }
+
+    public void ApplyKnockback(Vector2 direction, float speed)
+    {
+        if (direction.LengthSquared() < 0.01f)
+        {
+            direction = Vector2.Right;
+        }
+
+        _knockbackVelocity = direction.Normalized() * speed;
+    }
+
     public override void _PhysicsProcess(double delta)
     {
         if (_target == null || !GodotObject.IsInstanceValid(_target))
@@ -46,6 +63,21 @@ public partial class Enemy : CharacterBody2D
         }
 
         _contactTimer = Mathf.Max(_contactTimer - (float)delta, 0f);
+        _stunTimer = Mathf.Max(_stunTimer - (float)delta, 0f);
+
+        if (_knockbackVelocity.LengthSquared() > 4f)
+        {
+            Velocity = _knockbackVelocity;
+            _knockbackVelocity *= 0.88f;
+            MoveAndSlide();
+            return;
+        }
+
+        if (_stunTimer > 0f)
+        {
+            Velocity = Vector2.Zero;
+            return;
+        }
 
         var toTarget = _target.GlobalPosition - GlobalPosition;
         if (toTarget.LengthSquared() > 4f)
@@ -64,7 +96,7 @@ public partial class Enemy : CharacterBody2D
             var collider = GetSlideCollision(i).GetCollider();
             if (collider is Player player)
             {
-                player.TakeContactDamage((int)_statsComponent.GetContactDamage());
+                player.TakeContactDamage((int)_statsComponent.GetContactDamage(), this);
                 _contactTimer = ContactCooldown;
                 break;
             }
