@@ -1,0 +1,188 @@
+{
+  "cols": 5,
+  "rows": 6,
+  "cell_w": 204,
+  "cell_h": 170,
+  "frames": [
+    {
+      "file": "idle_00.png",
+      "row": 0,
+      "col": 0,
+      "animation": "idle"
+    },
+    {
+      "file": "idle_01.png",
+      "row": 0,
+      "col": 1,
+      "animation": "idle"
+    },
+    {
+      "file": "idle_02.png",
+      "row": 0,
+      "col": 2,
+      "animation": "idle"
+    },
+    {
+      "file": "idle_03.png",
+      "row": 0,
+      "col": 3,
+      "animation": "idle"
+    },
+    {
+      "file": "idle_04.png",
+      "row": 0,
+      "col": 4,
+      "animation": "idle"
+    },
+    {
+      "file": "walk_00.png",
+      "row": 1,
+      "col": 0,
+      "animation": "walk"
+    },
+    {
+      "file": "walk_01.png",
+      "row": 1,
+      "col": 1,
+      "animation": "walk"
+    },
+    {
+      "file": "walk_02.png",
+      "row": 1,
+      "col": 2,
+      "animation": "walk"
+    },
+    {
+      "file": "walk_03.png",
+      "row": 1,
+      "col": 3,
+      "animation": "walk"
+    },
+    {
+      "file": "walk_04.png",
+      "row": 1,
+      "col": 4,
+      "animation": "walk"
+    },
+    {
+      "file": "action_a_00.png",
+      "row": 2,
+      "col": 0,
+      "animation": "action_a"
+    },
+    {
+      "file": "action_a_01.png",
+      "row": 2,
+      "col": 1,
+      "animation": "action_a"
+    },
+    {
+      "file": "action_a_02.png",
+      "row": 2,
+      "col": 2,
+      "animation": "action_a"
+    },
+    {
+      "file": "action_a_03.png",
+      "row": 2,
+      "col": 3,
+      "animation": "action_a"
+    },
+    {
+      "file": "action_a_04.png",
+      "row": 2,
+      "col": 4,
+      "animation": "action_a"
+    },
+    {
+      "file": "action_b_00.png",
+      "row": 3,
+      "col": 0,
+      "animation": "action_b"
+    },
+    {
+      "file": "action_b_01.png",
+      "row": 3,
+      "col": 1,
+      "animation": "action_b"
+    },
+    {
+      "file": "action_b_02.png",
+      "row": 3,
+      "col": 2,
+      "animation": "action_b"
+    },
+    {
+      "file": "action_b_03.png",
+      "row": 3,
+      "col": 3,
+      "animation": "action_b"
+    },
+    {
+      "file": "action_b_04.png",
+      "row": 3,
+      "col": 4,
+      "animation": "action_b"
+    },
+    {
+      "file": "action_c_00.png",
+      "row": 4,
+      "col": 0,
+      "animation": "action_c"
+    },
+    {
+      "file": "action_c_01.png",
+      "row": 4,
+      "col": 1,
+      "animation": "action_c"
+    },
+    {
+      "file": "action_c_02.png",
+      "row": 4,
+      "col": 2,
+      "animation": "action_c"
+    },
+    {
+      "file": "action_c_03.png",
+      "row": 4,
+      "col": 3,
+      "animation": "action_c"
+    },
+    {
+      "file": "action_c_04.png",
+      "row": 4,
+      "col": 4,
+      "animation": "action_c"
+    },
+    {
+      "file": "action_d_00.png",
+      "row": 5,
+      "col": 0,
+      "animation": "action_d"
+    },
+    {
+      "file": "action_d_01.png",
+      "row": 5,
+      "col": 1,
+      "animation": "action_d"
+    },
+    {
+      "file": "action_d_02.png",
+      "row": 5,
+      "col": 2,
+      "animation": "action_d"
+    },
+    {
+      "file": "action_d_03.png",
+      "row": 5,
+      "col": 3,
+      "animation": "action_d"
+    },
+    {
+      "file": "action_d_04.png",
+      "row": 5,
+      "col": 4,
+      "animation": "action_d"
+    }
+  ]
+}

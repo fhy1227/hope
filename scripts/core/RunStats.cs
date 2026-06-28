@@ -1,19 +1,37 @@
 namespace Hope.Core;
 
 /// <summary>
-/// 单局运行时数值，波间商店会修改此对象。
+/// 单局运行时数值快照。由 RunManager 持有；波间商店升级通过 <see cref="ShopUpgrade"/> 修改本对象。
+/// 与玩家组件上的最终属性（含装备加成）分离，此处为对局级基础成长。
 /// </summary>
 public class RunStats
 {
+    /// <summary>本局生命上限（商店可叠加）。</summary>
     public int MaxHealth { get; set; } = 10;
+
+    /// <summary>移动速度（像素/秒）。</summary>
     public float Speed { get; set; } = 200f;
+
+    /// <summary>基础攻击伤害。</summary>
     public float Damage { get; set; } = 5f;
+
+    /// <summary>攻击间隔倍率；越大攻速越快。</summary>
     public float AttackSpeed { get; set; } = 1.2f;
+
+    /// <summary>远程弹道速度（像素/秒）。</summary>
     public float ProjectileSpeed { get; set; } = 450f;
+
+    /// <summary>武器有效射程/索敌距离。</summary>
     public float WeaponRange { get; set; } = 320f;
+
+    /// <summary>本局累计金币。</summary>
     public int Gold { get; set; }
+
+    /// <summary>当前波次，从 1 起计。</summary>
     public int Wave { get; set; }
 
+    /// <summary>浅拷贝全部字段，用于 UI 预览或存档快照而不共享引用。</summary>
+    /// <returns>新的 <see cref="RunStats"/> 实例，数值与当前相同。</returns>
     public RunStats Clone()
     {
         return new RunStats

@@ -53,6 +53,13 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "战斗中"
 
+[node name="InventoryButton" type="Button" parent="Margin/VBox" unique_id=1847291056]
+unique_name_in_owner = true
+process_mode = 3
+custom_minimum_size = Vector2(80, 32)
+layout_mode = 2
+text = "装备"
+
 [node name="StatsMargin" type="MarginContainer" parent="." unique_id=1091963700]
 layout_mode = 1
 anchors_preset = 1

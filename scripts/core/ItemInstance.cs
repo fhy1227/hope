@@ -7,30 +7,32 @@ using Hope.Systems;
 namespace Hope.Core;
 
 /// <summary>
-/// 运行时物品实例（背包里的一件物品）
-/// Phase2：支持随机词条、物品等级（D4 ilvl）
+/// 运行时物品实例（背包/装备槽中的一条记录），继承 Godot <see cref="Resource"/> 便于序列化。
+/// 配置底材来自 item.json；随机掉落可附带 ilvl、掷骰稀有度与词条列表。
 /// </summary>
 public partial class ItemInstance : Resource
 {
-    /// <summary> 配置ID（对应 item.json 的 id） </summary>
+    /// <summary>配置表 ID，对应 <see cref="Config.ItemConfig"/> 的 id 字段。</summary>
     public int ConfigId { get; set; }
 
-    /// <summary> 唯一实例ID（区分同类物品） </summary>
+    /// <summary>实例唯一标识，区分同 ConfigId 的多件装备；默认新建 GUID。</summary>
     public string Uid { get; set; } = System.Guid.NewGuid().ToString();
 
-    /// <summary> 堆叠数量（可堆叠物品） </summary>
+    /// <summary>堆叠数量；不可堆叠装备恒为 1。</summary>
     public int Count { get; set; } = 1;
 
-    /// <summary> 掉落物品等级（D4 Item Power） </summary>
+    /// <summary>掉落物品等级（Item Power），影响词条档位等。</summary>
     public int ItemLevel { get; set; } = 1;
 
-    /// <summary> 掷骰稀有度（0 表示沿用配置底材 rarity） </summary>
+    /// <summary>掷骰得到的稀有度；为 0 时沿用配置底材 <see cref="Config.ItemConfig.Rarity"/>。</summary>
     public int RolledRarity { get; set; }
 
-    /// <summary> 随机词条 </summary>
+    /// <summary>随机附加词条列表，由 <see cref="EquipDropGenerator"/> 生成。</summary>
     public List<RolledAffix> Affixes { get; set; } = [];
 
-    /// <summary> 获取配置数据（延迟读取） </summary>
+    /// <summary>
+    /// 延迟从 <see cref="ConfigManager"/> 读取的配置；ConfigId 无效时 PrintErr 并可能返回 null。
+    /// </summary>
     public Config.ItemConfig Config
     {
         get
@@ -42,18 +44,19 @@ public partial class ItemInstance : Resource
         }
     }
 
-    /// <summary> 是否可堆叠 </summary>
+    /// <summary>配置中 StackLimit &gt; 0 时可与其他同类实例堆叠。</summary>
     public bool IsStackable => Config != null && Config.StackLimit > 0;
 
-    /// <summary> 是否为装备 </summary>
+    /// <summary>SlotType &gt; 0 表示可装备到对应槽位。</summary>
     public bool IsEquip => Config != null && Config.SlotType > 0;
 
-    /// <summary> 有效稀有度（优先掷骰结果） </summary>
+    /// <summary>展示与数值计算用的稀有度：优先 <see cref="RolledRarity"/>，否则底材 rarity，默认 1。</summary>
     public int EffectiveRarity => RolledRarity > 0 ? RolledRarity : Config?.Rarity ?? 1;
 
     /// <summary>
-    /// 计算底材 + 词条 + 传奇加成的属性（供 EquipManager 使用）。
+    /// 汇总底材属性、传奇倍率与全部词条，供 <see cref="EquipManager"/> 合并到玩家数值。
     /// </summary>
+    /// <returns>可叠加的 <see cref="EquipStatBonus"/>；Config 缺失时返回零加成。</returns>
     public EquipStatBonus ComputeStatBonus()
     {
         var bonus = new EquipStatBonus();

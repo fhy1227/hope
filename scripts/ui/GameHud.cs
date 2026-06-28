@@ -45,6 +45,8 @@ public partial class GameHud : Control
 
         CallDeferred(MethodName.BindRunManager);
 
+        GetNode<Button>("%InventoryButton").Pressed += OnInventoryButtonPressed;
+
         if (EquipManager.Instance != null)
         {
             EquipManager.Instance.EquipmentChanged += OnEquipmentChanged;
@@ -85,6 +87,11 @@ public partial class GameHud : Control
     {
         _runManager = GetTree().GetFirstNodeInGroup("run_manager") as RunManager;
         RefreshStatsPanel();
+    }
+
+    private void OnInventoryButtonPressed()
+    {
+        Main.Instance?.OverlayLayer.GetNodeOrNull<InventoryUI>("InventoryUI")?.Toggle();
     }
 
     private void OnEquipmentChanged()

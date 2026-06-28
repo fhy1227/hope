@@ -3,12 +3,17 @@ using Hope.Core;
 
 namespace Hope.Components.Actions;
 
+/// <summary>
+/// 翻滚行为（输入 Space）：定向位移约 0.25s，全程无敌并临时忽略与敌人的碰撞（穿敌）。
+/// 结束后进入 1s 冷却。自行调用 MoveAndSlide，锁定移动状态机。
+/// </summary>
 public sealed class RollAction : IPlayerAction
 {
     private const float Duration = 0.25f;
     private const float Speed = 480f;
     private const float CooldownTime = 1f;
 
+    /// <summary>内部阶段：空闲 → 翻滚中 → 冷却。</summary>
     private enum Phase { Idle, Rolling, Cooldown }
 
     private Phase _phase = Phase.Idle;
@@ -17,17 +22,32 @@ public sealed class RollAction : IPlayerAction
     private Vector2 _direction;
     private uint _savedCollisionMask;
 
+    /// <inheritdoc />
     public PlayerActionId Id => PlayerActionId.Roll;
+
+    /// <inheritdoc />
     public bool IsActive => _phase == Phase.Rolling;
+
+    /// <inheritdoc />
     public float CooldownRemaining => _cooldown;
+
+    /// <inheritdoc />
     public bool BlocksMovement => IsActive;
+
+    /// <inheritdoc />
     public bool BlocksOtherActions => IsActive;
+
+    /// <inheritdoc />
     public bool GrantsInvincibility => IsActive;
+
+    /// <inheritdoc />
     public float MoveSpeedMultiplier => 1f;
 
+    /// <inheritdoc />
     public bool CanStart(PlayerActionContext ctx) =>
         _phase == Phase.Idle && _cooldown <= 0f;
 
+    /// <inheritdoc />
     public void Enter(PlayerActionContext ctx)
     {
         _direction = ctx.GetRollDirection();
@@ -40,6 +60,7 @@ public sealed class RollAction : IPlayerAction
         ctx.Controller.NotifyActionStarted(Id);
     }
 
+    /// <inheritdoc />
     public void Update(PlayerActionContext ctx, double delta)
     {
         if (_phase != Phase.Rolling)
@@ -57,6 +78,7 @@ public sealed class RollAction : IPlayerAction
         }
     }
 
+    /// <inheritdoc />
     public void Exit(PlayerActionContext ctx)
     {
         if (_phase == Phase.Rolling)
@@ -65,6 +87,7 @@ public sealed class RollAction : IPlayerAction
         }
     }
 
+    /// <inheritdoc />
     public void TickInactive(double delta)
     {
         if (_phase != Phase.Cooldown)
@@ -80,6 +103,7 @@ public sealed class RollAction : IPlayerAction
         }
     }
 
+    /// <summary>翻滚结束：恢复碰撞掩码、视觉与速度，进入冷却并通知 Controller。</summary>
     private void FinishRoll(PlayerActionContext ctx)
     {
         ctx.Player.CollisionMask = _savedCollisionMask;

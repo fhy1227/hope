@@ -1,0 +1,67 @@
+---
+description: 新增功能时为类、属性、方法添加详尽 XML 注释（面向初级开发者）
+globs: "**/*.cs"
+alwaysApply: false
+---
+
+# 新增功能文档注释规范
+
+假设代码读者为**初级开发者**。新增或扩展功能时，必须为**新写的**类、公开/Protected 成员、以及非 trivial 的私有方法添加**中文 XML 注释**（`///`），说明「是什么、为什么、怎么用」。
+
+> 本规则在**新增代码**时优先于「仅注释非显而易见逻辑」。不要求批量补全历史文件。
+> **例外**：`scripts/config/*Config.cs` 等工具链生成文件勿手改注释。
+
+## 类
+
+- 职责边界（做什么 / 不做什么）
+- 在架构中的位置（Autoload、组件、系统、UI 等）
+- 关键协作对象或生命周期（如 `Main.Instance`、`EventBus`、所属 `CanvasLayer`）
+
+```csharp
+/// <summary>
+/// 主游戏场景根协调者：持有世界与 UI 层引用，重置局内系统，不微操玩法细节。
+/// </summary>
+public partial class Main : Node { }
+```
+
+## 属性 / 字段
+
+- 语义与取值范围
+- 可空性含义（`Type?` 何时为 null）
+- 是否只读、是否有副作用或依赖外部状态
+
+```csharp
+/// <summary>当前对局波次，从 1 开始；新对局在 <see cref="RunManager.StartRun"/> 时重置。</summary>
+public int CurrentWave { get; private set; }
+```
+
+## 方法
+
+- 行为摘要与**何时调用**
+- `<param>`、`<returns>`（有参数、返回值、out/ref 时必填）
+- 前置条件、失败/静默忽略的情况、副作用（发信号、改树、暂停等）
+
+```csharp
+/// <summary>
+/// 新对局进入主场景时清空背包与装备（Autoload 局内状态重置入口）。
+/// </summary>
+public void ResetRunState() { }
+
+/// <summary>
+/// 按方向启动翻滚；已在翻滚中或体力不足时静默忽略。
+/// </summary>
+/// <param name="direction">归一化移动方向；零向量时使用面朝方向。</param>
+/// <returns>是否成功开始翻滚。</returns>
+public bool TryStart(Vector2 direction) { }
+```
+
+## 枚举与接口
+
+- 枚举类型：说明用途；非 obvious 的枚举值逐条注释
+- 接口：说明契约与实现者职责
+
+## 不必注释
+
+- 与项目内大量重复、完全机械的单例 `Instance` 赋值模板（类级注释已说明时）
+- 一行即可说清的自解释私有局部变量
+- 修改已有成员时：**同步更新**相关注释，勿删除或留过时说明

@@ -34,7 +34,7 @@ public partial class Player : CharacterBody2D
 		_actions = GetNode<PlayerActionController>("PlayerActionController");
 		_actions.Bind(this);
 
-		var visual = GetNodeOrNull<Node2D>("Visual");
+		var visual = GetNodeOrNull<AnimatedSprite2D>("Visual");
 		if (visual != null)
 		{
 			_visualBaseScale = visual.Scale;
@@ -71,7 +71,7 @@ public partial class Player : CharacterBody2D
 
 	public void SetActionVisual(Color color, float scaleMultiplier = 1f)
 	{
-		var visual = GetNodeOrNull<Node2D>("Visual");
+		var visual = GetNodeOrNull<AnimatedSprite2D>("Visual");
 		if (visual == null)
 		{
 			return;
@@ -83,7 +83,7 @@ public partial class Player : CharacterBody2D
 
 	public void ResetActionVisual()
 	{
-		var visual = GetNodeOrNull<Node2D>("Visual");
+		var visual = GetNodeOrNull<AnimatedSprite2D>("Visual");
 		if (visual == null)
 		{
 			return;

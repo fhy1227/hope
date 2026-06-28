@@ -1,6 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
+using Hope;
 using Hope.Core;
 using Hope.Systems;
 
@@ -30,6 +31,7 @@ public partial class InventoryUI : Control
     private Label _inventoryLabel = null!;
     private Label _emptyLabel = null!;
     private readonly Dictionary<int, List<Button>> _equipSlotButtons = new();
+    private bool _pausedBySelf;
 
     public override void _Ready()
     {
@@ -64,11 +66,18 @@ public partial class InventoryUI : Control
 
     public override void _Input(InputEvent @event)
     {
-        if (!@event.IsActionPressed("toggle_inventory"))
+        if (@event.IsActionPressed("toggle_inventory"))
+        {
+            GetViewport().SetInputAsHandled();
+            Toggle();
             return;
+        }
 
-        GetViewport().SetInputAsHandled();
-        Toggle();
+        if (Visible && @event.IsActionPressed("ui_cancel"))
+        {
+            GetViewport().SetInputAsHandled();
+            SetOpen(false);
+        }
     }
 
     private void BindEquipSlots()
@@ -225,13 +234,28 @@ public partial class InventoryUI : Control
 
     private void SetOpen(bool open)
     {
-        Visible = open;
-        MouseFilter = open ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
-
         if (open)
         {
+            if (!Visible && GameManager.Instance?.State == GameState.Playing)
+            {
+                GetTree().Paused = true;
+                _pausedBySelf = true;
+            }
+
+            Visible = true;
+            MouseFilter = MouseFilterEnum.Stop;
             RefreshInventoryGrid();
             RefreshEquipSlots();
+            return;
+        }
+
+        Visible = false;
+        MouseFilter = MouseFilterEnum.Ignore;
+
+        if (_pausedBySelf)
+        {
+            GetTree().Paused = false;
+            _pausedBySelf = false;
         }
     }
 
