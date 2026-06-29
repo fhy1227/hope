@@ -80,7 +80,18 @@ public partial class HealthComponent : Node
     private Vector2 GetDamageNumberPosition()
     {
         var parent = GetParent() as Node2D;
-        return parent?.GlobalPosition + new Vector2(0f, -16f) ?? Vector2.Zero;
+        if (parent == null)
+        {
+            return Vector2.Zero;
+        }
+
+        var healthBar = parent.GetNodeOrNull<UnitHealthBar>("UnitHealthBar");
+        if (healthBar != null)
+        {
+            return healthBar.GlobalPosition + new Vector2(0f, -healthBar.BarSize.Y * 0.5f);
+        }
+
+        return parent.GlobalPosition + new Vector2(0f, -16f);
     }
 
     public void Heal(int amount)

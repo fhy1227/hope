@@ -23,7 +23,7 @@ public partial class DamageNumber : Node2D
             ? new Color(1f, 0.4f, 0.4f)
             : new Color(1f, 0.92f, 0.45f);
 
-        Position = new Vector2((float)GD.RandRange(-10f, 10f), (float)GD.RandRange(-22f, -16f));
+        Position += new Vector2((float)GD.RandRange(-8f, 8f), (float)GD.RandRange(-2f, 2f));
         _velocity = new Vector2((float)GD.RandRange(-18f, 18f), -RiseSpeed);
         Scale = Vector2.One * 0.55f;
 
