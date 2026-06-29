@@ -28,6 +28,10 @@ EquipManager="*res://scripts/systems/EquipManager.cs"
 
 project/assembly_name="hope"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/TileMapDual/plugin.cfg")
+
 [input]
 
 move_left={
