@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c74ugq7y80vmi"]
 
 [ext_resource type="Script" uid="uid://cun3ty5lmeu0" path="res://scripts/ui/InventoryUI.cs" id="1_inv"]
+[ext_resource type="PackedScene" uid="uid://bqx8itemactionpopup" path="res://scenes/ui/inventory_item_action_popup.tscn" id="2_popup"]
 
 [node name="InventoryUI" type="Control" unique_id=1463402532]
 process_mode = 3
@@ -187,6 +188,13 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
 text = "  背 包"
 
+[node name="SellLowRarityButton" type="Button" parent="Center/MainPanel/MainVBox/Content/InvColumn"]
+unique_name_in_owner = true
+process_mode = 3
+layout_mode = 2
+size_flags_horizontal = 3
+text = "卖出普通/魔法物品"
+
 [node name="ScrollContainer" type="ScrollContainer" parent="Center/MainPanel/MainVBox/Content/InvColumn" unique_id=1772512410]
 unique_name_in_owner = true
 layout_mode = 2
@@ -211,5 +219,8 @@ autowrap_mode = 3
 
 [node name="FooterLabel" type="Label" parent="Center/MainPanel/MainVBox" unique_id=1893323425]
 layout_mode = 2
-text = "点击背包物品穿戴 | 点击已装备物品卸下 | I 键关闭"
+text = "点击背包装备选择操作 | 点击已装备物品卸下 | I 键关闭"
 horizontal_alignment = 1
+
+[node name="ItemActionPopup" parent="." instance=ExtResource("2_popup")]
+unique_name_in_owner = true

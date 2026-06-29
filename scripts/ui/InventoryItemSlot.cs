@@ -11,7 +11,7 @@ public partial class InventoryItemSlot : Button
 {
     private string _itemUid = "";
 
-    public void Bind(ItemInstance item, Action<string> onEquipClicked, Action<ItemInstance> onUseClicked)
+    public void Bind(ItemInstance item, Action<string> onEquipItemClicked, Action<ItemInstance> onUseClicked)
     {
         _itemUid = item.Uid;
         var config = item.Config;
@@ -20,6 +20,7 @@ public partial class InventoryItemSlot : Button
 
         var color = InventoryUI.GetQualityColor(item.EffectiveRarity);
         AddThemeColorOverride("font_color", color);
+        InventoryUI.ApplyQualityBackground(this, item.EffectiveRarity);
         Text = config.StackLimit > 1 && item.Count > 1 ? $"x{item.Count}" : "";
         TooltipText = InventoryUI.BuildItemTooltip(item);
 
@@ -28,7 +29,7 @@ public partial class InventoryItemSlot : Button
         void OnPressed()
         {
             if (item.IsEquip)
-                onEquipClicked(_itemUid);
+                onEquipItemClicked(_itemUid);
             else
                 onUseClicked(item);
         }

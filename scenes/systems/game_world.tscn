@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cgameworld01"]
+[gd_scene load_steps=10 format=3 uid="uid://cgameworld01"]
 
 [ext_resource type="Script" uid="uid://h45l0y8tes8c" path="res://scripts/systems/GameWorld.cs" id="1_gw"]
 [ext_resource type="Script" uid="uid://dg41xmuojjjs5" path="res://scripts/systems/RunManager.cs" id="2_run"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://cenemy001" path="res://scenes/entities/enemy.tscn" id="6_enemy"]
 [ext_resource type="PackedScene" uid="uid://cpickup001" path="res://scenes/entities/pickup.tscn" id="7_pickup"]
 [ext_resource type="PackedScene" uid="uid://carena01" path="res://scenes/levels/arena.tscn" id="8_arena"]
+[ext_resource type="Script" path="res://scripts/systems/DamageNumberSpawner.cs" id="9_dmg_spawn"]
+[ext_resource type="PackedScene" uid="uid://cdmgnumber01" path="res://scenes/entities/damage_number.tscn" id="10_dmg_num"]
 
 [node name="GameWorld" type="Node2D"]
 script = ExtResource("1_gw")
@@ -27,6 +29,10 @@ polygon = PackedVector2Array(-1200, -1200, 1200, -1200, 1200, 1200, -1200, 1200)
 [node name="Effects" type="Node2D" parent="."]
 
 [node name="Projectiles" type="Node2D" parent="Effects"]
+
+[node name="DamageNumbers" type="Node" parent="Effects"]
+script = ExtResource("9_dmg_spawn")
+DamageNumberScene = ExtResource("10_dmg_num")
 
 [node name="Pickups" type="Node2D" parent="."]
 

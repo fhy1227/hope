@@ -37,6 +37,9 @@ public partial class EventBus : Node
     [Signal]
     public delegate void PlayerActionEndedEventHandler(int actionId);
 
+    [Signal]
+    public delegate void DamageTakenEventHandler(int amount, Vector2 worldPosition, bool isPlayer);
+
     public static EventBus? Instance { get; private set; }
 
     public override void _EnterTree()
@@ -101,5 +104,10 @@ public partial class EventBus : Node
     public void EmitPlayerActionEnded(int actionId)
     {
         EmitSignal(SignalName.PlayerActionEnded, actionId);
+    }
+
+    public void EmitDamageTaken(int amount, Vector2 worldPosition, bool isPlayer)
+    {
+        EmitSignal(SignalName.DamageTaken, amount, worldPosition, isPlayer);
     }
 }

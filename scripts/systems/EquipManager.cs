@@ -24,7 +24,7 @@ public partial class EquipManager : Node
     [Signal] public delegate void EquipmentChangedEventHandler();
 
     /// <summary> 当前装备带来的属性加成（缓存） </summary>
-    public EquipStatBonus CurrentBonus { get; private set; } = new();
+    public NumericModifierMap CurrentBonus { get; private set; } = new();
 
     public override void _Ready()
     {
@@ -177,30 +177,44 @@ public partial class EquipManager : Node
     /// </summary>
     private void RecalcBonus()
     {
-        var bonus = new EquipStatBonus();
+        var bonus = new NumericModifierMap();
 
         foreach (var item in GetAllEquipped())
         {
-            if (item.Config == null) continue;
-            var itemBonus = item.ComputeStatBonus();
-            bonus.Hp     += itemBonus.Hp;
-            bonus.Damage += itemBonus.Damage;
-            bonus.Speed  += itemBonus.Speed;
-            bonus.Crit   += itemBonus.Crit;
-            bonus.Armor  += itemBonus.Armor;
+            if (item.Config == null)
+            {
+                continue;
+            }
+
+            bonus.MergeFrom(item.ComputeStatBonus());
         }
 
         CurrentBonus = bonus;
-        GD.Print($"[EquipManager] 属性加成: HP+{bonus.Hp} 伤害x{bonus.Damage:F2} 速度x{bonus.Speed:F2} 暴击+{bonus.Crit:F2} 护甲+{bonus.Armor}");
+        GD.Print($"[EquipManager] 属性加成条目: {FormatBonusLog(bonus)}");
 
-        // 应用到 RunStats
-        ApplyToRunStats();
+        ApplyToPlayerStats();
+    }
+
+    private static string FormatBonusLog(NumericModifierMap bonus)
+    {
+        if (bonus.IsEmpty)
+        {
+            return "无";
+        }
+
+        var parts = new List<string>();
+        foreach (var (type, modType, value) in bonus.Entries)
+        {
+            parts.Add($"{type} {modType} {value:0.##}");
+        }
+
+        return string.Join(", ", parts);
     }
 
     /// <summary>
-    /// 将当前加成应用到 RunStats（Player 的单局属性）
+    /// 将当前加成应用到玩家 NumericComponent（经 DataModifierComponent）。
     /// </summary>
-    private void ApplyToRunStats()
+    private void ApplyToPlayerStats()
     {
         var player = Main.Instance?.Run?.Player;
         if (player == null)
@@ -227,21 +241,12 @@ public partial class EquipManager : Node
     public void Clear()
     {
         foreach (var kv in _equipped)
+        {
             kv.Value.Clear();
-        CurrentBonus = new EquipStatBonus();
+        }
+
+        CurrentBonus = new NumericModifierMap();
         EmitSignal(SignalName.EquipmentChanged);
         GD.Print("[EquipManager] 已清空所有装备");
     }
-}
-
-/// <summary>
-/// 装备属性加成（值类型）
-/// </summary>
-public struct EquipStatBonus
-{
-    public int   Hp;
-    public float Damage;
-    public float Speed;
-    public float Crit;
-    public int   Armor;
 }

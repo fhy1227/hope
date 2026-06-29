@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Components;
 using Hope.Core;
 using Hope.Systems;
 
@@ -107,32 +108,70 @@ public partial class GameHud : Control
         }
 
         var stats = _runManager.Stats;
-        var bonus = EquipManager.Instance?.CurrentBonus ?? default;
+        var bonus = EquipManager.Instance?.CurrentBonus ?? NumericModifierMap.Empty;
 
-        _statHpLabel.Text = FormatIntStat("生命上限", stats.MaxHealth + bonus.Hp, bonus.Hp);
-        _statDamageLabel.Text = FormatFloatStat("伤害", stats.Damage, bonus.Damage);
-        _statAttackSpeedLabel.Text = $"攻速  {stats.AttackSpeed:0.##}/s";
-        _statSpeedLabel.Text = FormatFloatStat("移速", stats.Speed, bonus.Speed);
-        _statRangeLabel.Text = $"射程  {stats.WeaponRange:0}";
-        _statProjectileSpeedLabel.Text = $"弹道  {stats.ProjectileSpeed:0}";
-        _statCritLabel.Text = bonus.Crit > 0f
-            ? $"暴击  +{bonus.Crit:0.##}"
-            : "暴击  0";
-        _statArmorLabel.Text = bonus.Armor > 0
-            ? $"护甲  +{bonus.Armor}"
-            : "护甲  0";
+        _statHpLabel.Text = FormatStatWithBonus("生命上限", stats.MaxHealth, bonus, NumericType.MaxHealth, "0");
+        _statDamageLabel.Text = FormatStatWithBonus("伤害", stats.Damage, bonus, NumericType.Damage);
+        _statAttackSpeedLabel.Text = FormatStatWithBonus("攻速", stats.AttackSpeed, bonus, NumericType.AttackSpeed, "0.##") + "/s";
+        _statSpeedLabel.Text = FormatStatWithBonus("移速", stats.Speed, bonus, NumericType.MoveSpeed);
+        _statRangeLabel.Text = FormatStatWithBonus("射程", stats.WeaponRange, bonus, NumericType.WeaponRange, "0");
+        _statProjectileSpeedLabel.Text = FormatStatWithBonus("弹道", stats.ProjectileSpeed, bonus, NumericType.ProjectileSpeed, "0");
+        _statCritLabel.Text = FormatBonusOnlyStat("暴击", bonus, NumericType.Crit);
+        _statArmorLabel.Text = FormatBonusOnlyStat("护甲", bonus, NumericType.Armor, "0");
     }
 
-    private static string FormatIntStat(string name, int total, int bonus)
+    private static string FormatStatWithBonus(
+        string name,
+        float baseValue,
+        NumericModifierMap bonus,
+        NumericType type,
+        string format = "0.##")
     {
-        return bonus > 0 ? $"{name}  {total} (+{bonus})" : $"{name}  {total}";
+        var constant = bonus.GetValue(type, ModifierType.Constant);
+        var percent = bonus.GetValue(type, ModifierType.Percentage);
+        if (Mathf.Abs(constant) <= NumericDefine.Epsilon && Mathf.Abs(percent) <= NumericDefine.Epsilon)
+        {
+            return $"{name}  {baseValue.ToString(format)}";
+        }
+
+        var total = bonus.ApplyToBase(type, baseValue);
+        return $"{name}  {total.ToString(format)} ({FormatBonusSuffix(constant, percent, format)})";
     }
 
-    private static string FormatFloatStat(string name, float baseValue, float bonus)
+    private static string FormatBonusOnlyStat(
+        string name,
+        NumericModifierMap bonus,
+        NumericType type,
+        string format = "0.##")
     {
-        return bonus > 0f
-            ? $"{name}  {baseValue:0.##} (+{bonus:0.##})"
-            : $"{name}  {baseValue:0.##}";
+        var constant = bonus.GetValue(type, ModifierType.Constant);
+        var percent = bonus.GetValue(type, ModifierType.Percentage);
+        if (Mathf.Abs(constant) <= NumericDefine.Epsilon && Mathf.Abs(percent) <= NumericDefine.Epsilon)
+        {
+            return $"{name}  0";
+        }
+
+        return $"{name}  {FormatBonusSuffix(constant, percent, format)}";
+    }
+
+    private static string FormatBonusSuffix(float constant, float percent, string format)
+    {
+        var parts = new System.Collections.Generic.List<string>();
+        if (Mathf.Abs(constant) > NumericDefine.Epsilon)
+        {
+            parts.Add(constant > 0f
+                ? $"+{constant.ToString(format)}"
+                : constant.ToString(format));
+        }
+
+        if (Mathf.Abs(percent) > NumericDefine.Epsilon)
+        {
+            parts.Add(percent > 0f
+                ? $"+{percent.ToString(format)}%"
+                : $"{percent.ToString(format)}%");
+        }
+
+        return string.Join(", ", parts);
     }
 
     private void OnHealthChanged(int current, int max)

@@ -145,6 +145,35 @@ public partial class InventoryManager : Node
     }
 
     /// <summary>
+    /// 批量移除物品，只触发一次 InventoryChanged。
+    /// </summary>
+    public bool RemoveItems(IReadOnlyList<(string uid, int count)> removals)
+    {
+        if (removals.Count == 0)
+            return false;
+
+        var modified = false;
+        foreach (var (uid, count) in removals)
+        {
+            var item = _items.Find(i => i.Uid == uid);
+            if (item == null)
+                continue;
+
+            if (item.IsStackable && item.Count > count)
+                item.Count -= count;
+            else
+                _items.Remove(item);
+
+            modified = true;
+        }
+
+        if (modified)
+            EmitSignal(SignalName.InventoryChanged);
+
+        return modified;
+    }
+
+    /// <summary>
     /// 按配置ID移除物品
     /// </summary>
     public bool RemoveItemByConfigId(int configId, int count = 1)

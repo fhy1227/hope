@@ -46,11 +46,11 @@ public partial class PlayerStatsComponent : Node
             _numeric[NumericType.Health] = savedHealth;
         }
 
-        ApplyEquipModifiers(EquipManager.Instance?.CurrentBonus ?? default);
+        ApplyEquipModifiers(EquipManager.Instance?.CurrentBonus ?? NumericModifierMap.Empty);
         _healthSync.SyncAll(refillHealth);
     }
 
-    public void ApplyEquipModifiers(EquipStatBonus bonus)
+    public void ApplyEquipModifiers(NumericModifierMap bonus)
     {
         if (_equipModifiers.Count > 0)
         {
@@ -58,35 +58,13 @@ public partial class PlayerStatsComponent : Node
             _equipModifiers.Clear();
         }
 
-        if (bonus.Hp != 0)
+        if (bonus == null || bonus.IsEmpty)
         {
-            _equipModifiers.Add(new DataModifier(ModifierType.Constant, NumericType.MaxHealth, bonus.Hp));
+            return;
         }
 
-        if (bonus.Damage != 0f)
-        {
-            _equipModifiers.Add(new DataModifier(ModifierType.Constant, NumericType.Damage, bonus.Damage));
-        }
-
-        if (bonus.Speed != 0f)
-        {
-            _equipModifiers.Add(new DataModifier(ModifierType.Constant, NumericType.MoveSpeed, bonus.Speed));
-        }
-
-        if (bonus.Crit != 0f)
-        {
-            _equipModifiers.Add(new DataModifier(ModifierType.Constant, NumericType.Crit, bonus.Crit));
-        }
-
-        if (bonus.Armor != 0)
-        {
-            _equipModifiers.Add(new DataModifier(ModifierType.Constant, NumericType.Armor, bonus.Armor));
-        }
-
-        if (_equipModifiers.Count > 0)
-        {
-            _modifiers.AddModifiers(_equipModifiers);
-        }
+        _equipModifiers.AddRange(bonus.ToDataModifiers());
+        _modifiers.AddModifiers(_equipModifiers);
     }
 
     public float GetMoveSpeed() => _numeric[NumericType.MoveSpeed];

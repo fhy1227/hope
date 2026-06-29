@@ -1,3 +1,5 @@
+using Hope.Core;
+
 namespace Hope.DropSystem;
 
 /// <summary>
@@ -6,18 +8,7 @@ namespace Hope.DropSystem;
 public class RolledAffix
 {
     public string AffixId { get; set; } = "";
-    public AffixStat Stat { get; set; }
+    public NumericType NumericType { get; set; }
+    public ModifierType ModifierType { get; set; } = ModifierType.Constant;
     public float Value { get; set; }
-}
-
-/// <summary>
-/// 词条可影响的属性类型。
-/// </summary>
-public enum AffixStat
-{
-    Hp = 1,
-    Damage = 2,
-    Speed = 3,
-    Crit = 4,
-    Armor = 5,
 }

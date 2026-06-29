@@ -56,23 +56,22 @@ public partial class ItemInstance : Resource
     /// <summary>
     /// 汇总底材属性、传奇倍率与全部词条，供 <see cref="EquipManager"/> 合并到玩家数值。
     /// </summary>
-    /// <returns>可叠加的 <see cref="EquipStatBonus"/>；Config 缺失时返回零加成。</returns>
-    public EquipStatBonus ComputeStatBonus()
+    /// <returns>可叠加的 <see cref="NumericModifierMap"/>；Config 缺失时返回空 map。</returns>
+    public NumericModifierMap ComputeStatBonus()
     {
-        var bonus = new EquipStatBonus();
+        var bonus = new NumericModifierMap();
         if (Config == null)
+        {
             return bonus;
+        }
 
         var legendaryMul = EffectiveRarity >= 4 ? EquipDropGenerator.LegendaryStatMultiplier : 1f;
-
-        bonus.Hp = Config.StatHp;
-        bonus.Damage = Config.StatDamage * legendaryMul;
-        bonus.Speed = Config.StatSpeed;
-        bonus.Crit = Config.StatCrit;
-        bonus.Armor = Config.StatArmor;
+        ItemStatMapping.ApplyBaseStats(Config, bonus, legendaryMul);
 
         foreach (var affix in Affixes)
-            AffixPool.ApplyAffix(ref bonus, affix);
+        {
+            bonus.Add(affix.NumericType, affix.ModifierType, affix.Value);
+        }
 
         return bonus;
     }

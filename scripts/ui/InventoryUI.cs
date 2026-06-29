@@ -14,6 +14,8 @@ namespace Hope.UI;
 public partial class InventoryUI : Control
 {
     // ── 品质颜色映射 ────────────────────────────
+    private const float QualityBackgroundAlpha = 0.35f;
+
     private static readonly Color[] QualityColors = {
         new(0, 0, 0, 0),                  // 0 - 未使用
         new(0.627f, 0.627f, 0.627f, 1),   // 1 白 #A0A0A0
@@ -23,6 +25,8 @@ public partial class InventoryUI : Control
         new(1,     0.843f, 0,      1),    // 5 暗金 #FFD700
     };
 
+    private static StyleBoxFlat[]? _qualityBackgroundStyles;
+
     private const string ItemSlotScenePath = "res://scenes/ui/inventory_item_slot.tscn";
 
     [Export] public PackedScene ItemSlotScene { get; set; } = null!;
@@ -31,6 +35,7 @@ public partial class InventoryUI : Control
     private Label _inventoryLabel = null!;
     private Label _emptyLabel = null!;
     private readonly Dictionary<int, List<Button>> _equipSlotButtons = new();
+    private InventoryItemActionPopup _itemActionPopup = null!;
     private bool _pausedBySelf;
 
     public override void _Ready()
@@ -45,6 +50,11 @@ public partial class InventoryUI : Control
 
         BindEquipSlots();
         GetNode<Button>("%CloseButton").Pressed += () => SetOpen(false);
+        GetNode<Button>("%SellLowRarityButton").Pressed += OnSellLowRarityClicked;
+
+        _itemActionPopup = GetNode<InventoryItemActionPopup>("%ItemActionPopup");
+        _itemActionPopup.EquipRequested += OnItemEquipRequested;
+        _itemActionPopup.SellRequested += OnItemSellRequested;
 
         Visible = false;
 
@@ -62,6 +72,12 @@ public partial class InventoryUI : Control
             InventoryManager.Instance.InventoryChanged -= OnInventoryChanged;
         if (EquipManager.Instance != null)
             EquipManager.Instance.EquipmentChanged -= OnEquipmentChanged;
+
+        if (_itemActionPopup != null)
+        {
+            _itemActionPopup.EquipRequested -= OnItemEquipRequested;
+            _itemActionPopup.SellRequested -= OnItemSellRequested;
+        }
     }
 
     public override void _Input(InputEvent @event)
@@ -76,6 +92,12 @@ public partial class InventoryUI : Control
         if (Visible && @event.IsActionPressed("ui_cancel"))
         {
             GetViewport().SetInputAsHandled();
+            if (_itemActionPopup.IsOpen)
+            {
+                _itemActionPopup.HidePopup();
+                return;
+            }
+
             SetOpen(false);
         }
     }
@@ -142,7 +164,7 @@ public partial class InventoryUI : Control
         foreach (var item in items)
         {
             var slot = ItemSlotScene.Instantiate<InventoryItemSlot>();
-            slot.Bind(item, OnInventoryItemClickedByUid, OnConsumableClicked);
+            slot.Bind(item, ShowItemActionPopup, OnConsumableClicked);
             _inventoryGrid.AddChild(slot);
         }
     }
@@ -156,21 +178,9 @@ public partial class InventoryUI : Control
             for (int i = 0; i < buttons.Count; i++)
             {
                 if (i < equipped.Count)
-                {
-                    var item = equipped[i];
-                    ApplyItemIcon(buttons[i], item);
-                    buttons[i].Text = item.Count > 1 ? $"x{item.Count}" : "";
-                    var color = GetQualityColor(item.EffectiveRarity);
-                    buttons[i].AddThemeColorOverride("font_color", color);
-                    buttons[i].TooltipText = BuildItemTooltip(item);
-                }
+                    ApplyEquipSlotAppearance(buttons[i], equipped[i]);
                 else
-                {
-                    buttons[i].Icon = null;
-                    buttons[i].Text = "（空）";
-                    buttons[i].AddThemeColorOverride("font_color", new Color(0.5f, 0.5f, 0.5f));
-                    buttons[i].TooltipText = "";
-                }
+                    ClearEquipSlotAppearance(buttons[i]);
             }
         }
     }
@@ -187,6 +197,41 @@ public partial class InventoryUI : Control
         btn.Icon = LoadItemIcon(config.Icon);
     }
 
+    public static void ApplyEquipSlotAppearance(Button btn, ItemInstance item)
+    {
+        ApplyItemIcon(btn, item);
+        btn.Text = item.Count > 1 ? $"x{item.Count}" : "";
+        btn.AddThemeColorOverride("font_color", GetQualityColor(item.EffectiveRarity));
+        btn.TooltipText = BuildItemTooltip(item);
+        ApplyQualityBackground(btn, item.EffectiveRarity);
+    }
+
+    public static void ClearEquipSlotAppearance(Button btn)
+    {
+        btn.Icon = null;
+        btn.Text = "（空）";
+        btn.AddThemeColorOverride("font_color", new Color(0.5f, 0.5f, 0.5f));
+        btn.TooltipText = "";
+        ClearQualityBackground(btn);
+    }
+
+    public static void ApplyQualityBackground(Button btn, int rarity)
+    {
+        var style = GetQualityBackgroundStyle(rarity);
+        btn.AddThemeStyleboxOverride("normal", style);
+        btn.AddThemeStyleboxOverride("hover", style);
+        btn.AddThemeStyleboxOverride("pressed", style);
+        btn.AddThemeStyleboxOverride("focus", style);
+    }
+
+    public static void ClearQualityBackground(Button btn)
+    {
+        btn.RemoveThemeStyleboxOverride("normal");
+        btn.RemoveThemeStyleboxOverride("hover");
+        btn.RemoveThemeStyleboxOverride("pressed");
+        btn.RemoveThemeStyleboxOverride("focus");
+    }
+
     private static Texture2D? LoadItemIcon(string iconPath)
     {
         if (string.IsNullOrEmpty(iconPath))
@@ -195,7 +240,7 @@ public partial class InventoryUI : Control
         return GD.Load<Texture2D>(iconPath);
     }
 
-    private void OnInventoryItemClickedByUid(string uid)
+    private void ShowItemActionPopup(string uid)
     {
         var item = InventoryManager.Instance?.Items.FirstOrDefault(i => i.Uid == uid);
         if (item == null)
@@ -207,11 +252,86 @@ public partial class InventoryUI : Control
         if (!item.IsEquip)
             return;
 
+        _itemActionPopup.ShowFor(item);
+    }
+
+    private void OnItemEquipRequested(string uid)
+    {
+        var item = InventoryManager.Instance?.Items.FirstOrDefault(i => i.Uid == uid);
+        if (item == null)
+        {
+            GD.Print("[InventoryUI] 物品已不在背包中");
+            return;
+        }
+
         bool ok = EquipManager.Instance.Equip(item);
         if (ok)
             GD.Print($"[InventoryUI] 已穿戴: {item.Config.NameKey}");
         else
             GD.Print($"[InventoryUI] 穿戴失败: {item.Config.NameKey}");
+    }
+
+    private void OnItemSellRequested(string uid)
+    {
+        var item = InventoryManager.Instance?.Items.FirstOrDefault(i => i.Uid == uid);
+        if (item == null)
+        {
+            GD.Print("[InventoryUI] 物品已不在背包中");
+            return;
+        }
+
+        if (!TrySellItem(item, out var gold))
+            return;
+
+        Main.Instance?.Run?.AddGold(gold);
+        GD.Print($"[InventoryUI] 已卖出: {item.Config?.NameKey} +{gold} 金币");
+    }
+
+    private void OnSellLowRarityClicked()
+    {
+        var inventory = InventoryManager.Instance;
+        if (inventory == null)
+            return;
+
+        var toSell = inventory.Items
+            .Where(i => IsLowRarity(i.EffectiveRarity))
+            .Where(i => GetSellGold(i) > 0)
+            .ToList();
+
+        if (toSell.Count == 0)
+        {
+            GD.Print("[InventoryUI] 背包中没有可卖出的普通/魔法物品");
+            return;
+        }
+
+        var removals = toSell.Select(i => (i.Uid, i.Count)).ToList();
+        var totalGold = toSell.Sum(GetSellGold);
+
+        if (!inventory.RemoveItems(removals))
+            return;
+
+        Main.Instance?.Run?.AddGold(totalGold);
+        GD.Print($"[InventoryUI] 批量卖出 {toSell.Count} 件普通/魔法物品，获得 {totalGold} 金币");
+    }
+
+    private static bool IsLowRarity(int rarity) => rarity is 1 or 2;
+
+    private static int GetSellGold(ItemInstance item)
+    {
+        var unitPrice = item.Config?.SellPrice ?? 0;
+        return unitPrice > 0 ? unitPrice * item.Count : 0;
+    }
+
+    private static bool TrySellItem(ItemInstance item, out int gold)
+    {
+        gold = GetSellGold(item);
+        if (gold <= 0)
+        {
+            GD.Print($"[InventoryUI] 不可卖出: {item.Config?.NameKey}");
+            return false;
+        }
+
+        return InventoryManager.Instance?.RemoveItem(item.Uid) == true;
     }
 
     private static void OnConsumableClicked(ItemInstance item)
@@ -251,6 +371,7 @@ public partial class InventoryUI : Control
 
         Visible = false;
         MouseFilter = MouseFilterEnum.Ignore;
+        _itemActionPopup.HidePopup();
 
         if (_pausedBySelf)
         {
@@ -264,6 +385,35 @@ public partial class InventoryUI : Control
         if (rarity >= 1 && rarity < QualityColors.Length)
             return QualityColors[rarity];
         return Colors.White;
+    }
+
+    public static Color GetQualityBackgroundColor(int rarity)
+    {
+        var color = GetQualityColor(rarity);
+        color.A = QualityBackgroundAlpha;
+        return color;
+    }
+
+    private static StyleBoxFlat GetQualityBackgroundStyle(int rarity)
+    {
+        _qualityBackgroundStyles ??= new StyleBoxFlat[QualityColors.Length];
+
+        if (rarity < 1 || rarity >= _qualityBackgroundStyles.Length)
+            rarity = 1;
+
+        if (_qualityBackgroundStyles[rarity] == null)
+        {
+            _qualityBackgroundStyles[rarity] = new StyleBoxFlat
+            {
+                BgColor = GetQualityBackgroundColor(rarity),
+                CornerRadiusTopLeft = 4,
+                CornerRadiusTopRight = 4,
+                CornerRadiusBottomLeft = 4,
+                CornerRadiusBottomRight = 4,
+            };
+        }
+
+        return _qualityBackgroundStyles[rarity];
     }
 
     private static string GetQualityName(int rarity) => rarity switch
@@ -302,14 +452,15 @@ public partial class InventoryUI : Control
             $"物品等级: {item.ItemLevel}",
             $"类型: {GetSlotName(cfg.SlotType)}"
         };
-        if (bonus.Hp     > 0) lines.Add($"生命: +{bonus.Hp}");
-        if (bonus.Damage > 0) lines.Add($"伤害: x{bonus.Damage:F2}");
-        if (bonus.Speed  > 0) lines.Add($"速度: x{bonus.Speed:F2}");
-        if (bonus.Crit   > 0) lines.Add($"暴击: +{bonus.Crit:F2}");
-        if (bonus.Armor  > 0) lines.Add($"护甲: +{bonus.Armor}");
+        foreach (var (type, modType, value) in bonus.Entries)
+        {
+            lines.Add(NumericModifierMap.FormatEntry(type, modType, value));
+        }
 
         foreach (var affix in item.Affixes)
-            lines.Add($"+ {affix.AffixId}: {affix.Value:F2}");
+        {
+            lines.Add($"+ {affix.AffixId}: {NumericModifierMap.FormatEntry(affix.NumericType, affix.ModifierType, affix.Value)}");
+        }
 
         if (cfg.SellPrice  > 0) lines.Add($"售价: {cfg.SellPrice} 金币");
 

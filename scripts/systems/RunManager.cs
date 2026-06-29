@@ -224,7 +224,7 @@ public partial class RunManager : Node
 		AddGold(amount);
 	}
 
-	private void AddGold(int amount)
+	public void AddGold(int amount)
 	{
 		_stats.Gold += amount;
 		Hope.EventBus.Instance?.EmitGoldChanged(_stats.Gold);

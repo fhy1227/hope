@@ -56,7 +56,9 @@ public partial class HealthComponent : Node
             return;
         }
 
+        var actualDamage = Mathf.Min(amount, CurrentHealth);
         CurrentHealth = Mathf.Max(CurrentHealth - amount, 0);
+        Hope.EventBus.Instance?.EmitDamageTaken(actualDamage, GetDamageNumberPosition(), IsPlayer);
         EmitSignal(SignalName.Changed, CurrentHealth, MaxHealth);
 
         if (IsPlayer)
@@ -73,6 +75,12 @@ public partial class HealthComponent : Node
                 Hope.EventBus.Instance?.EmitPlayerDied();
             }
         }
+    }
+
+    private Vector2 GetDamageNumberPosition()
+    {
+        var parent = GetParent() as Node2D;
+        return parent?.GlobalPosition + new Vector2(0f, -16f) ?? Vector2.Zero;
     }
 
     public void Heal(int amount)

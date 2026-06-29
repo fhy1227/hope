@@ -26,4 +26,7 @@ public static class ScenePaths
 
     /// <summary>默认竞技场关卡。</summary>
     public const string ArenaLevel = "res://scenes/levels/arena.tscn";
+
+    /// <summary>世界空间浮动伤害数字。</summary>
+    public const string DamageNumber = "res://scenes/entities/damage_number.tscn";
 }
