@@ -7,6 +7,7 @@ namespace Hope.Systems;
 /// </summary>
 public partial class GameWorld : Node2D
 {
+	public LevelManager LevelManager => GetNode<LevelManager>("LevelManager");
 	public Node2D Levels => GetNode<Node2D>("Levels");
 	public Node2D Entities => GetNode<Node2D>("Entities");
 	public Node2D Enemies => GetNode<Node2D>("Enemies");

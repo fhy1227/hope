@@ -30,7 +30,7 @@ project/assembly_name="hope"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/TileMapDual/plugin.cfg")
+enabled=PackedStringArray("res://addons/TileMapDual/plugin.cfg", "res://addons/codeandweb.texturepacker/plugin.cfg")
 
 [input]
 

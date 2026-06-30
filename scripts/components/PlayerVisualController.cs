@@ -5,11 +5,11 @@ using Hope.Entities;
 namespace Hope.Components;
 
 /// <summary>
-/// 玩家序列帧动画：从 frames 目录构建 SpriteFrames，同步移动与战斗行为。
+/// 玩家序列帧动画：从 TexturePacker 图集切片构建 SpriteFrames，同步移动与战斗行为。
 /// </summary>
 public partial class PlayerVisualController : AnimatedSprite2D
 {
-	private const string FrameDir = "res://assets/sprites/characters/player/frames/";
+	private const string SpriteDir = "res://assets/textures/characters/archer_gold.sprites/";
 
 	private Player _player = null!;
 	private bool _actionLocked;
@@ -43,12 +43,23 @@ public partial class PlayerVisualController : AnimatedSprite2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		UpdateFacing();
+
 		if (_actionLocked)
 		{
 			return;
 		}
 
 		UpdateLocomotion();
+	}
+
+	private void UpdateFacing()
+	{
+		var facingX = _player.FacingDirection.X;
+		if (Mathf.Abs(facingX) > 0.01f)
+		{
+			FlipH = facingX > 0f;
+		}
 	}
 
 	private void UpdateLocomotion()
@@ -112,35 +123,30 @@ public partial class PlayerVisualController : AnimatedSprite2D
 	private static SpriteFrames BuildSpriteFrames()
 	{
 		var frames = new SpriteFrames();
-		AddLoop(frames, "idle", "idle_", 5, 6f);
-		AddLoop(frames, "walk", "walk_", 5, 8f);
-		AddOnce(frames, "roll", "walk_", 5, 20f);
-		AddLoop(frames, "charge", "action_b_", 3, 8f);
-		AddOnce(frames, "charge_release", "action_b_", 3, 2, 10f);
-		AddOnce(frames, "stomp", "action_c_", 5, 14f);
-		AddOnce(frames, "parry", "action_d_", 5, 12f);
+		AddLoop(frames, "idle", "idle", 0, 1, 6f);
+		AddLoop(frames, "walk", "run", 0, 10, 10f);
+		AddOnce(frames, "roll", "run", 0, 10, 20f);
+		AddLoop(frames, "charge", "skill1", 0, 8, 8f);
+		AddOnce(frames, "charge_release", "skill1", 8, 8, 12f);
+		AddOnce(frames, "stomp", "attack", 0, 14, 14f);
+		AddOnce(frames, "parry", "attack", 0, 6, 12f);
 		return frames;
 	}
 
-	private static void AddLoop(SpriteFrames frames, string name, string prefix, int count, float fps)
+	private static void AddLoop(SpriteFrames frames, string name, string clip, int start, int count, float fps)
 	{
-		AddFrames(frames, name, prefix, 0, count, fps, loop: true);
+		AddFrames(frames, name, clip, start, count, fps, loop: true);
 	}
 
-	private static void AddOnce(SpriteFrames frames, string name, string prefix, int count, float fps)
+	private static void AddOnce(SpriteFrames frames, string name, string clip, int start, int count, float fps)
 	{
-		AddFrames(frames, name, prefix, 0, count, fps, loop: false);
-	}
-
-	private static void AddOnce(SpriteFrames frames, string name, string prefix, int start, int count, float fps)
-	{
-		AddFrames(frames, name, prefix, start, count, fps, loop: false);
+		AddFrames(frames, name, clip, start, count, fps, loop: false);
 	}
 
 	private static void AddFrames(
 		SpriteFrames frames,
 		string name,
-		string prefix,
+		string clip,
 		int start,
 		int count,
 		float fps,
@@ -152,7 +158,7 @@ public partial class PlayerVisualController : AnimatedSprite2D
 
 		for (var i = 0; i < count; i++)
 		{
-			var path = $"{FrameDir}{prefix}{(start + i):D2}.png";
+			var path = ResolveFramePath(clip, start + i);
 			var texture = GD.Load<Texture2D>(path);
 			if (texture == null)
 			{
@@ -162,5 +168,15 @@ public partial class PlayerVisualController : AnimatedSprite2D
 
 			frames.AddFrame(name, texture);
 		}
+	}
+
+	private static string ResolveFramePath(string clip, int index)
+	{
+		if (clip == "idle")
+		{
+			return $"{SpriteDir}archer_gold-idle_0.tres";
+		}
+
+		return $"{SpriteDir}archer_gold-{clip}_{index:D2}.tres";
 	}
 }

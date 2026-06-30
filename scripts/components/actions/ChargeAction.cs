@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Components.Actions.Charge;
 using Hope.Core;
 
 namespace Hope.Components.Actions;
@@ -9,6 +10,8 @@ namespace Hope.Components.Actions;
 /// </summary>
 public sealed class ChargeAction : IPlayerAction
 {
+    private readonly IChargeReleaseEffect _releaseEffect;
+
     private const float WindUpTime = 0.15f;
     private const float MaxChargeTime = 2f;
     private const float ReleaseTime = 0.2f;
@@ -22,6 +25,15 @@ public sealed class ChargeAction : IPlayerAction
     private float _timer;
     private float _chargePercent;
     private float _cooldown;
+
+    /// <summary>
+    /// 创建聚气行为；未指定释放效果时使用默认范围爆发。
+    /// </summary>
+    /// <param name="releaseEffect">蓄力达标后的释放逻辑；装备词条等可注入不同实现。</param>
+    public ChargeAction(IChargeReleaseEffect? releaseEffect = null)
+    {
+        _releaseEffect = releaseEffect ?? new AoEChargeReleaseEffect();
+    }
 
     /// <inheritdoc />
     public PlayerActionId Id => PlayerActionId.Charge;
@@ -158,7 +170,7 @@ public sealed class ChargeAction : IPlayerAction
     }
 
     /// <summary>
-    /// 判定蓄力是否达到最低释放阈值；不足则取消，否则进入释放并立即造成 AOE。
+    /// 判定蓄力是否达到最低释放阈值；不足则取消，否则进入释放并委托 <see cref="IChargeReleaseEffect"/>。
     /// </summary>
     private void BeginRelease(PlayerActionContext ctx)
     {
@@ -170,24 +182,12 @@ public sealed class ChargeAction : IPlayerAction
 
         _phase = Phase.Release;
         _timer = ReleaseTime;
-        ExecutePulse(ctx);
-        ctx.Player.FlashActionRelease(new Color(1f, 0.95f, 0.7f));
-    }
-
-    /// <summary>
-    /// 按蓄力档位选择半径、伤害倍率与击退，调用 <see cref="CombatPulse.HitCount"/>。
-    /// 档位：&lt;50% / &lt;75% / 满蓄三档。
-    /// </summary>
-    private void ExecutePulse(PlayerActionContext ctx)
-    {
-        var (radius, damageMultiplier, knockback) = _chargePercent switch
+        _releaseEffect.Execute(new ChargeReleaseContext
         {
-            < 0.5f => (60f, 0.8f, 80f),
-            < 0.75f => (90f, 1.2f, 100f),
-            _ => (120f, 2f, 140f),
-        };
-
-        CombatPulse.HitCount(ctx.Player, radius, ctx.GetDamage(damageMultiplier), knockback);
+            Action = ctx,
+            ChargePercent = _chargePercent,
+        });
+        ctx.Player.FlashActionRelease(new Color(1f, 0.95f, 0.7f));
     }
 
     /// <summary>释放阶段倒计时，结束后进入冷却。</summary>

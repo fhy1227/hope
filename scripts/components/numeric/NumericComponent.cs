@@ -132,6 +132,8 @@ public partial class NumericComponent : Node
         }
     }
 
+    private void SetRaw(NumericType numericType, float value) => _numeric[numericType] = value;
+
     private void ApplyMaxHealthChange(float newMaxHealth)
     {
         var maxHealth = Mathf.Max(newMaxHealth, 1f);
@@ -139,29 +141,37 @@ public partial class NumericComponent : Node
         var maxChange = maxHealth - oldMaxHealth;
         var oldHealth = _numeric.GetValueOrDefault(NumericType.Health);
 
+        float newHealth;
         if (maxChange > 0f)
         {
-            var newHealth = Mathf.Min(oldHealth + maxChange, maxHealth);
-            _numeric[NumericType.Health] = newHealth;
+            // 上限提高：当前生命同步增加等量，不超过新上限
+            newHealth = Mathf.Min(oldHealth + maxChange, maxHealth);
         }
         else
         {
-            _numeric[NumericType.Health] = Mathf.Min(oldHealth, maxHealth);
+            // 上限降低：当前生命不超过新上限
+            newHealth = Mathf.Min(oldHealth, maxHealth);
         }
 
-        _numeric[NumericType.MaxHealth] = maxHealth;
+        if (Mathf.Abs(newHealth - oldHealth) > NumericDefine.Epsilon)
+        {
+            SetRaw(NumericType.Health, newHealth);
+        }
+
+        SetRaw(NumericType.MaxHealth, maxHealth);
     }
 
     public void InitFromRunStats(RunStats stats, bool refillHealth = true)
     {
         Clear();
-        _numeric[NumericType.MaxHealth] = stats.MaxHealth;
-        _numeric[NumericType.Health] = refillHealth ? stats.MaxHealth : 0f;
-        _numeric[NumericType.Damage] = stats.Damage;
-        _numeric[NumericType.AttackSpeed] = stats.AttackSpeed;
-        _numeric[NumericType.MoveSpeed] = stats.Speed;
-        _numeric[NumericType.WeaponRange] = stats.WeaponRange;
-        _numeric[NumericType.ProjectileSpeed] = stats.ProjectileSpeed;
+        var maxHealth = Mathf.Max(stats.MaxHealth, 1f);
+        SetRaw(NumericType.MaxHealth, maxHealth);
+        SetRaw(NumericType.Health, refillHealth ? maxHealth : 0f);
+        SetRaw(NumericType.Damage, stats.Damage);
+        SetRaw(NumericType.AttackSpeed, stats.AttackSpeed);
+        SetRaw(NumericType.MoveSpeed, stats.Speed);
+        SetRaw(NumericType.WeaponRange, stats.WeaponRange);
+        SetRaw(NumericType.ProjectileSpeed, stats.ProjectileSpeed);
         InitOriNumeric();
     }
 

@@ -1,0 +1,918 @@
+{
+	"textures": [
+		{
+			"image": "archer_gold.png",
+			"size": {
+				"w": 2030,
+				"h": 320
+			},
+			"sprites": [
+				{
+					"filename": "archer_gold-skill1_08.png",
+					"region": {
+						"x": 1,
+						"y": 1,
+						"w": 161,
+						"h": 115
+					},
+					"margin": {
+						"x": 28,
+						"y": 15,
+						"w": 42,
+						"h": 51
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_07.png",
+					"region": {
+						"x": 1,
+						"y": 118,
+						"w": 159,
+						"h": 113
+					},
+					"margin": {
+						"x": 30,
+						"y": 15,
+						"w": 44,
+						"h": 53
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_04.png",
+					"region": {
+						"x": 1,
+						"y": 233,
+						"w": 94,
+						"h": 80
+					},
+					"margin": {
+						"x": 87,
+						"y": 52,
+						"w": 109,
+						"h": 86
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_14.png",
+					"region": {
+						"x": 1,
+						"y": 315,
+						"w": 3,
+						"h": 3
+					},
+					"margin": {
+						"x": 0,
+						"y": 0,
+						"w": 200,
+						"h": 163
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_05.png",
+					"region": {
+						"x": 97,
+						"y": 233,
+						"w": 94,
+						"h": 80
+					},
+					"margin": {
+						"x": 87,
+						"y": 50,
+						"w": 109,
+						"h": 86
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_06.png",
+					"region": {
+						"x": 162,
+						"y": 118,
+						"w": 157,
+						"h": 113
+					},
+					"margin": {
+						"x": 32,
+						"y": 15,
+						"w": 46,
+						"h": 53
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_01.png",
+					"region": {
+						"x": 164,
+						"y": 1,
+						"w": 119,
+						"h": 113
+					},
+					"margin": {
+						"x": 77,
+						"y": 11,
+						"w": 84,
+						"h": 53
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_05.png",
+					"region": {
+						"x": 285,
+						"y": 1,
+						"w": 156,
+						"h": 112
+					},
+					"margin": {
+						"x": 33,
+						"y": 15,
+						"w": 47,
+						"h": 54
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_06.png",
+					"region": {
+						"x": 193,
+						"y": 233,
+						"w": 93,
+						"h": 80
+					},
+					"margin": {
+						"x": 87,
+						"y": 50,
+						"w": 110,
+						"h": 86
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_10.png",
+					"region": {
+						"x": 288,
+						"y": 233,
+						"w": 93,
+						"h": 80
+					},
+					"margin": {
+						"x": 88,
+						"y": 52,
+						"w": 110,
+						"h": 86
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_04.png",
+					"region": {
+						"x": 321,
+						"y": 115,
+						"w": 154,
+						"h": 112
+					},
+					"margin": {
+						"x": 36,
+						"y": 15,
+						"w": 49,
+						"h": 54
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_03.png",
+					"region": {
+						"x": 443,
+						"y": 1,
+						"w": 153,
+						"h": 112
+					},
+					"margin": {
+						"x": 37,
+						"y": 15,
+						"w": 50,
+						"h": 54
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_07.png",
+					"region": {
+						"x": 383,
+						"y": 229,
+						"w": 92,
+						"h": 80
+					},
+					"margin": {
+						"x": 88,
+						"y": 51,
+						"w": 111,
+						"h": 86
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_09.png",
+					"region": {
+						"x": 477,
+						"y": 115,
+						"w": 169,
+						"h": 108
+					},
+					"margin": {
+						"x": 29,
+						"y": 16,
+						"w": 34,
+						"h": 58
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_02.png",
+					"region": {
+						"x": 598,
+						"y": 1,
+						"w": 131,
+						"h": 108
+					},
+					"margin": {
+						"x": 59,
+						"y": 15,
+						"w": 72,
+						"h": 58
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_08.png",
+					"region": {
+						"x": 477,
+						"y": 225,
+						"w": 92,
+						"h": 80
+					},
+					"margin": {
+						"x": 88,
+						"y": 51,
+						"w": 111,
+						"h": 86
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_09.png",
+					"region": {
+						"x": 571,
+						"y": 225,
+						"w": 92,
+						"h": 80
+					},
+					"margin": {
+						"x": 88,
+						"y": 51,
+						"w": 111,
+						"h": 86
+					}
+				},
+				{
+					"filename": "archer_gold-attack_01.png",
+					"region": {
+						"x": 648,
+						"y": 111,
+						"w": 124,
+						"h": 108
+					},
+					"margin": {
+						"x": 66,
+						"y": 15,
+						"w": 79,
+						"h": 58
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_01.png",
+					"region": {
+						"x": 648,
+						"y": 111,
+						"w": 124,
+						"h": 108
+					},
+					"margin": {
+						"x": 66,
+						"y": 15,
+						"w": 79,
+						"h": 58
+					}
+				},
+				{
+					"filename": "archer_gold-run_00.png",
+					"region": {
+						"x": 665,
+						"y": 221,
+						"w": 113,
+						"h": 98
+					},
+					"margin": {
+						"x": 78,
+						"y": 3,
+						"w": 90,
+						"h": 68
+					}
+				},
+				{
+					"filename": "archer_gold-attack_02.png",
+					"region": {
+						"x": 731,
+						"y": 1,
+						"w": 124,
+						"h": 107
+					},
+					"margin": {
+						"x": 66,
+						"y": 15,
+						"w": 79,
+						"h": 59
+					}
+				},
+				{
+					"filename": "archer_gold-attack_03.png",
+					"region": {
+						"x": 774,
+						"y": 110,
+						"w": 124,
+						"h": 107
+					},
+					"margin": {
+						"x": 65,
+						"y": 15,
+						"w": 79,
+						"h": 59
+					}
+				},
+				{
+					"filename": "archer_gold-run_07.png",
+					"region": {
+						"x": 780,
+						"y": 219,
+						"w": 113,
+						"h": 100
+					},
+					"margin": {
+						"x": 78,
+						"y": 13,
+						"w": 90,
+						"h": 66
+					}
+				},
+				{
+					"filename": "archer_gold-attack_04.png",
+					"region": {
+						"x": 857,
+						"y": 1,
+						"w": 124,
+						"h": 106
+					},
+					"margin": {
+						"x": 65,
+						"y": 15,
+						"w": 79,
+						"h": 60
+					}
+				},
+				{
+					"filename": "archer_gold-run_08.png",
+					"region": {
+						"x": 895,
+						"y": 219,
+						"w": 113,
+						"h": 98
+					},
+					"margin": {
+						"x": 78,
+						"y": 13,
+						"w": 90,
+						"h": 68
+					}
+				},
+				{
+					"filename": "archer_gold-attack_05.png",
+					"region": {
+						"x": 900,
+						"y": 109,
+						"w": 101,
+						"h": 104
+					},
+					"margin": {
+						"x": 97,
+						"y": 16,
+						"w": 102,
+						"h": 62
+					}
+				},
+				{
+					"filename": "archer_gold-attack_06.png",
+					"region": {
+						"x": 983,
+						"y": 1,
+						"w": 101,
+						"h": 103
+					},
+					"margin": {
+						"x": 97,
+						"y": 16,
+						"w": 102,
+						"h": 63
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_10.png",
+					"region": {
+						"x": 1003,
+						"y": 106,
+						"w": 101,
+						"h": 103
+					},
+					"margin": {
+						"x": 97,
+						"y": 16,
+						"w": 102,
+						"h": 63
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_11.png",
+					"region": {
+						"x": 1086,
+						"y": 1,
+						"w": 100,
+						"h": 103
+					},
+					"margin": {
+						"x": 98,
+						"y": 16,
+						"w": 103,
+						"h": 63
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_12.png",
+					"region": {
+						"x": 1010,
+						"y": 211,
+						"w": 101,
+						"h": 102
+					},
+					"margin": {
+						"x": 98,
+						"y": 16,
+						"w": 102,
+						"h": 64
+					}
+				},
+				{
+					"filename": "archer_gold-attack_07.png",
+					"region": {
+						"x": 1106,
+						"y": 106,
+						"w": 100,
+						"h": 102
+					},
+					"margin": {
+						"x": 98,
+						"y": 16,
+						"w": 103,
+						"h": 64
+					}
+				},
+				{
+					"filename": "archer_gold-attack_08.png",
+					"region": {
+						"x": 1188,
+						"y": 1,
+						"w": 100,
+						"h": 102
+					},
+					"margin": {
+						"x": 99,
+						"y": 16,
+						"w": 103,
+						"h": 64
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_13.png",
+					"region": {
+						"x": 1113,
+						"y": 210,
+						"w": 100,
+						"h": 102
+					},
+					"margin": {
+						"x": 99,
+						"y": 16,
+						"w": 103,
+						"h": 64
+					}
+				},
+				{
+					"filename": "archer_gold-attack_09.png",
+					"region": {
+						"x": 1208,
+						"y": 105,
+						"w": 99,
+						"h": 102
+					},
+					"margin": {
+						"x": 100,
+						"y": 16,
+						"w": 104,
+						"h": 64
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_14.png",
+					"region": {
+						"x": 1290,
+						"y": 1,
+						"w": 99,
+						"h": 102
+					},
+					"margin": {
+						"x": 100,
+						"y": 16,
+						"w": 104,
+						"h": 64
+					}
+				},
+				{
+					"filename": "archer_gold-run_05.png",
+					"region": {
+						"x": 1215,
+						"y": 209,
+						"w": 112,
+						"h": 101
+					},
+					"margin": {
+						"x": 79,
+						"y": 6,
+						"w": 91,
+						"h": 65
+					}
+				},
+				{
+					"filename": "archer_gold-run_06.png",
+					"region": {
+						"x": 1309,
+						"y": 105,
+						"w": 112,
+						"h": 101
+					},
+					"margin": {
+						"x": 79,
+						"y": 13,
+						"w": 91,
+						"h": 65
+					}
+				},
+				{
+					"filename": "archer_gold-attack_10.png",
+					"region": {
+						"x": 1391,
+						"y": 1,
+						"w": 99,
+						"h": 101
+					},
+					"margin": {
+						"x": 100,
+						"y": 16,
+						"w": 104,
+						"h": 65
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_15.png",
+					"region": {
+						"x": 1391,
+						"y": 1,
+						"w": 99,
+						"h": 101
+					},
+					"margin": {
+						"x": 100,
+						"y": 16,
+						"w": 104,
+						"h": 65
+					}
+				},
+				{
+					"filename": "archer_gold-run_04.png",
+					"region": {
+						"x": 1329,
+						"y": 208,
+						"w": 109,
+						"h": 98
+					},
+					"margin": {
+						"x": 81,
+						"y": 0,
+						"w": 94,
+						"h": 68
+					}
+				},
+				{
+					"filename": "archer_gold-attack_11.png",
+					"region": {
+						"x": 1423,
+						"y": 104,
+						"w": 103,
+						"h": 98
+					},
+					"margin": {
+						"x": 92,
+						"y": 16,
+						"w": 100,
+						"h": 68
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_16.png",
+					"region": {
+						"x": 1423,
+						"y": 104,
+						"w": 103,
+						"h": 98
+					},
+					"margin": {
+						"x": 92,
+						"y": 16,
+						"w": 100,
+						"h": 68
+					}
+				},
+				{
+					"filename": "archer_gold-run_09.png",
+					"region": {
+						"x": 1492,
+						"y": 1,
+						"w": 114,
+						"h": 97
+					},
+					"margin": {
+						"x": 77,
+						"y": 14,
+						"w": 89,
+						"h": 69
+					}
+				},
+				{
+					"filename": "archer_gold-run_01.png",
+					"region": {
+						"x": 1440,
+						"y": 204,
+						"w": 112,
+						"h": 97
+					},
+					"margin": {
+						"x": 79,
+						"y": 3,
+						"w": 91,
+						"h": 69
+					}
+				},
+				{
+					"filename": "archer_gold-run_02.png",
+					"region": {
+						"x": 1528,
+						"y": 100,
+						"w": 112,
+						"h": 97
+					},
+					"margin": {
+						"x": 79,
+						"y": 2,
+						"w": 91,
+						"h": 69
+					}
+				},
+				{
+					"filename": "archer_gold-run_03.png",
+					"region": {
+						"x": 1608,
+						"y": 1,
+						"w": 111,
+						"h": 97
+					},
+					"margin": {
+						"x": 80,
+						"y": 1,
+						"w": 92,
+						"h": 69
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_17.png",
+					"region": {
+						"x": 1554,
+						"y": 199,
+						"w": 104,
+						"h": 97
+					},
+					"margin": {
+						"x": 90,
+						"y": 15,
+						"w": 99,
+						"h": 69
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_02.png",
+					"region": {
+						"x": 1642,
+						"y": 100,
+						"w": 88,
+						"h": 97
+					},
+					"margin": {
+						"x": 109,
+						"y": 17,
+						"w": 115,
+						"h": 69
+					}
+				},
+				{
+					"filename": "archer_gold-attack_00.png",
+					"region": {
+						"x": 1721,
+						"y": 1,
+						"w": 113,
+						"h": 96
+					},
+					"margin": {
+						"x": 78,
+						"y": 14,
+						"w": 90,
+						"h": 70
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_00.png",
+					"region": {
+						"x": 1721,
+						"y": 1,
+						"w": 113,
+						"h": 96
+					},
+					"margin": {
+						"x": 78,
+						"y": 14,
+						"w": 90,
+						"h": 70
+					}
+				},
+				{
+					"filename": "archer_gold-idle_0.png",
+					"region": {
+						"x": 1721,
+						"y": 1,
+						"w": 113,
+						"h": 96
+					},
+					"margin": {
+						"x": 78,
+						"y": 14,
+						"w": 90,
+						"h": 70
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_00.png",
+					"region": {
+						"x": 1721,
+						"y": 1,
+						"w": 113,
+						"h": 96
+					},
+					"margin": {
+						"x": 78,
+						"y": 14,
+						"w": 90,
+						"h": 70
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_18.png",
+					"region": {
+						"x": 1660,
+						"y": 199,
+						"w": 104,
+						"h": 96
+					},
+					"margin": {
+						"x": 89,
+						"y": 15,
+						"w": 99,
+						"h": 70
+					}
+				},
+				{
+					"filename": "archer_gold-attack_12.png",
+					"region": {
+						"x": 1732,
+						"y": 99,
+						"w": 103,
+						"h": 96
+					},
+					"margin": {
+						"x": 90,
+						"y": 15,
+						"w": 100,
+						"h": 70
+					}
+				},
+				{
+					"filename": "archer_gold-attack_13.png",
+					"region": {
+						"x": 1836,
+						"y": 1,
+						"w": 103,
+						"h": 96
+					},
+					"margin": {
+						"x": 89,
+						"y": 15,
+						"w": 100,
+						"h": 70
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_03.png",
+					"region": {
+						"x": 1941,
+						"y": 1,
+						"w": 88,
+						"h": 80
+					},
+					"margin": {
+						"x": 99,
+						"y": 35,
+						"w": 115,
+						"h": 86
+					}
+				},
+				{
+					"filename": "archer_gold-skill1_19.png",
+					"region": {
+						"x": 1766,
+						"y": 197,
+						"w": 104,
+						"h": 95
+					},
+					"margin": {
+						"x": 88,
+						"y": 15,
+						"w": 99,
+						"h": 71
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_11.png",
+					"region": {
+						"x": 1837,
+						"y": 99,
+						"w": 92,
+						"h": 79
+					},
+					"margin": {
+						"x": 89,
+						"y": 52,
+						"w": 111,
+						"h": 87
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_12.png",
+					"region": {
+						"x": 1931,
+						"y": 99,
+						"w": 92,
+						"h": 79
+					},
+					"margin": {
+						"x": 89,
+						"y": 52,
+						"w": 111,
+						"h": 87
+					}
+				},
+				{
+					"filename": "archer_gold-defeated_13.png",
+					"region": {
+						"x": 1872,
+						"y": 180,
+						"w": 92,
+						"h": 79
+					},
+					"margin": {
+						"x": 89,
+						"y": 52,
+						"w": 111,
+						"h": 87
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:91c137ffba48d975b900a285eb590bdc:e5b1b7bab34980bf19a16d29983da882:187f3f15bf1821c4654632750354bd5c$"
+	}
+}

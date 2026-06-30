@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://bc87i3u5i1oss"]
+
+[ext_resource type="Texture2D" uid="uid://buxblu2olvhiv" path="res://assets/textures/characters/archer_gold.png" id="1_fr5rv"]
+
+[resource]
+atlas = ExtResource("1_fr5rv")
+region = Rect2(383, 229, 92, 80)
+margin = Rect2(88, 51, 111, 86)

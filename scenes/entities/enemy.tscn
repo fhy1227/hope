@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://ddci34hjmsvnk" path="res://scripts/components/numeric/NumericHealthSyncComponent.cs" id="6_health_sync"]
 [ext_resource type="Script" uid="uid://ok6sghex31a5" path="res://scripts/components/numeric/EnemyStatsComponent.cs" id="7_stats"]
 [ext_resource type="PackedScene" uid="uid://dmjoh412e01lx" path="res://scenes/ui/unit_health_bar.tscn" id="3_healthbar"]
+[ext_resource type="Script" path="res://scripts/components/EnemyVisualController.cs" id="8_visual"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_enemy"]
 size = Vector2(22, 22)
@@ -18,9 +19,9 @@ script = ExtResource("1_enemy")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=345678040]
 shape = SubResource("RectangleShape2D_enemy")
 
-[node name="Visual" type="Polygon2D" parent="." unique_id=1051946009]
-color = Color(0.95, 0.35, 0.35, 1)
-polygon = PackedVector2Array(-11, -11, 11, -11, 11, 11, -11, 11)
+[node name="Visual" type="AnimatedSprite2D" parent="." unique_id=1051946009]
+scale = Vector2(0.32, 0.32)
+script = ExtResource("8_visual")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=1363926979]
 script = ExtResource("2_health")

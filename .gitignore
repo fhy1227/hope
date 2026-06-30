@@ -14,3 +14,10 @@ obj/
 
 # Workbuddy
 .workbuddy/
+
+# 开发临时目录（不进 Godot 编辑器 / 不导出）
+temp/*
+!temp/.gdignore
+
+# Python
+tools/__pycache__/

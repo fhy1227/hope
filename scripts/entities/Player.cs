@@ -21,6 +21,12 @@ public partial class Player : CharacterBody2D
 
 	public bool IsInvincible => _invincibilityTimer > 0f || _actions.GrantsInvincibility;
 
+	/// <summary>当前面朝方向：移动时取速度，否则取上次移动输入。</summary>
+	public Vector2 FacingDirection =>
+		Velocity.LengthSquared() > 4f
+			? Velocity.Normalized()
+			: _actions.LastMoveDirection;
+
 	public override void _Ready()
 	{
 		AddToGroup("player");

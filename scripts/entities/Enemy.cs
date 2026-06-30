@@ -25,6 +25,9 @@ public partial class Enemy : CharacterBody2D
     private float _stunTimer;
     private Vector2 _knockbackVelocity;
 
+    /// <summary>当前面朝方向（用于视觉朝向，优先取追击目标方向）。</summary>
+    public Vector2 FacingDirection { get; private set; } = Vector2.Right;
+
     public override void _Ready()
     {
         AddToGroup("enemies");
@@ -80,10 +83,19 @@ public partial class Enemy : CharacterBody2D
         }
 
         var toTarget = _target.GlobalPosition - GlobalPosition;
+        if (toTarget.LengthSquared() > 1f)
+        {
+            FacingDirection = toTarget.Normalized();
+        }
+
         if (toTarget.LengthSquared() > 4f)
         {
             Velocity = toTarget.Normalized() * _statsComponent.GetMoveSpeed();
             MoveAndSlide();
+        }
+        else
+        {
+            Velocity = Vector2.Zero;
         }
 
         if (_contactTimer > 0f)
@@ -98,6 +110,10 @@ public partial class Enemy : CharacterBody2D
             {
                 player.TakeContactDamage((int)_statsComponent.GetContactDamage(), this);
                 _contactTimer = ContactCooldown;
+
+                var visual = GetNodeOrNull<EnemyVisualController>("Visual");
+                visual?.FaceToward(_target.GlobalPosition);
+                visual?.PlayAttack();
                 break;
             }
         }
@@ -109,14 +125,16 @@ public partial class Enemy : CharacterBody2D
         CollisionLayer = 0;
         CollisionMask = 0;
 
-        var visual = GetNodeOrNull<CanvasItem>("Visual");
+        EmitSignal(SignalName.EnemyKilled, GoldDrop, GlobalPosition, EnemyType);
+
+        var visual = GetNodeOrNull<EnemyVisualController>("Visual");
         if (visual != null)
         {
-            visual.Modulate = new Color(1f, 1f, 1f, 0.2f);
+            visual.PlayDefeated();
+            return;
         }
 
-        EmitSignal(SignalName.EnemyKilled, GoldDrop, GlobalPosition, EnemyType);
-        CallDeferred(Node.MethodName.QueueFree);
+        QueueFree();
     }
 
     [Signal]

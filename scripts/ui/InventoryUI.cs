@@ -164,7 +164,7 @@ public partial class InventoryUI : Control
         foreach (var item in items)
         {
             var slot = ItemSlotScene.Instantiate<InventoryItemSlot>();
-            slot.Bind(item, ShowItemActionPopup, OnConsumableClicked);
+            slot.Bind(item, OnInventoryEquipClicked, OnInventoryEquipRightClicked, OnConsumableClicked);
             _inventoryGrid.AddChild(slot);
         }
     }
@@ -239,6 +239,39 @@ public partial class InventoryUI : Control
 
         return GD.Load<Texture2D>(iconPath);
     }
+
+    private void OnInventoryEquipClicked(string uid)
+    {
+        var item = InventoryManager.Instance?.Items.FirstOrDefault(i => i.Uid == uid);
+        if (item == null)
+        {
+            GD.Print("[InventoryUI] 物品已不在背包中");
+            return;
+        }
+
+        if (!item.IsEquip)
+        {
+            return;
+        }
+
+        var slotType = item.Config.SlotType;
+        if (!HasEquippedInSlot(slotType))
+        {
+            OnItemEquipRequested(uid);
+            return;
+        }
+
+        ShowItemActionPopup(uid);
+    }
+
+    private void OnInventoryEquipRightClicked(string uid)
+    {
+        _itemActionPopup.HidePopup();
+        OnItemSellRequested(uid);
+    }
+
+    private static bool HasEquippedInSlot(int slotType) =>
+        EquipManager.Instance?.GetEquipped(slotType).Count > 0;
 
     private void ShowItemActionPopup(string uid)
     {
@@ -375,7 +408,8 @@ public partial class InventoryUI : Control
 
         if (_pausedBySelf)
         {
-            GetTree().Paused = false;
+            if (Main.Instance?.Run?.Phase != RunPhase.Shop)
+                GetTree().Paused = false;
             _pausedBySelf = false;
         }
     }

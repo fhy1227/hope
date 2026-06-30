@@ -1,0 +1,633 @@
+{
+	"textures": [
+		{
+			"image": "enemy01.png",
+			"size": {
+				"w": 2004,
+				"h": 386
+			},
+			"sprites": [
+				{
+					"filename": "long_daoke-attack_01.png",
+					"region": {
+						"x": 1,
+						"y": 1,
+						"w": 109,
+						"h": 154
+					},
+					"margin": {
+						"x": 69,
+						"y": 25,
+						"w": 89,
+						"h": 62
+					}
+				},
+				{
+					"filename": "long_daoke-attack_02.png",
+					"region": {
+						"x": 1,
+						"y": 157,
+						"w": 105,
+						"h": 154
+					},
+					"margin": {
+						"x": 73,
+						"y": 25,
+						"w": 93,
+						"h": 62
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_14.png",
+					"region": {
+						"x": 1,
+						"y": 313,
+						"w": 3,
+						"h": 3
+					},
+					"margin": {
+						"x": 0,
+						"y": 0,
+						"w": 195,
+						"h": 213
+					}
+				},
+				{
+					"filename": "long_daoke-attack_03.png",
+					"region": {
+						"x": 108,
+						"y": 157,
+						"w": 107,
+						"h": 153
+					},
+					"margin": {
+						"x": 76,
+						"y": 26,
+						"w": 91,
+						"h": 63
+					}
+				},
+				{
+					"filename": "long_daoke-attack_04.png",
+					"region": {
+						"x": 112,
+						"y": 1,
+						"w": 110,
+						"h": 152
+					},
+					"margin": {
+						"x": 80,
+						"y": 27,
+						"w": 88,
+						"h": 64
+					}
+				},
+				{
+					"filename": "long_daoke-attack_05.png",
+					"region": {
+						"x": 217,
+						"y": 155,
+						"w": 112,
+						"h": 151
+					},
+					"margin": {
+						"x": 84,
+						"y": 28,
+						"w": 86,
+						"h": 65
+					}
+				},
+				{
+					"filename": "long_daoke-run_06.png",
+					"region": {
+						"x": 224,
+						"y": 1,
+						"w": 144,
+						"h": 147
+					},
+					"margin": {
+						"x": 32,
+						"y": 17,
+						"w": 54,
+						"h": 69
+					}
+				},
+				{
+					"filename": "long_daoke-attack_06.png",
+					"region": {
+						"x": 331,
+						"y": 150,
+						"w": 154,
+						"h": 146
+					},
+					"margin": {
+						"x": 13,
+						"y": 44,
+						"w": 44,
+						"h": 70
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_10.png",
+					"region": {
+						"x": 331,
+						"y": 298,
+						"w": 165,
+						"h": 87
+					},
+					"margin": {
+						"x": 3,
+						"y": 107,
+						"w": 33,
+						"h": 129
+					}
+				},
+				{
+					"filename": "long_daoke-attack_07.png",
+					"region": {
+						"x": 370,
+						"y": 1,
+						"w": 153,
+						"h": 146
+					},
+					"margin": {
+						"x": 13,
+						"y": 44,
+						"w": 45,
+						"h": 70
+					}
+				},
+				{
+					"filename": "long_daoke-attack_08.png",
+					"region": {
+						"x": 487,
+						"y": 149,
+						"w": 152,
+						"h": 145
+					},
+					"margin": {
+						"x": 13,
+						"y": 45,
+						"w": 46,
+						"h": 71
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_07.png",
+					"region": {
+						"x": 498,
+						"y": 296,
+						"w": 163,
+						"h": 89
+					},
+					"margin": {
+						"x": 4,
+						"y": 110,
+						"w": 35,
+						"h": 127
+					}
+				},
+				{
+					"filename": "long_daoke-attack_09.png",
+					"region": {
+						"x": 525,
+						"y": 1,
+						"w": 152,
+						"h": 145
+					},
+					"margin": {
+						"x": 12,
+						"y": 45,
+						"w": 46,
+						"h": 71
+					}
+				},
+				{
+					"filename": "long_daoke-attack_10.png",
+					"region": {
+						"x": 641,
+						"y": 148,
+						"w": 150,
+						"h": 145
+					},
+					"margin": {
+						"x": 12,
+						"y": 45,
+						"w": 48,
+						"h": 71
+					}
+				},
+				{
+					"filename": "long_daoke-attack_11.png",
+					"region": {
+						"x": 679,
+						"y": 1,
+						"w": 150,
+						"h": 145
+					},
+					"margin": {
+						"x": 11,
+						"y": 45,
+						"w": 48,
+						"h": 71
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_06.png",
+					"region": {
+						"x": 663,
+						"y": 295,
+						"w": 164,
+						"h": 90
+					},
+					"margin": {
+						"x": 4,
+						"y": 111,
+						"w": 34,
+						"h": 126
+					}
+				},
+				{
+					"filename": "long_daoke-run_07.png",
+					"region": {
+						"x": 793,
+						"y": 148,
+						"w": 144,
+						"h": 145
+					},
+					"margin": {
+						"x": 32,
+						"y": 34,
+						"w": 54,
+						"h": 71
+					}
+				},
+				{
+					"filename": "long_daoke-run_05.png",
+					"region": {
+						"x": 831,
+						"y": 1,
+						"w": 141,
+						"h": 145
+					},
+					"margin": {
+						"x": 34,
+						"y": 1,
+						"w": 57,
+						"h": 71
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_13.png",
+					"region": {
+						"x": 829,
+						"y": 295,
+						"w": 167,
+						"h": 88
+					},
+					"margin": {
+						"x": 3,
+						"y": 107,
+						"w": 31,
+						"h": 128
+					}
+				},
+				{
+					"filename": "long_daoke-run_04.png",
+					"region": {
+						"x": 939,
+						"y": 148,
+						"w": 140,
+						"h": 145
+					},
+					"margin": {
+						"x": 34,
+						"y": 3,
+						"w": 58,
+						"h": 71
+					}
+				},
+				{
+					"filename": "long_daoke-run_03.png",
+					"region": {
+						"x": 974,
+						"y": 1,
+						"w": 139,
+						"h": 145
+					},
+					"margin": {
+						"x": 34,
+						"y": 5,
+						"w": 59,
+						"h": 71
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_11.png",
+					"region": {
+						"x": 998,
+						"y": 295,
+						"w": 166,
+						"h": 88
+					},
+					"margin": {
+						"x": 3,
+						"y": 107,
+						"w": 32,
+						"h": 128
+					}
+				},
+				{
+					"filename": "long_daoke-run_08.png",
+					"region": {
+						"x": 1081,
+						"y": 148,
+						"w": 144,
+						"h": 144
+					},
+					"margin": {
+						"x": 32,
+						"y": 35,
+						"w": 54,
+						"h": 72
+					}
+				},
+				{
+					"filename": "long_daoke-run_02.png",
+					"region": {
+						"x": 1115,
+						"y": 1,
+						"w": 139,
+						"h": 144
+					},
+					"margin": {
+						"x": 35,
+						"y": 7,
+						"w": 59,
+						"h": 72
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_12.png",
+					"region": {
+						"x": 1166,
+						"y": 294,
+						"w": 166,
+						"h": 88
+					},
+					"margin": {
+						"x": 3,
+						"y": 107,
+						"w": 32,
+						"h": 128
+					}
+				},
+				{
+					"filename": "long_daoke-run_09.png",
+					"region": {
+						"x": 1227,
+						"y": 147,
+						"w": 144,
+						"h": 143
+					},
+					"margin": {
+						"x": 32,
+						"y": 36,
+						"w": 54,
+						"h": 73
+					}
+				},
+				{
+					"filename": "long_daoke-run_00.png",
+					"region": {
+						"x": 1256,
+						"y": 1,
+						"w": 143,
+						"h": 143
+					},
+					"margin": {
+						"x": 33,
+						"y": 36,
+						"w": 55,
+						"h": 73
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_09.png",
+					"region": {
+						"x": 1334,
+						"y": 292,
+						"w": 165,
+						"h": 88
+					},
+					"margin": {
+						"x": 3,
+						"y": 108,
+						"w": 33,
+						"h": 128
+					}
+				},
+				{
+					"filename": "long_daoke-run_01.png",
+					"region": {
+						"x": 1373,
+						"y": 146,
+						"w": 141,
+						"h": 143
+					},
+					"margin": {
+						"x": 34,
+						"y": 10,
+						"w": 57,
+						"h": 73
+					}
+				},
+				{
+					"filename": "long_daoke-attack_00.png",
+					"region": {
+						"x": 1401,
+						"y": 1,
+						"w": 139,
+						"h": 143
+					},
+					"margin": {
+						"x": 34,
+						"y": 36,
+						"w": 59,
+						"h": 73
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_00.png",
+					"region": {
+						"x": 1401,
+						"y": 1,
+						"w": 139,
+						"h": 143
+					},
+					"margin": {
+						"x": 34,
+						"y": 36,
+						"w": 59,
+						"h": 73
+					}
+				},
+				{
+					"filename": "long_daoke-idle_0.png",
+					"region": {
+						"x": 1401,
+						"y": 1,
+						"w": 139,
+						"h": 143
+					},
+					"margin": {
+						"x": 34,
+						"y": 36,
+						"w": 59,
+						"h": 73
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_05.png",
+					"region": {
+						"x": 1501,
+						"y": 291,
+						"w": 164,
+						"h": 88
+					},
+					"margin": {
+						"x": 5,
+						"y": 112,
+						"w": 34,
+						"h": 128
+					}
+				},
+				{
+					"filename": "long_daoke-attack_14.png",
+					"region": {
+						"x": 1516,
+						"y": 146,
+						"w": 139,
+						"h": 142
+					},
+					"margin": {
+						"x": 34,
+						"y": 37,
+						"w": 59,
+						"h": 74
+					}
+				},
+				{
+					"filename": "long_daoke-attack_13.png",
+					"region": {
+						"x": 1542,
+						"y": 1,
+						"w": 140,
+						"h": 141
+					},
+					"margin": {
+						"x": 33,
+						"y": 38,
+						"w": 58,
+						"h": 75
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_01.png",
+					"region": {
+						"x": 1657,
+						"y": 144,
+						"w": 149,
+						"h": 140
+					},
+					"margin": {
+						"x": 25,
+						"y": 39,
+						"w": 49,
+						"h": 76
+					}
+				},
+				{
+					"filename": "long_daoke-attack_12.png",
+					"region": {
+						"x": 1684,
+						"y": 1,
+						"w": 148,
+						"h": 140
+					},
+					"margin": {
+						"x": 18,
+						"y": 39,
+						"w": 50,
+						"h": 76
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_08.png",
+					"region": {
+						"x": 1667,
+						"y": 286,
+						"w": 164,
+						"h": 88
+					},
+					"margin": {
+						"x": 3,
+						"y": 109,
+						"w": 34,
+						"h": 128
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_02.png",
+					"region": {
+						"x": 1808,
+						"y": 143,
+						"w": 156,
+						"h": 132
+					},
+					"margin": {
+						"x": 19,
+						"y": 47,
+						"w": 42,
+						"h": 84
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_04.png",
+					"region": {
+						"x": 1833,
+						"y": 277,
+						"w": 170,
+						"h": 102
+					},
+					"margin": {
+						"x": 3,
+						"y": 91,
+						"w": 28,
+						"h": 114
+					}
+				},
+				{
+					"filename": "long_daoke-defeated_03.png",
+					"region": {
+						"x": 1834,
+						"y": 1,
+						"w": 164,
+						"h": 129
+					},
+					"margin": {
+						"x": 10,
+						"y": 58,
+						"w": 34,
+						"h": 87
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:8026d645ec5ac589448298396ed53598:8557f5f0b6e3c848150415b6e9f45f13:e79787999f86a65506b62c9525fb19a0$"
+	}
+}

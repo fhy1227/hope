@@ -56,9 +56,9 @@ public partial class HealthComponent : Node
             return;
         }
 
-        var actualDamage = Mathf.Min(amount, CurrentHealth);
         CurrentHealth = Mathf.Max(CurrentHealth - amount, 0);
-        Hope.EventBus.Instance?.EmitDamageTaken(actualDamage, GetDamageNumberPosition(), IsPlayer);
+        // 飘字显示攻击方造成的全额伤害，不因目标剩余生命截断
+        Hope.EventBus.Instance?.EmitDamageTaken(amount, GetDamageNumberPosition(), IsPlayer);
         EmitSignal(SignalName.Changed, CurrentHealth, MaxHealth);
 
         if (IsPlayer)

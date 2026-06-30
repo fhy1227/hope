@@ -10,6 +10,16 @@ namespace Hope.Components;
 /// </summary>
 public partial class PlayerStatsComponent : Node
 {
+    private static readonly NumericType[] RunStatTypes =
+    [
+        NumericType.MaxHealth,
+        NumericType.Damage,
+        NumericType.AttackSpeed,
+        NumericType.MoveSpeed,
+        NumericType.WeaponRange,
+        NumericType.ProjectileSpeed,
+    ];
+
     [Export]
     public NodePath NumericPath { get; set; } = new("../NumericComponent");
 
@@ -38,16 +48,39 @@ public partial class PlayerStatsComponent : Node
 
     public void ApplyStats(RunStats stats, bool refillHealth)
     {
-        var savedHealth = refillHealth ? -1 : _health.CurrentHealth;
-
-        _numeric.InitFromRunStats(stats, refillHealth);
-        if (!refillHealth && savedHealth >= 0)
+        var isFirst = !_numeric.HasOriValue(NumericType.MaxHealth);
+        if (isFirst)
         {
-            _numeric[NumericType.Health] = savedHealth;
+            _numeric.InitFromRunStats(stats, refillHealth);
+        }
+        else
+        {
+            _numeric.UpdateBaseFromRunStats(stats);
         }
 
         ApplyEquipModifiers(EquipManager.Instance?.CurrentBonus ?? NumericModifierMap.Empty);
+
+        if (!isFirst)
+        {
+            RefreshRunStatsOnNumeric();
+            if (refillHealth)
+            {
+                _numeric[NumericType.Health] = _numeric[NumericType.MaxHealth];
+            }
+        }
+
         _healthSync.SyncAll(refillHealth);
+    }
+
+    /// <summary>
+    /// 将 RunStats 基础值（ori）与装备修改器合并后写回当前战斗数值。
+    /// </summary>
+    private void RefreshRunStatsOnNumeric()
+    {
+        foreach (var type in RunStatTypes)
+        {
+            _numeric[type] = _modifiers.GetFinalValue(type);
+        }
     }
 
     public void ApplyEquipModifiers(NumericModifierMap bonus)

@@ -44,6 +44,9 @@ public partial class PlayerActionController : Node
         _player = player;
     }
 
+    /// <summary>最近一次有效移动方向，供无输入时的翻滚/默认朝向使用。</summary>
+    public Vector2 LastMoveDirection => _lastMoveDirection;
+
     /// <summary>
     /// 记录最近一次有效移动方向，供无输入时的翻滚/默认朝向使用。
     /// </summary>

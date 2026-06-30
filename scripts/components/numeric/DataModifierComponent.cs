@@ -23,6 +23,20 @@ public partial class DataModifierComponent : Node
 
     public void Clear() => _modifiers.Clear();
 
+    public bool HasModifierKey(NumericType type) =>
+        _modifiers.TryGetValue((int)type, out var list) && list.Count > 0;
+
+    /// <summary>按当前 ori 与已挂载修改器计算最终数值（不含写入 Numeric）。</summary>
+    public float GetFinalValue(NumericType numericType)
+    {
+        if (numericType == NumericType.None)
+        {
+            return 0f;
+        }
+
+        return ApplyModifiers((int)numericType, _numeric.GetOriValue(numericType));
+    }
+
     public void AddModifier(DataModifier modifier)
     {
         if (modifier.ModifierKey == (int)NumericType.None)
@@ -85,6 +99,7 @@ public partial class DataModifierComponent : Node
         }
 
         list.Remove(modifier);
+        PruneModifierKey(modifier.ModifierKey);
         UpdateToNumeric((NumericType)modifier.ModifierKey);
     }
 
@@ -110,6 +125,7 @@ public partial class DataModifierComponent : Node
 
         foreach (var key in changedKeys)
         {
+            PruneModifierKey(key);
             UpdateToNumeric((NumericType)key);
         }
     }
@@ -133,6 +149,14 @@ public partial class DataModifierComponent : Node
         foreach (var key in _modifiers.Keys)
         {
             UpdateToNumeric((NumericType)key);
+        }
+    }
+
+    private void PruneModifierKey(int modifierKey)
+    {
+        if (_modifiers.TryGetValue(modifierKey, out var list) && list.Count == 0)
+        {
+            _modifiers.Remove(modifierKey);
         }
     }
 

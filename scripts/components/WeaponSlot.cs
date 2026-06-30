@@ -67,7 +67,7 @@ public partial class WeaponSlot : Node2D
 
         if (weapon.Type == WeaponType.Melee)
         {
-            ConfigureMeleeHitbox(weapon);
+            ConfigureMeleeHitbox(weapon, _numeric != null ? GetMeleeRange() : weapon.Range);
         }
     }
 
@@ -159,7 +159,14 @@ public partial class WeaponSlot : Node2D
 
         return _weapon.Type == WeaponType.Ranged
             ? _numeric![NumericType.WeaponRange] * (_weapon.Range / 340f)
-            : _weapon.Range;
+            : GetMeleeRange();
+    }
+
+    /// <summary>近战射程随 RunStats.WeaponRange 同比缩放（默认 320 为基准）。</summary>
+    private float GetMeleeRange()
+    {
+        const float baseWeaponRange = 320f;
+        return _weapon!.Range * (_numeric![NumericType.WeaponRange] / baseWeaponRange);
     }
 
     private float GetAttackInterval()
@@ -233,6 +240,7 @@ public partial class WeaponSlot : Node2D
         var baseAngle = direction.Angle();
         _pivot.Rotation = baseAngle;
 
+        ConfigureMeleeHitbox(_weapon, GetMeleeRange());
         _meleeHitbox.Monitoring = true;
 
         var tween = CreateTween();
@@ -268,7 +276,7 @@ public partial class WeaponSlot : Node2D
         _pivot.Position = Vector2.Zero;
     }
 
-    private void ConfigureMeleeHitbox(WeaponData weapon)
+    private void ConfigureMeleeHitbox(WeaponData weapon, float range)
     {
         if (_meleeShape.Shape is not RectangleShape2D rectangle)
         {
@@ -277,13 +285,13 @@ public partial class WeaponSlot : Node2D
 
         if (weapon.MeleeStyle == MeleeStyle.Thrust)
         {
-            rectangle.Size = new Vector2(weapon.Range * 0.85f, 14f);
-            _meleeShape.Position = new Vector2(weapon.Range * 0.42f, 0f);
+            rectangle.Size = new Vector2(range * 0.85f, 14f);
+            _meleeShape.Position = new Vector2(range * 0.42f, 0f);
         }
         else
         {
-            rectangle.Size = new Vector2(weapon.Range * 0.75f, 22f);
-            _meleeShape.Position = new Vector2(weapon.Range * 0.38f, 0f);
+            rectangle.Size = new Vector2(range * 0.75f, 22f);
+            _meleeShape.Position = new Vector2(range * 0.38f, 0f);
         }
     }
 

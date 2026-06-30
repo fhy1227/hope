@@ -212,25 +212,32 @@ public partial class EquipManager : Node
     }
 
     /// <summary>
-    /// 将当前加成应用到玩家 NumericComponent（经 DataModifierComponent）。
+    /// 将当前加成应用到玩家（同步 RunStats 基础值 + 装备修改器）。
     /// </summary>
     private void ApplyToPlayerStats()
     {
-        var player = Main.Instance?.Run?.Player;
+        var run = Main.Instance?.Run;
+        var player = run?.Player;
         if (player == null)
         {
             GD.Print("[EquipManager] 未找到 player，暂存加成");
             return;
         }
 
-        var stats = player.GetNodeOrNull<PlayerStatsComponent>("PlayerStatsComponent");
-        if (stats == null)
+        var statsComponent = player.GetNodeOrNull<PlayerStatsComponent>("PlayerStatsComponent");
+        if (statsComponent == null)
         {
             GD.Print("[EquipManager] 未找到 PlayerStatsComponent，暂存加成");
             return;
         }
 
-        stats.ApplyEquipModifiers(CurrentBonus);
+        if (run.Stats != null)
+        {
+            statsComponent.ApplyStats(run.Stats, refillHealth: false);
+            return;
+        }
+
+        statsComponent.ApplyEquipModifiers(CurrentBonus);
     }
 
     // ── 对局重置 ─────────────────────────────────────────────────────

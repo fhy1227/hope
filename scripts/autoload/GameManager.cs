@@ -60,8 +60,16 @@ public partial class GameManager : Node
 
     public void Resume()
     {
-        GetTree().Paused = false;
         ChangeState(GameState.Playing);
+
+        // 波间商店仍显示时保持世界暂停，避免 Esc 恢复后角色继续移动。
+        if (Main.Instance?.Run?.Phase == RunPhase.Shop)
+        {
+            GetTree().Paused = true;
+            return;
+        }
+
+        GetTree().Paused = false;
     }
 
     public void ChangeScene(string path)

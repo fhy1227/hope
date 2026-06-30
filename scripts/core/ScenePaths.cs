@@ -29,4 +29,7 @@ public static class ScenePaths
 
     /// <summary>世界空间浮动伤害数字。</summary>
     public const string DamageNumber = "res://scenes/entities/damage_number.tscn";
+
+    /// <summary>范围技能圆形闪光特效。</summary>
+    public const string CircleFlashEffect = "res://scenes/effects/circle_flash_effect.tscn";
 }

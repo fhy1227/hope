@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://cdv2o7ptiixm7"]
+
+[ext_resource type="Texture2D" uid="uid://b8h60ku6cotpa" path="res://assets/textures/enemy/enemy01.png" id="1_lebuc"]
+
+[resource]
+atlas = ExtResource("1_lebuc")
+region = Rect2(1166, 294, 166, 88)
+margin = Rect2(3, 107, 32, 128)

@@ -40,6 +40,9 @@ public partial class EventBus : Node
     [Signal]
     public delegate void DamageTakenEventHandler(int amount, Vector2 worldPosition, bool isPlayer);
 
+    [Signal]
+    public delegate void LevelChangedEventHandler(string levelPath);
+
     public static EventBus? Instance { get; private set; }
 
     public override void _EnterTree()
@@ -109,5 +112,10 @@ public partial class EventBus : Node
     public void EmitDamageTaken(int amount, Vector2 worldPosition, bool isPlayer)
     {
         EmitSignal(SignalName.DamageTaken, amount, worldPosition, isPlayer);
+    }
+
+    public void EmitLevelChanged(string levelPath)
+    {
+        EmitSignal(SignalName.LevelChanged, levelPath);
     }
 }
