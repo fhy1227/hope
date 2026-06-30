@@ -1,5 +1,2 @@
-@echo off
-chcp 65001 >nul
-cd /d "%~dp0"
-python tools/export_config.py
+C:/Users/admin/.workbuddy/binaries/python/versions/3.13.12/python.exe tools/export_config.py
 pause
