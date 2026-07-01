@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cshoppanel1" path="res://scenes/ui/shop_panel.tscn" id="4_shop"]
 [ext_resource type="PackedScene" uid="uid://c74ugq7y80vmi" path="res://scenes/ui/inventory_ui.tscn" id="5_inv"]
 [ext_resource type="PackedScene" uid="uid://cpausemenu01" path="res://scenes/ui/pause_menu.tscn" id="6_pause"]
+[ext_resource type="PackedScene" uid="uid://cdeathdialog1" path="res://scenes/ui/death_dialog.tscn" id="7_death"]
 
 [node name="Main" type="Node" unique_id=153546318]
 process_mode = 3
@@ -36,6 +37,8 @@ process_mode = 3
 layer = 3
 
 [node name="PauseMenu" parent="UI_Pause" unique_id=888560577 instance=ExtResource("6_pause")]
+
+[node name="DeathDialog" parent="UI_Pause" instance=ExtResource("7_death")]
 
 [node name="UI_Transition" type="CanvasLayer" parent="." unique_id=1042483453]
 unique_name_in_owner = true

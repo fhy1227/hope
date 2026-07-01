@@ -269,6 +269,7 @@ public partial class RunManager : Node
 		_waveManager.Stop();
 		_enemySpawner.Stop();
 		SetPhase(RunPhase.GameOver);
+		GameManager.Instance?.ChangeState(GameState.GameOver);
 	}
 
 	private void SetPhase(RunPhase phase)
@@ -283,7 +284,7 @@ public partial class RunManager : Node
 	/// </summary>
 	private void SyncRunPhasePause()
 	{
-		if (_phase == RunPhase.Shop)
+		if (_phase == RunPhase.Shop || _phase == RunPhase.GameOver)
 		{
 			GetTree().Paused = true;
 			return;

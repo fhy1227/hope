@@ -10,6 +10,7 @@ mono_crash.*
 *.pdb
 bin/
 obj/
+build/
 .vs/
 
 # Workbuddy
