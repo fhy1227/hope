@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Hope.Config;
 
 namespace Hope.Persistence;
 
@@ -53,17 +54,18 @@ public class CharacterSaveData
     /// <summary>新建角色时的默认装备（双持武士刀）。</summary>
     public static CharacterSaveData CreateDefault(string characterName)
     {
-        var katana = new ItemSaveData { ConfigId = 1030, Count = 1 };
+        var weaponId = (int)ParamsConfig.WeaponDefaultConfigId;
+        var katana = new ItemSaveData { ConfigId = weaponId, Count = 1 };
         return new CharacterSaveData
         {
             CharacterName = characterName,
             Equipped = new Dictionary<int, List<ItemSaveData>>
             {
-                [EquipManagerWeaponSlotType] = [katana, new ItemSaveData { ConfigId = 1030, Count = 1 }],
+                [EquipManagerWeaponSlotType] = [katana, new ItemSaveData { ConfigId = weaponId, Count = 1 }],
             },
         };
     }
 
     /// <summary>与 <see cref="Systems.EquipManager.WeaponSlotType"/> 一致，避免循环引用。</summary>
-    private const int EquipManagerWeaponSlotType = 1;
+    private static int EquipManagerWeaponSlotType => (int)ParamsConfig.DropWeaponSlotType;
 }

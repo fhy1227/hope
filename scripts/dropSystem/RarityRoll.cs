@@ -10,9 +10,6 @@ namespace Hope.DropSystem;
 /// </summary>
 public static class RarityRoll
 {
-    /// <summary> 升档概率（D4 近似：低概率跳高一档） </summary>
-    public const float UpgradeChance = 0.05f;
-
     public static int Roll(DropContext ctx, int itemLevel)
     {
         if (ctx.ForcedRarity > 0)
@@ -29,7 +26,7 @@ public static class RarityRoll
         var weights = pool.Select(q => ApplyMagicFind(q, ctx.MagicFind)).ToArray();
         var picked = WeightedPick(pool, weights);
 
-        if (picked.Id < pool[^1].Id && GD.Randf() < UpgradeChance)
+        if (picked.Id < pool[^1].Id && GD.Randf() < ParamsConfig.DropRarityUpgradeChance)
             return picked.Id + 1;
 
         return picked.Id;
@@ -41,7 +38,7 @@ public static class RarityRoll
     private static float ApplyMagicFind(QualityConfig quality, float magicFind)
     {
         var tier = quality.Id - 1;
-        var mfBoost = 1f + magicFind * tier * 0.5f;
+        var mfBoost = 1f + magicFind * tier * ParamsConfig.DropMfTierFactor;
         return quality.DropWeight * mfBoost;
     }
 

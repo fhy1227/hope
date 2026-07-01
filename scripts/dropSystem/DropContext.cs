@@ -1,3 +1,5 @@
+using Hope.Config;
+
 namespace Hope.DropSystem;
 
 /// <summary>
@@ -34,7 +36,7 @@ public readonly struct DropContext
 
     public static DropContext FromWave(string enemyType, int wave, float tableDropRate, int forcedRarity = 0)
     {
-        var areaLevel = 1 + (wave - 1) * 2;
+        var areaLevel = (int)(ParamsConfig.DropAreaLevelBase + (wave - 1) * ParamsConfig.DropAreaLevelPerWave);
         var (mf, rateMul, levelBonus) = EnemyTypeModifiers(enemyType);
 
         return new DropContext
@@ -44,21 +46,24 @@ public readonly struct DropContext
             AreaLevel = areaLevel,
             MagicFind = mf,
             DropRateMultiplier = rateMul,
-            PreferredSlotTypes = [EquipManagerWeaponSlot],
-            SmartLootChance = 0.85f,
+            PreferredSlotTypes = [(int)ParamsConfig.DropWeaponSlotType],
+            SmartLootChance = ParamsConfig.DropSmartLootChance,
             TableDropRate = tableDropRate,
             ForcedRarity = forcedRarity,
         };
     }
 
-    /// <summary> 武器槽类型，与 EquipManager.WeaponSlotType 一致 </summary>
-    public const int EquipManagerWeaponSlot = 1;
-
     private static (float mf, float rateMul, int levelBonus) EnemyTypeModifiers(string enemyType) =>
         enemyType switch
         {
-            "elite" => (0.25f, 2f, 2),
-            "boss" => (0.5f, 1f, 5),
+            var t when t == ParamsConfig.EnemyTypeElite => (
+                ParamsConfig.DropEliteMagicFind,
+                ParamsConfig.DropEliteRateMul,
+                (int)ParamsConfig.DropEliteLevelBonus),
+            var t when t == ParamsConfig.EnemyTypeBoss => (
+                ParamsConfig.DropBossMagicFind,
+                ParamsConfig.DropBossRateMul,
+                (int)ParamsConfig.DropBossLevelBonus),
             _ => (0f, 1f, 0),
         };
 }

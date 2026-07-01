@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Core;
 
 namespace Hope.Components;
@@ -61,7 +62,7 @@ public partial class NumericHealthSyncComponent : Node
             return;
         }
 
-        var damage = Mathf.Max(1, amount - (int)armor);
+        var damage = Mathf.Max((int)ParamsConfig.PlayerMinDamage, amount - (int)armor);
         ApplyDamage(damage);
     }
 

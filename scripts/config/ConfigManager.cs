@@ -35,10 +35,10 @@ public static class ConfigManager
 	{
 		if (_loaded) return;
 
-		using var dir = DirAccess.Open("res://assets/config/");
+		using var dir = DirAccess.Open(ParamsConfig.PathConfigDir);
 		if (dir == null)
 		{
-			GD.PrintErr("[ConfigManager] 无法打开配置目录: res://assets/config/");
+			GD.PrintErr($"[ConfigManager] 无法打开配置目录: {ParamsConfig.PathConfigDir}");
 			return;
 		}
 
@@ -51,7 +51,7 @@ public static class ConfigManager
 			if (!fileName.EndsWith(".json")) continue;
 
 			var configName = fileName.Replace(".json", "");
-			var path = "res://assets/config/" + fileName;
+			var path = ParamsConfig.PathConfigDir + fileName;
 			using var file = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read);
 			if (file == null)
 			{

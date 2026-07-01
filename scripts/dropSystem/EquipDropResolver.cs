@@ -42,7 +42,7 @@ public static class EquipDropResolver
 
         for (var i = 0; i < count; i++)
         {
-            var drop = i == 0 && ctx.EnemyType == "boss"
+            var drop = i == 0 && ctx.EnemyType == ParamsConfig.EnemyTypeBoss
                 ? EquipDropGenerator.Generate(ctx)
                 : EquipDropGenerator.TryGenerate(ctx);
 

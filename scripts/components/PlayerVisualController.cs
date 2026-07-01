@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Core;
 using Hope.Entities;
 
@@ -9,8 +10,6 @@ namespace Hope.Components;
 /// </summary>
 public partial class PlayerVisualController : AnimatedSprite2D
 {
-	private const string SpriteDir = "res://assets/textures/characters/archer_gold.sprites/";
-
 	private Player _player = null!;
 	private bool _actionLocked;
 	private string _locomotionAnim = "idle";
@@ -64,7 +63,7 @@ public partial class PlayerVisualController : AnimatedSprite2D
 
 	private void UpdateLocomotion()
 	{
-		var moving = _player.Velocity.LengthSquared() > 4f;
+		var moving = _player.Velocity.LengthSquared() > ParamsConfig.PlayerFacingVelThresholdSq;
 		var next = moving ? "walk" : "idle";
 		if (next == _locomotionAnim && IsPlaying())
 		{
@@ -123,13 +122,13 @@ public partial class PlayerVisualController : AnimatedSprite2D
 	private static SpriteFrames BuildSpriteFrames()
 	{
 		var frames = new SpriteFrames();
-		AddLoop(frames, "idle", "idle", 0, 1, 6f);
-		AddLoop(frames, "walk", "run", 0, 10, 10f);
-		AddOnce(frames, "roll", "run", 0, 10, 20f);
-		AddLoop(frames, "charge", "skill1", 0, 8, 8f);
-		AddOnce(frames, "charge_release", "skill1", 8, 8, 12f);
-		AddOnce(frames, "stomp", "attack", 0, 14, 14f);
-		AddOnce(frames, "parry", "attack", 0, 6, 12f);
+		AddLoop(frames, "idle", "idle", 0, 1, ParamsConfig.AnimPlayerIdleFps);
+		AddLoop(frames, "walk", "run", 0, (int)ParamsConfig.AnimPlayerWalkFrames, ParamsConfig.AnimPlayerWalkFps);
+		AddOnce(frames, "roll", "run", 0, (int)ParamsConfig.AnimPlayerRollFrames, ParamsConfig.AnimPlayerRollFps);
+		AddLoop(frames, "charge", "skill1", 0, (int)ParamsConfig.AnimPlayerChargeFrames, ParamsConfig.AnimPlayerChargeFps);
+		AddOnce(frames, "charge_release", "skill1", 8, 8, ParamsConfig.AnimPlayerChargeReleaseFps);
+		AddOnce(frames, "stomp", "attack", 0, (int)ParamsConfig.AnimPlayerStompFrames, ParamsConfig.AnimPlayerStompFps);
+		AddOnce(frames, "parry", "attack", 0, (int)ParamsConfig.AnimPlayerParryFrames, ParamsConfig.AnimPlayerParryFps);
 		return frames;
 	}
 
@@ -172,11 +171,12 @@ public partial class PlayerVisualController : AnimatedSprite2D
 
 	private static string ResolveFramePath(string clip, int index)
 	{
+		var spriteDir = ParamsConfig.PathPlayerSpriteDir;
 		if (clip == "idle")
 		{
-			return $"{SpriteDir}archer_gold-idle_0.tres";
+			return $"{spriteDir}archer_gold-idle_0.tres";
 		}
 
-		return $"{SpriteDir}archer_gold-{clip}_{index:D2}.tres";
+		return $"{spriteDir}archer_gold-{clip}_{index:D2}.tres";
 	}
 }

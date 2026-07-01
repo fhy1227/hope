@@ -48,7 +48,7 @@ public partial class EquipManager : Node, IPersistedDataParticipant
     }
 
     /// <summary> 武器槽类型（equip_slot.json id=1） </summary>
-    public const int WeaponSlotType = 1;
+    public static int WeaponSlotType => (int)ParamsConfig.DropWeaponSlotType;
 
     // ── 公共查询 ─────────────────────────────────────────────────────
 

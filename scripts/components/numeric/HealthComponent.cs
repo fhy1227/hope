@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 
 namespace Hope.Components;
 
@@ -14,7 +15,7 @@ public partial class HealthComponent : Node
     public delegate void ChangedEventHandler(int current, int max);
 
     [Export]
-    public int MaxHealth { get; set; } = 3;
+    public int MaxHealth { get; set; } = (int)ParamsConfig.HealthDefaultMax;
 
     [Export]
     public bool IsPlayer { get; set; }
@@ -91,7 +92,7 @@ public partial class HealthComponent : Node
             return healthBar.GlobalPosition + new Vector2(0f, -healthBar.BarSize.Y * 0.5f);
         }
 
-        return parent.GlobalPosition + new Vector2(0f, -16f);
+        return parent.GlobalPosition + new Vector2(0f, ParamsConfig.HealthFloatTextOffsetY);
     }
 
     public void Heal(int amount)

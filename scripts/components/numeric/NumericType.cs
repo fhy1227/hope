@@ -1,3 +1,5 @@
+using Hope.Config;
+
 namespace Hope.Core;
 
 /// <summary>
@@ -23,7 +25,7 @@ public enum NumericType
 
 public static class NumericDefine
 {
-    public const float MinMoveSpeed = 50f;
-    public const float MinWeaponRange = 50f;
+    public static float MinMoveSpeed => ParamsConfig.NumericMinMoveSpeed;
+    public static float MinWeaponRange => ParamsConfig.NumericMinWeaponRange;
     public const float Epsilon = 0.00001f;
 }

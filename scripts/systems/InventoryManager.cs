@@ -18,7 +18,7 @@ public partial class InventoryManager : Node, IPersistedDataParticipant
     public static InventoryManager Instance => _instance;
 
     /// <summary> 背包最大容量（格数） </summary>
-    [Export] public int MaxSlots { get; set; } = 20;
+    [Export] public int MaxSlots { get; set; } = (int)ParamsConfig.InventoryMaxSlots;
 
     /// <summary> 背包物品列表 </summary>
     private readonly List<Core.ItemInstance> _items = new();

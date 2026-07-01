@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 
 namespace Hope.DropSystem;
 
@@ -8,15 +9,14 @@ namespace Hope.DropSystem;
 /// </summary>
 public static class ItemLevelCalculator
 {
-    public const int LevelVariance = 1;
-
     /// <summary>
     /// 根据怪物等级掷出最终物品等级。
     /// </summary>
     public static int Roll(DropContext ctx)
     {
         var baseLevel = System.Math.Max(System.Math.Max(ctx.MonsterLevel, ctx.AreaLevel), 1);
-        var offset = GD.RandRange(-LevelVariance, LevelVariance);
+        var variance = (int)ParamsConfig.DropItemLevelVariance;
+        var offset = GD.RandRange(-variance, variance);
         return Mathf.Max(baseLevel + offset, 1);
     }
 }

@@ -1,3 +1,5 @@
+using Hope.Config;
+
 namespace Hope.Core;
 
 /// <summary>
@@ -7,22 +9,22 @@ namespace Hope.Core;
 public class RunStats
 {
     /// <summary>本局生命上限（商店可叠加）。</summary>
-    public int MaxHealth { get; set; } = 10;
+    public int MaxHealth { get; set; } = (int)ParamsConfig.RunMaxHealth;
 
     /// <summary>移动速度（像素/秒）。</summary>
-    public float Speed { get; set; } = 200f;
+    public float Speed { get; set; } = ParamsConfig.RunSpeed;
 
     /// <summary>基础攻击伤害。</summary>
-    public float Damage { get; set; } = 5f;
+    public float Damage { get; set; } = ParamsConfig.RunDamage;
 
     /// <summary>攻击间隔倍率；越大攻速越快。</summary>
-    public float AttackSpeed { get; set; } = 1.2f;
+    public float AttackSpeed { get; set; } = ParamsConfig.RunAttackSpeed;
 
     /// <summary>远程弹道速度（像素/秒）。</summary>
-    public float ProjectileSpeed { get; set; } = 450f;
+    public float ProjectileSpeed { get; set; } = ParamsConfig.RunProjectileSpeed;
 
     /// <summary>武器有效射程/索敌距离。</summary>
-    public float WeaponRange { get; set; } = 320f;
+    public float WeaponRange { get; set; } = ParamsConfig.RunWeaponRange;
 
     /// <summary>本局累计金币。</summary>
     public int Gold { get; set; }

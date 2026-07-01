@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Core;
 using Hope.Systems;
 
@@ -21,7 +22,7 @@ public partial class ShopPanel : PanelContainer
         _titleLabel = GetNode<Label>("%TitleLabel");
 
         Visible = false;
-        ZIndex = 100;
+        ZIndex = (int)ParamsConfig.ShopPanelZIndex;
         MouseFilter = MouseFilterEnum.Ignore;
 
         CallDeferred(MethodName.BindRunManager);

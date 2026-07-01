@@ -5,51 +5,65 @@
     "1": {
       "id": 1,
       "affix_key": "affix.vitality",
-      "modifier_type": 100,
+      "numeric_type": 100,
+      "modifier_type": 1,
       "min_per_level": 1.0,
       "max_per_level": 2.0,
       "slot_mask": [
+        2,
+        3,
+        4,
         5
       ]
     },
     "2": {
       "id": 2,
       "affix_key": "affix.might",
-      "modifier_type": 102,
-      "min_per_level": 2.0,
-      "max_per_level": 0.01,
+      "numeric_type": 102,
+      "modifier_type": 2,
+      "min_per_level": 0.01,
+      "max_per_level": 0.03,
       "slot_mask": [
-        0
+        1,
+        5
       ]
     },
     "3": {
       "id": 3,
       "affix_key": "affix.swiftness",
-      "modifier_type": 104,
-      "min_per_level": 2.0,
-      "max_per_level": 0.005,
+      "numeric_type": 104,
+      "modifier_type": 2,
+      "min_per_level": 0.005,
+      "max_per_level": 0.015,
       "slot_mask": [
-        0
+        4,
+        5
       ]
     },
     "4": {
       "id": 4,
       "affix_key": "affix.precision",
-      "modifier_type": 110,
-      "min_per_level": 2.0,
-      "max_per_level": 0.01,
+      "numeric_type": 110,
+      "modifier_type": 2,
+      "min_per_level": 0.01,
+      "max_per_level": 0.04,
       "slot_mask": [
-        0
+        1,
+        2,
+        5
       ]
     },
     "5": {
       "id": 5,
       "affix_key": "affix.fortitude",
-      "modifier_type": 111,
+      "numeric_type": 111,
+      "modifier_type": 1,
       "min_per_level": 1.0,
       "max_per_level": 1.0,
       "slot_mask": [
-        3
+        2,
+        3,
+        4
       ]
     }
   }

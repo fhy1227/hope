@@ -1,3 +1,5 @@
+using Hope.Config;
+
 namespace Hope.Persistence;
 
 /// <summary>
@@ -6,7 +8,7 @@ namespace Hope.Persistence;
 public static class SaveSchema
 {
     public const int CurrentVersion = 1;
-    public const int MaxProfileSlots = 3;
+    public static int MaxProfileSlots => (int)ParamsConfig.SaveMaxProfileSlots;
     public const string SavesRoot = "user://saves/";
     public const string MetaFileName = "meta.json";
     public const string CharacterFileName = "character.json";

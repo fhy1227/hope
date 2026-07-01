@@ -2,6 +2,7 @@ using Godot;
 using System.Collections.Generic;
 using System.Linq;
 using Hope;
+using Hope.Config;
 using Hope.Core;
 using Hope.Systems;
 
@@ -14,20 +15,7 @@ namespace Hope.UI;
 public partial class InventoryUI : Control
 {
     // ── 品质颜色映射 ────────────────────────────
-    private const float QualityBackgroundAlpha = 0.35f;
-
-    private static readonly Color[] QualityColors = {
-        new(0, 0, 0, 0),                  // 0 - 未使用
-        new(0.627f, 0.627f, 0.627f, 1),   // 1 白 #A0A0A0
-        new(0.188f, 0.447f, 0.953f, 1),   // 2 蓝 #3072F3
-        new(0.961f, 0.651f, 0.137f, 1),   // 3 黄 #F5A623
-        new(0.639f, 0.208f, 0.933f, 1),   // 4 橙 #A335EE
-        new(1,     0.843f, 0,      1),    // 5 暗金 #FFD700
-    };
-
     private static StyleBoxFlat[]? _qualityBackgroundStyles;
-
-    private const string ItemSlotScenePath = "res://scenes/ui/inventory_item_slot.tscn";
 
     [Export] public PackedScene ItemSlotScene { get; set; } = null!;
 
@@ -40,7 +28,7 @@ public partial class InventoryUI : Control
 
     public override void _Ready()
     {
-        ItemSlotScene ??= GD.Load<PackedScene>(ItemSlotScenePath);
+        ItemSlotScene ??= GD.Load<PackedScene>(ParamsConfig.PathInventoryItemSlot);
         if (ItemSlotScene == null)
             GD.PushError("[InventoryUI] 未找到物品格子场景，请检查 inventory_item_slot.tscn");
 
@@ -155,7 +143,7 @@ public partial class InventoryUI : Control
             return;
         }
 
-        _inventoryGrid.Columns = 5;
+        _inventoryGrid.Columns = (int)ParamsConfig.InventoryGridColumns;
         _emptyLabel.Visible = false;
 
         if (ItemSlotScene == null)
@@ -210,7 +198,7 @@ public partial class InventoryUI : Control
     {
         btn.Icon = null;
         btn.Text = "（空）";
-        btn.AddThemeColorOverride("font_color", new Color(0.5f, 0.5f, 0.5f));
+        btn.AddThemeColorOverride("font_color", ParamsConfig.ColorInventoryEmptySlot);
         btn.TooltipText = "";
         ClearQualityBackground(btn);
     }
@@ -347,7 +335,7 @@ public partial class InventoryUI : Control
         GD.Print($"[InventoryUI] 批量卖出 {toSell.Count} 件普通/魔法物品，获得 {totalGold} 金币");
     }
 
-    private static bool IsLowRarity(int rarity) => rarity is 1 or 2;
+    private static bool IsLowRarity(int rarity) => rarity <= (int)ParamsConfig.InventoryLowRarityMax;
 
     private static int GetSellGold(ItemInstance item)
     {
@@ -414,36 +402,41 @@ public partial class InventoryUI : Control
         }
     }
 
-    public static Color GetQualityColor(int rarity)
+    public static Color GetQualityColor(int rarity) => rarity switch
     {
-        if (rarity >= 1 && rarity < QualityColors.Length)
-            return QualityColors[rarity];
-        return Colors.White;
-    }
+        1 => ParamsConfig.ColorQualityWhite,
+        2 => ParamsConfig.ColorQualityBlue,
+        3 => ParamsConfig.ColorQualityYellow,
+        4 => ParamsConfig.ColorQualityOrange,
+        5 => ParamsConfig.ColorQualityGold,
+        _ => Colors.White,
+    };
 
     public static Color GetQualityBackgroundColor(int rarity)
     {
         var color = GetQualityColor(rarity);
-        color.A = QualityBackgroundAlpha;
+        color.A = ParamsConfig.InventoryQualityBgAlpha;
         return color;
     }
 
     private static StyleBoxFlat GetQualityBackgroundStyle(int rarity)
     {
-        _qualityBackgroundStyles ??= new StyleBoxFlat[QualityColors.Length];
+        const int qualitySlotCount = 6;
+        _qualityBackgroundStyles ??= new StyleBoxFlat[qualitySlotCount];
 
         if (rarity < 1 || rarity >= _qualityBackgroundStyles.Length)
             rarity = 1;
 
         if (_qualityBackgroundStyles[rarity] == null)
         {
+            var radius = (int)ParamsConfig.InventorySlotCornerRadius;
             _qualityBackgroundStyles[rarity] = new StyleBoxFlat
             {
                 BgColor = GetQualityBackgroundColor(rarity),
-                CornerRadiusTopLeft = 4,
-                CornerRadiusTopRight = 4,
-                CornerRadiusBottomLeft = 4,
-                CornerRadiusBottomRight = 4,
+                CornerRadiusTopLeft = radius,
+                CornerRadiusTopRight = radius,
+                CornerRadiusBottomLeft = radius,
+                CornerRadiusBottomRight = radius,
             };
         }
 

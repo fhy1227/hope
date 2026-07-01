@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Core;
 
 namespace Hope.Components.Actions;
@@ -9,10 +10,6 @@ namespace Hope.Components.Actions;
 /// </summary>
 public sealed class RollAction : IPlayerAction
 {
-    private const float Duration = 0.25f;
-    private const float Speed = 480f;
-    private const float CooldownTime = 1f;
-
     /// <summary>内部阶段：空闲 → 翻滚中 → 冷却。</summary>
     private enum Phase { Idle, Rolling, Cooldown }
 
@@ -52,11 +49,11 @@ public sealed class RollAction : IPlayerAction
     {
         _direction = ctx.GetRollDirection();
         _phase = Phase.Rolling;
-        _timer = Duration;
+        _timer = ParamsConfig.RollDuration;
 
         _savedCollisionMask = ctx.Player.CollisionMask;
         ctx.Player.CollisionMask &= ~CollisionLayers.Enemy;
-        ctx.Player.SetActionVisual(new Color(1f, 1f, 1f, 0.55f));
+        ctx.Player.SetActionVisual(ParamsConfig.ColorRollVisual);
         ctx.Controller.NotifyActionStarted(Id);
     }
 
@@ -69,7 +66,7 @@ public sealed class RollAction : IPlayerAction
         }
 
         _timer -= (float)delta;
-        ctx.Player.Velocity = _direction * Speed;
+        ctx.Player.Velocity = _direction * ParamsConfig.RollSpeed;
         ctx.Player.MoveAndSlide();
 
         if (_timer <= 0f)
@@ -110,7 +107,7 @@ public sealed class RollAction : IPlayerAction
         ctx.Player.ResetActionVisual();
         ctx.Player.Velocity = Vector2.Zero;
         _phase = Phase.Cooldown;
-        _cooldown = CooldownTime;
+        _cooldown = ParamsConfig.RollCooldown;
         ctx.Controller.NotifyActionEnded(Id);
     }
 }

@@ -38,7 +38,7 @@ layer = 3
 
 [node name="PauseMenu" parent="UI_Pause" unique_id=888560577 instance=ExtResource("6_pause")]
 
-[node name="DeathDialog" parent="UI_Pause" instance=ExtResource("7_death")]
+[node name="DeathDialog" parent="UI_Pause" unique_id=647091508 instance=ExtResource("7_death")]
 
 [node name="UI_Transition" type="CanvasLayer" parent="." unique_id=1042483453]
 unique_name_in_owner = true

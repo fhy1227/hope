@@ -19,7 +19,7 @@ namespace Hope.DropSystem;
 public static class EquipDropGenerator
 {
     /// <summary> 传奇底材对主属性的额外倍率 </summary>
-    public const float LegendaryStatMultiplier = 1.35f;
+    public static float LegendaryStatMultiplier => ParamsConfig.DropLegendaryStatMul;
 
     /// <summary>
     /// 尝试生成一件装备；未通过掉落门禁时返回 null。

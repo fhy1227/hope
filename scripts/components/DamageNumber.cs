@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 
 namespace Hope.Components;
 
@@ -7,10 +8,6 @@ namespace Hope.Components;
 /// </summary>
 public partial class DamageNumber : Node2D
 {
-    private const float Duration = 0.75f;
-    private const float RiseSpeed = 55f;
-    private const int FontSize = 16;
-
     private string _text = "";
     private Color _color;
     private Vector2 _velocity;
@@ -20,15 +17,19 @@ public partial class DamageNumber : Node2D
     {
         _text = amount.ToString();
         _color = isPlayer
-            ? new Color(1f, 0.4f, 0.4f)
-            : new Color(1f, 0.92f, 0.45f);
+            ? ParamsConfig.ColorDamageNumberPlayer
+            : ParamsConfig.ColorDamageNumberEnemy;
 
-        Position += new Vector2((float)GD.RandRange(-8f, 8f), (float)GD.RandRange(-2f, 2f));
-        _velocity = new Vector2((float)GD.RandRange(-18f, 18f), -RiseSpeed);
-        Scale = Vector2.One * 0.55f;
+        Position += new Vector2(
+            (float)GD.RandRange(-ParamsConfig.DamageNumberJitterX, ParamsConfig.DamageNumberJitterX),
+            (float)GD.RandRange(-ParamsConfig.DamageNumberJitterY, ParamsConfig.DamageNumberJitterY));
+        _velocity = new Vector2(
+            (float)GD.RandRange(-ParamsConfig.DamageNumberVelJitterX, ParamsConfig.DamageNumberVelJitterX),
+            -ParamsConfig.DamageNumberRiseSpeed);
+        Scale = Vector2.One * ParamsConfig.DamageNumberInitialScale;
 
         var tween = CreateTween();
-        tween.TweenProperty(this, "scale", Vector2.One, 0.1)
+        tween.TweenProperty(this, "scale", Vector2.One, ParamsConfig.DamageNumberScaleTween)
             .SetTrans(Tween.TransitionType.Back)
             .SetEase(Tween.EaseType.Out);
     }
@@ -38,10 +39,10 @@ public partial class DamageNumber : Node2D
         var dt = (float)delta;
         _elapsed += dt;
         Position += _velocity * dt;
-        _velocity *= 0.92f;
+        _velocity *= ParamsConfig.DamageNumberVelocityDecay;
         QueueRedraw();
 
-        if (_elapsed >= Duration)
+        if (_elapsed >= ParamsConfig.DamageNumberDuration)
         {
             QueueFree();
         }
@@ -50,9 +51,10 @@ public partial class DamageNumber : Node2D
     public override void _Draw()
     {
         var font = ThemeDB.FallbackFont;
-        var size = font.GetStringSize(_text, HorizontalAlignment.Center, -1, FontSize);
-        var alpha = Mathf.Clamp(1f - _elapsed / Duration, 0f, 1f);
+        var fontSize = (int)ParamsConfig.DamageNumberFontSize;
+        var size = font.GetStringSize(_text, HorizontalAlignment.Center, -1, fontSize);
+        var alpha = Mathf.Clamp(1f - _elapsed / ParamsConfig.DamageNumberDuration, 0f, 1f);
         var color = new Color(_color.R, _color.G, _color.B, alpha);
-        DrawString(font, new Vector2(-size.X / 2f, size.Y / 4f), _text, HorizontalAlignment.Center, -1, FontSize, color);
+        DrawString(font, new Vector2(-size.X / 2f, size.Y / 4f), _text, HorizontalAlignment.Center, -1, fontSize, color);
     }
 }

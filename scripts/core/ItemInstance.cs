@@ -68,7 +68,9 @@ public partial class ItemInstance : Resource
             return bonus;
         }
 
-        var legendaryMul = EffectiveRarity >= 4 ? EquipDropGenerator.LegendaryStatMultiplier : 1f;
+        var legendaryMul = EffectiveRarity >= (int)ParamsConfig.DropLegendaryRarityThreshold
+            ? EquipDropGenerator.LegendaryStatMultiplier
+            : 1f;
         ItemStatMapping.ApplyBaseStats(Config, bonus, ItemLevel, legendaryMul);
 
         foreach (var affix in Affixes)

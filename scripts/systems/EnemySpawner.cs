@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Entities;
 
 namespace Hope.Systems;
@@ -15,16 +16,16 @@ public partial class EnemySpawner : Node
     public NodePath EnemyContainerPath { get; set; } = new("../Enemies");
 
     [Export]
-    public float SpawnRadiusMin { get; set; } = 360f;
+    public float SpawnRadiusMin { get; set; } = ParamsConfig.SpawnRadiusMin;
 
     [Export]
-    public float SpawnRadiusMax { get; set; } = 480f;
+    public float SpawnRadiusMax { get; set; } = ParamsConfig.SpawnRadiusMax;
 
     [Export]
-    public float BaseSpawnInterval { get; set; } = 2.2f;
+    public float BaseSpawnInterval { get; set; } = ParamsConfig.SpawnBaseInterval;
 
     [Export]
-    public int MaxAliveEnemies { get; set; } = 30;
+    public int MaxAliveEnemies { get; set; } = (int)ParamsConfig.SpawnMaxAlive;
 
     private Node2D _enemyContainer;
     private Node2D _player;
@@ -47,7 +48,7 @@ public partial class EnemySpawner : Node
     {
         _wave = wave;
         _active = true;
-        _spawnTimer = 0.5f;
+        _spawnTimer = ParamsConfig.SpawnBeginTimer;
     }
 
     public void Stop()
@@ -75,7 +76,7 @@ public partial class EnemySpawner : Node
 
         if (CountAliveEnemies() >= MaxAliveEnemies)
         {
-            _spawnTimer = 0.5f;
+            _spawnTimer = ParamsConfig.SpawnCapRetryTimer;
             return;
         }
 
@@ -85,7 +86,9 @@ public partial class EnemySpawner : Node
 
     private float GetSpawnInterval()
     {
-        return Mathf.Max(BaseSpawnInterval - _wave * 0.12f, 0.45f);
+        return Mathf.Max(
+            BaseSpawnInterval - _wave * ParamsConfig.SpawnIntervalWaveReduce,
+            ParamsConfig.SpawnIntervalMin);
     }
 
     private int CountAliveEnemies()

@@ -28,16 +28,16 @@ public class WeaponData
     public MeleeStyle MeleeStyle { get; set; } = MeleeStyle.Swing;
 
     /// <summary>相对 RunStats.Damage 的伤害倍率。</summary>
-    public float DamageScale { get; set; } = 1f;
+    public float DamageScale { get; set; } = ParamsConfig.WeaponDamageScaleDefault;
 
     /// <summary>相对 RunStats.AttackSpeed 的攻速倍率。</summary>
-    public float AttackSpeedScale { get; set; } = 1f;
+    public float AttackSpeedScale { get; set; } = ParamsConfig.WeaponAttackSpeedScaleDefault;
 
     /// <summary>攻击/索敌距离（像素）。</summary>
-    public float Range { get; set; } = 300f;
+    public float Range { get; set; } = ParamsConfig.WeaponRangeDefault;
 
     /// <summary>远程弹道速度（像素/秒）；近战忽略。</summary>
-    public float ProjectileSpeed { get; set; } = 450f;
+    public float ProjectileSpeed { get; set; } = ParamsConfig.WeaponProjectileSpeedDefault;
 
     /// <summary>远程攻击实例化的弹道场景；未设置则无法发射。</summary>
     public PackedScene? ProjectileScene { get; set; }
@@ -66,28 +66,31 @@ public class WeaponData
             Id = itemConfigId.ToString(),
             DisplayName = config.NameKey,
             IconPath = config.Icon,
-            DamageScale = config.StatDamage > 0f ? config.StatDamage : 1f,
-            AttackSpeedScale = Mathf.Max(0.1f, 1f + config.StatSpeed),
+            DamageScale = config.StatDamage > 0f ? config.StatDamage : ParamsConfig.WeaponDamageScaleDefault,
+            AttackSpeedScale = Mathf.Max(ParamsConfig.WeaponMinAttackSpeedScale, 1f + config.StatSpeed),
         };
+
+        var rangedId1 = (int)ParamsConfig.WeaponRangedConfigId1;
+        var rangedId2 = (int)ParamsConfig.WeaponRangedConfigId2;
+        var swordId = (int)ParamsConfig.WeaponSwordConfigId;
 
         switch (itemConfigId)
         {
-            case 1032:
-            case 1033:
+            case var id when id == rangedId1 || id == rangedId2:
                 data.Type = WeaponType.Ranged;
-                data.Range = 340f;
-                data.ProjectileSpeed = 480f;
+                data.Range = ParamsConfig.WeaponRangeRanged;
+                data.ProjectileSpeed = ParamsConfig.WeaponProjectileSpeedRanged;
                 data.ProjectileScene = projectileScene;
                 break;
-            case 1031:
+            case var id when id == swordId:
                 data.Type = WeaponType.Melee;
                 data.MeleeStyle = MeleeStyle.Swing;
-                data.Range = 65f;
+                data.Range = ParamsConfig.WeaponRangeSword;
                 break;
             default:
                 data.Type = WeaponType.Melee;
                 data.MeleeStyle = MeleeStyle.Swing;
-                data.Range = 58f;
+                data.Range = ParamsConfig.WeaponRangeMeleeDefault;
                 break;
         }
 
@@ -101,12 +104,12 @@ public class WeaponData
         Id = "pistol",
         DisplayName = "手枪",
         Type = WeaponType.Ranged,
-        DamageScale = 1f,
-        AttackSpeedScale = 1.2f,
-        Range = 340f,
-        ProjectileSpeed = 480f,
+        DamageScale = ParamsConfig.WeaponDamageScaleDefault,
+        AttackSpeedScale = ParamsConfig.WeaponPistolAttackSpeedScale,
+        Range = ParamsConfig.WeaponRangeRanged,
+        ProjectileSpeed = ParamsConfig.WeaponProjectileSpeedRanged,
         ProjectileScene = projectileScene,
-        VisualColor = new Color(1f, 0.85f, 0.3f),
+        VisualColor = ParamsConfig.ColorWeaponPistol,
     };
 
     /// <summary>创建默认短剑（挥砍近战）数据。</summary>
@@ -116,10 +119,10 @@ public class WeaponData
         DisplayName = "短剑",
         Type = WeaponType.Melee,
         MeleeStyle = MeleeStyle.Swing,
-        DamageScale = 1.4f,
-        AttackSpeedScale = 0.85f,
-        Range = 58f,
-        VisualColor = new Color(0.85f, 0.9f, 1f),
+        DamageScale = ParamsConfig.WeaponSwordDamageScale,
+        AttackSpeedScale = ParamsConfig.WeaponSwordAttackSpeedScale,
+        Range = ParamsConfig.WeaponRangeMeleeDefault,
+        VisualColor = ParamsConfig.ColorWeaponSword,
     };
 
     /// <summary>创建默认长矛（刺击近战）数据，射程略长于短剑。</summary>
@@ -129,9 +132,9 @@ public class WeaponData
         DisplayName = "长矛",
         Type = WeaponType.Melee,
         MeleeStyle = MeleeStyle.Thrust,
-        DamageScale = 1.2f,
-        AttackSpeedScale = 1f,
-        Range = 72f,
-        VisualColor = new Color(0.75f, 0.8f, 0.95f),
+        DamageScale = ParamsConfig.WeaponSpearDamageScale,
+        AttackSpeedScale = ParamsConfig.WeaponAttackSpeedScaleDefault,
+        Range = ParamsConfig.WeaponSpearRange,
+        VisualColor = ParamsConfig.ColorWeaponSpear,
     };
 }

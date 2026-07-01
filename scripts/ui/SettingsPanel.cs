@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 
 namespace Hope.UI;
 
@@ -7,8 +8,6 @@ namespace Hope.UI;
 /// </summary>
 public partial class SettingsPanel : PanelContainer
 {
-    private const string MasterBusName = "Master";
-
     private HSlider _volumeSlider = null!;
     private Label _volumeLabel = null!;
 
@@ -17,7 +16,7 @@ public partial class SettingsPanel : PanelContainer
         _volumeSlider = GetNode<HSlider>("%VolumeSlider");
         _volumeLabel = GetNode<Label>("%VolumeLabel");
 
-        var busIndex = AudioServer.GetBusIndex(MasterBusName);
+        var busIndex = AudioServer.GetBusIndex(ParamsConfig.AudioMasterBus);
         var linear = Mathf.DbToLinear(AudioServer.GetBusVolumeDb(busIndex));
         _volumeSlider.Value = linear;
         UpdateVolumeLabel(linear);
@@ -41,7 +40,7 @@ public partial class SettingsPanel : PanelContainer
     private void OnVolumeChanged(double value)
     {
         var linear = (float)value;
-        var busIndex = AudioServer.GetBusIndex(MasterBusName);
+        var busIndex = AudioServer.GetBusIndex(ParamsConfig.AudioMasterBus);
         AudioServer.SetBusVolumeDb(busIndex, Mathf.LinearToDb(linear));
         UpdateVolumeLabel(linear);
     }

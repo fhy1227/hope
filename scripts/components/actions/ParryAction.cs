@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Core;
 using Hope.Entities;
 
@@ -11,14 +12,6 @@ namespace Hope.Components.Actions;
 /// </summary>
 public sealed class ParryAction : IPlayerAction
 {
-    private const float WindowDuration = 0.25f;
-    private const float PerfectWindow = 0.08f;
-    private const float SuccessCooldown = 0.8f;
-    private const float FailCooldown = 1.5f;
-    private const float CounterRadius = 70f;
-    private const float CounterDamageMultiplier = 1f;
-    private const float StunDuration = 0.4f;
-
     /// <summary>内部阶段：空闲 → 窗口激活 → 冷却。</summary>
     private enum Phase { Idle, Active, Cooldown }
 
@@ -48,7 +41,7 @@ public sealed class ParryAction : IPlayerAction
     public bool GrantsInvincibility => false;
 
     /// <inheritdoc />
-    public float MoveSpeedMultiplier => IsActive ? 0.3f : 1f;
+    public float MoveSpeedMultiplier => IsActive ? ParamsConfig.ParryMoveSpeedMul : 1f;
 
     /// <summary>
     /// 格挡窗口是否仍开放且未结算；Player 接触伤害与 Controller.TryParry 据此判断。
@@ -63,9 +56,9 @@ public sealed class ParryAction : IPlayerAction
     public void Enter(PlayerActionContext ctx)
     {
         _phase = Phase.Active;
-        _timer = WindowDuration;
+        _timer = ParamsConfig.ParryWindowDuration;
         _resolved = false;
-        ctx.Player.SetActionVisual(new Color(0.9f, 1f, 0.95f, 1f));
+        ctx.Player.SetActionVisual(ParamsConfig.ColorParryEnter);
         ctx.Controller.NotifyActionStarted(Id);
     }
 
@@ -124,16 +117,20 @@ public sealed class ParryAction : IPlayerAction
             return false;
         }
 
-        perfect = _timer >= WindowDuration - PerfectWindow;
+        perfect = _timer >= ParamsConfig.ParryWindowDuration - ParamsConfig.ParryPerfectWindow;
         _resolved = true;
 
         if (source != null && GodotObject.IsInstanceValid(source))
         {
-            source.ApplyStun(StunDuration);
+            source.ApplyStun(ParamsConfig.ParryStunDuration);
         }
 
-        CombatPulse.HitCount(ctx.Player, CounterRadius, ctx.GetDamage(CounterDamageMultiplier), 60f);
-        ctx.Player.FlashActionRelease(perfect ? new Color(1f, 1f, 0.6f) : new Color(0.85f, 1f, 0.85f));
+        CombatPulse.HitCount(
+            ctx.Player,
+            ParamsConfig.ParryCounterRadius,
+            ctx.GetDamage(ParamsConfig.ParryCounterDamageMul),
+            ParamsConfig.ParryCounterKnockback);
+        ctx.Player.FlashActionRelease(perfect ? ParamsConfig.ColorParryPerfect : ParamsConfig.ColorParryNormal);
         Finish(ctx, succeeded: true, perfect: perfect);
         return true;
     }
@@ -147,7 +144,9 @@ public sealed class ParryAction : IPlayerAction
     {
         ctx.Player.ResetActionVisual();
         _phase = Phase.Cooldown;
-        _cooldown = succeeded ? (perfect ? 0f : SuccessCooldown) : FailCooldown;
+        _cooldown = succeeded
+            ? (perfect ? 0f : ParamsConfig.ParrySuccessCooldown)
+            : ParamsConfig.ParryFailCooldown;
         _resolved = true;
         ctx.Controller.NotifyActionEnded(Id);
     }

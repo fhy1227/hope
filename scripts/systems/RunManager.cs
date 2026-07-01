@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Hope.Config;
 using Hope.Core;
 using Hope.Entities;
 using Hope.Levels;
@@ -80,8 +81,10 @@ public partial class RunManager : Node
 		_enemySpawner?.SetPaused(paused);
 	}
 
-	public IReadOnlyList<ShopUpgrade> RollShopOptions(int count = 3)
+	public IReadOnlyList<ShopUpgrade> RollShopOptions(int count = -1)
 	{
+		if (count < 0)
+			count = (int)ParamsConfig.ShopOptionCount;
 		var pool = new List<ShopUpgrade>(ShopUpgrade.Pool);
 		var result = new List<ShopUpgrade>(count);
 
@@ -138,8 +141,10 @@ public partial class RunManager : Node
 		_player.GlobalPosition = ResolveSpawnPosition();
 	}
 
-	public Godot.Collections.Array<Godot.Collections.Dictionary> GetShopOptions(int count = 3)
+	public Godot.Collections.Array<Godot.Collections.Dictionary> GetShopOptions(int count = -1)
 	{
+		if (count < 0)
+			count = (int)ParamsConfig.ShopOptionCount;
 		var result = new Godot.Collections.Array<Godot.Collections.Dictionary>();
 		foreach (var option in RollShopOptions(count))
 		{

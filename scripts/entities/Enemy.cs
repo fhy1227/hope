@@ -1,5 +1,6 @@
 using Godot;
 using Hope.Components;
+using Hope.Config;
 
 namespace Hope.Entities;
 
@@ -9,14 +10,14 @@ namespace Hope.Entities;
 public partial class Enemy : CharacterBody2D
 {
     [Export]
-    public float ContactCooldown { get; set; } = 0.6f;
+    public float ContactCooldown { get; set; } = ParamsConfig.EnemyContactCooldown;
 
     [Export]
-    public int GoldDrop { get; set; } = 1;
+    public int GoldDrop { get; set; } = (int)ParamsConfig.EnemyGoldDropDefault;
 
     /// <summary> 敌人类型，对应 drop_table.enemy_type（* 表示通用规则） </summary>
     [Export]
-    public string EnemyType { get; set; } = "normal";
+    public string EnemyType { get; set; } = ParamsConfig.EnemyTypeNormal;
 
     private HealthComponent _health;
     private EnemyStatsComponent _statsComponent;
@@ -68,10 +69,10 @@ public partial class Enemy : CharacterBody2D
         _contactTimer = Mathf.Max(_contactTimer - (float)delta, 0f);
         _stunTimer = Mathf.Max(_stunTimer - (float)delta, 0f);
 
-        if (_knockbackVelocity.LengthSquared() > 4f)
+        if (_knockbackVelocity.LengthSquared() > ParamsConfig.PlayerFacingVelThresholdSq)
         {
             Velocity = _knockbackVelocity;
-            _knockbackVelocity *= 0.88f;
+            _knockbackVelocity *= ParamsConfig.EnemyKnockbackDecay;
             MoveAndSlide();
             return;
         }
@@ -88,7 +89,7 @@ public partial class Enemy : CharacterBody2D
             FacingDirection = toTarget.Normalized();
         }
 
-        if (toTarget.LengthSquared() > 4f)
+        if (toTarget.LengthSquared() > ParamsConfig.PlayerFacingVelThresholdSq)
         {
             Velocity = toTarget.Normalized() * _statsComponent.GetMoveSpeed();
             MoveAndSlide();

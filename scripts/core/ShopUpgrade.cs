@@ -1,4 +1,5 @@
 using System;
+using Hope.Config;
 
 namespace Hope.Core;
 
@@ -23,32 +24,32 @@ public readonly struct ShopUpgrade
         new()
         {
             Id = "hp",
-            Label = "生命 +3",
-            Apply = stats => stats.MaxHealth += 3,
+            Label = $"生命 +{(int)ParamsConfig.ShopHpBonus}",
+            Apply = stats => stats.MaxHealth += (int)ParamsConfig.ShopHpBonus,
         },
         new()
         {
             Id = "damage",
-            Label = "伤害 +2",
-            Apply = stats => stats.Damage += 2f,
+            Label = $"伤害 +{(int)ParamsConfig.ShopDamageBonus}",
+            Apply = stats => stats.Damage += ParamsConfig.ShopDamageBonus,
         },
         new()
         {
             Id = "attack_speed",
-            Label = "攻速 +15%",
-            Apply = stats => stats.AttackSpeed *= 1.15f,
+            Label = $"攻速 +{(int)((ParamsConfig.ShopAttackSpeedMul - 1f) * 100)}%",
+            Apply = stats => stats.AttackSpeed *= ParamsConfig.ShopAttackSpeedMul,
         },
         new()
         {
             Id = "speed",
-            Label = "移速 +20",
-            Apply = stats => stats.Speed += 20f,
+            Label = $"移速 +{(int)ParamsConfig.ShopSpeedBonus}",
+            Apply = stats => stats.Speed += ParamsConfig.ShopSpeedBonus,
         },
         new()
         {
             Id = "range",
-            Label = "射程 +40",
-            Apply = stats => stats.WeaponRange += 40f,
+            Label = $"射程 +{(int)ParamsConfig.ShopWeaponRangeBonus}",
+            Apply = stats => stats.WeaponRange += ParamsConfig.ShopWeaponRangeBonus,
         },
     ];
 }

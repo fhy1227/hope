@@ -41,7 +41,7 @@ public static class BaseItemPicker
             .ToList();
 
         if (slots.Count == 0)
-            return DropContext.EquipManagerWeaponSlot;
+            return (int)ParamsConfig.DropWeaponSlotType;
 
         if (GD.Randf() < ctx.SmartLootChance && ctx.PreferredSlotTypes?.Length > 0)
         {

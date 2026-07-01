@@ -1,5 +1,6 @@
 using Godot;
 using Hope.Components.Actions.Charge;
+using Hope.Config;
 using Hope.Core;
 
 namespace Hope.Components.Actions;
@@ -11,12 +12,6 @@ namespace Hope.Components.Actions;
 public sealed class ChargeAction : IPlayerAction
 {
     private readonly IChargeReleaseEffect _releaseEffect;
-
-    private const float WindUpTime = 0.15f;
-    private const float MaxChargeTime = 2f;
-    private const float ReleaseTime = 0.2f;
-    private const float CooldownTime = 2f;
-    private const float MinReleasePercent = 0.25f;
 
     /// <summary>内部阶段：空闲 → 前摇 → 蓄力 → 释放 → 冷却。</summary>
     private enum Phase { Idle, WindUp, Charging, Release, Cooldown }
@@ -54,7 +49,7 @@ public sealed class ChargeAction : IPlayerAction
     public bool GrantsInvincibility => false;
 
     /// <inheritdoc />
-    public float MoveSpeedMultiplier => _phase == Phase.Charging ? 0.5f : 0f;
+    public float MoveSpeedMultiplier => _phase == Phase.Charging ? ParamsConfig.ChargeMoveSpeedMul : 0f;
 
     /// <inheritdoc />
     public bool CanStart(PlayerActionContext ctx) =>
@@ -64,9 +59,9 @@ public sealed class ChargeAction : IPlayerAction
     public void Enter(PlayerActionContext ctx)
     {
         _phase = Phase.WindUp;
-        _timer = WindUpTime;
+        _timer = ParamsConfig.ChargeWindupTime;
         _chargePercent = 0f;
-        ctx.Player.SetActionVisual(new Color(0.85f, 0.95f, 1f, 1f));
+        ctx.Player.SetActionVisual(ParamsConfig.ColorChargeEnter);
         ctx.Controller.NotifyActionStarted(Id);
     }
 
@@ -160,8 +155,10 @@ public sealed class ChargeAction : IPlayerAction
         }
 
         _timer += (float)delta;
-        _chargePercent = Mathf.Clamp(_timer / MaxChargeTime, 0f, 1f);
-        ctx.Player.SetActionVisual(new Color(0.7f, 0.85f, 1f, 1f), 1f + _chargePercent * 0.15f);
+        _chargePercent = Mathf.Clamp(_timer / ParamsConfig.ChargeMaxTime, 0f, 1f);
+        ctx.Player.SetActionVisual(
+            ParamsConfig.ColorChargeCharging,
+            1f + _chargePercent * ParamsConfig.ChargeVisualScaleMax);
 
         if (_chargePercent >= 1f)
         {
@@ -174,20 +171,20 @@ public sealed class ChargeAction : IPlayerAction
     /// </summary>
     private void BeginRelease(PlayerActionContext ctx)
     {
-        if (_chargePercent < MinReleasePercent)
+        if (_chargePercent < ParamsConfig.ChargeMinReleasePercent)
         {
             Cancel(ctx);
             return;
         }
 
         _phase = Phase.Release;
-        _timer = ReleaseTime;
+        _timer = ParamsConfig.ChargeReleaseTime;
         _releaseEffect.Execute(new ChargeReleaseContext
         {
             Action = ctx,
             ChargePercent = _chargePercent,
         });
-        ctx.Player.FlashActionRelease(new Color(1f, 0.95f, 0.7f));
+        ctx.Player.FlashActionRelease(ParamsConfig.ColorChargeRelease);
     }
 
     /// <summary>释放阶段倒计时，结束后进入冷却。</summary>
@@ -209,12 +206,12 @@ public sealed class ChargeAction : IPlayerAction
         ctx.Controller.NotifyActionEnded(Id);
     }
 
-    /// <summary>正常释放结束：进入 2s 冷却。</summary>
+    /// <summary>正常释放结束：进入冷却。</summary>
     private void Finish(PlayerActionContext ctx)
     {
         ctx.Player.ResetActionVisual();
         _phase = Phase.Cooldown;
-        _cooldown = CooldownTime;
+        _cooldown = ParamsConfig.ChargeCooldown;
         _chargePercent = 0f;
         ctx.Controller.NotifyActionEnded(Id);
     }

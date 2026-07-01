@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Core;
 
 namespace Hope.Components;
@@ -9,10 +10,10 @@ namespace Hope.Components;
 public partial class EnemyStatsComponent : Node
 {
     [Export]
-    public float MoveSpeed { get; set; } = 90f;
+    public float MoveSpeed { get; set; } = ParamsConfig.EnemyMoveSpeedDefault;
 
     [Export]
-    public float ContactDamage { get; set; } = 1f;
+    public float ContactDamage { get; set; } = ParamsConfig.EnemyContactDamageDefault;
 
     [Export]
     public NodePath NumericPath { get; set; } = new("../NumericComponent");

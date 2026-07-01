@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Entities;
 
 namespace Hope.Components;
@@ -8,9 +9,6 @@ namespace Hope.Components;
 /// </summary>
 public partial class EnemyVisualController : AnimatedSprite2D
 {
-	private const string SpriteDir = "res://assets/textures/enemy/enemy01.sprites/";
-	private const string SpritePrefix = "long_daoke";
-
 	private Enemy _enemy = null!;
 	private bool _dying;
 	private bool _attacking;
@@ -81,7 +79,7 @@ public partial class EnemyVisualController : AnimatedSprite2D
 
 	private void UpdateLocomotion()
 	{
-		var moving = _enemy.Velocity.LengthSquared() > 4f;
+		var moving = _enemy.Velocity.LengthSquared() > ParamsConfig.PlayerFacingVelThresholdSq;
 		var next = moving ? "walk" : "idle";
 		if (next == _locomotionAnim && IsPlaying())
 		{
@@ -94,7 +92,7 @@ public partial class EnemyVisualController : AnimatedSprite2D
 
 	private void UpdateFacing()
 	{
-		var facingX = _enemy.Velocity.LengthSquared() > 4f
+		var facingX = _enemy.Velocity.LengthSquared() > ParamsConfig.PlayerFacingVelThresholdSq
 			? _enemy.Velocity.X
 			: _enemy.FacingDirection.X;
 
@@ -122,10 +120,10 @@ public partial class EnemyVisualController : AnimatedSprite2D
 	private static SpriteFrames BuildSpriteFrames()
 	{
 		var frames = new SpriteFrames();
-		AddLoop(frames, "idle", "idle", 0, 1, 6f);
-		AddLoop(frames, "walk", "run", 0, 10, 10f);
-		AddOnce(frames, "attack", "attack", 0, 15, 12f);
-		AddOnce(frames, "defeated", "defeated", 0, 14, 12f);
+		AddLoop(frames, "idle", "idle", 0, 1, ParamsConfig.AnimEnemyIdleFps);
+		AddLoop(frames, "walk", "run", 0, (int)ParamsConfig.AnimEnemyWalkFrames, ParamsConfig.AnimEnemyWalkFps);
+		AddOnce(frames, "attack", "attack", 0, (int)ParamsConfig.AnimEnemyAttackFrames, ParamsConfig.AnimEnemyAttackFps);
+		AddOnce(frames, "defeated", "defeated", 0, (int)ParamsConfig.AnimEnemyDefeatedFrames, ParamsConfig.AnimEnemyDefeatedFps);
 		return frames;
 	}
 
@@ -168,11 +166,13 @@ public partial class EnemyVisualController : AnimatedSprite2D
 
 	private static string ResolveFramePath(string clip, int index)
 	{
+		var spriteDir = ParamsConfig.PathEnemySpriteDir;
+		var prefix = ParamsConfig.PathEnemySpritePrefix;
 		if (clip == "idle")
 		{
-			return $"{SpriteDir}{SpritePrefix}-idle_0.tres";
+			return $"{spriteDir}{prefix}-idle_0.tres";
 		}
 
-		return $"{SpriteDir}{SpritePrefix}-{clip}_{index:D2}.tres";
+		return $"{spriteDir}{prefix}-{clip}_{index:D2}.tres";
 	}
 }

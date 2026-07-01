@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 
 namespace Hope.Systems;
 
@@ -8,10 +9,10 @@ namespace Hope.Systems;
 public partial class WaveManager : Node
 {
     [Export]
-    public float WaveDuration { get; set; } = 20f;
+    public float WaveDuration { get; set; } = ParamsConfig.WaveDuration;
 
     [Export]
-    public float DurationGrowthPerWave { get; set; } = 1f;
+    public float DurationGrowthPerWave { get; set; } = ParamsConfig.WaveDurationGrowth;
 
     public int CurrentWave { get; private set; }
     public float TimeRemaining { get; private set; }

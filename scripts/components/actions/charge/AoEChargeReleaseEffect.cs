@@ -1,5 +1,6 @@
 using Hope.Components.Actions;
 using Hope.Components;
+using Hope.Config;
 
 namespace Hope.Components.Actions.Charge;
 
@@ -14,9 +15,18 @@ public sealed class AoEChargeReleaseEffect : IChargeReleaseEffect
         var ctx = release.Action;
         var (radius, damageMultiplier, knockback) = release.ChargePercent switch
         {
-            < 0.5f => (60f, 0.8f, 80f),
-            < 0.75f => (90f, 1.2f, 100f),
-            _ => (120f, 2f, 140f),
+            var p when p < ParamsConfig.ChargeAoeThresholdMid => (
+                ParamsConfig.ChargeAoeRadiusLow,
+                ParamsConfig.ChargeAoeDamageMulLow,
+                ParamsConfig.ChargeAoeKnockbackLow),
+            var p when p < ParamsConfig.ChargeAoeThresholdHigh => (
+                ParamsConfig.ChargeAoeRadiusMid,
+                ParamsConfig.ChargeAoeDamageMulMid,
+                ParamsConfig.ChargeAoeKnockbackMid),
+            _ => (
+                ParamsConfig.ChargeAoeRadiusHigh,
+                ParamsConfig.ChargeAoeDamageMulHigh,
+                ParamsConfig.ChargeAoeKnockbackHigh),
         };
 
         CombatPulse.HitCount(ctx.Player, radius, ctx.GetDamage(damageMultiplier), knockback);

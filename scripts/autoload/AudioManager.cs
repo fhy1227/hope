@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 
 namespace Hope;
 
@@ -7,8 +8,6 @@ namespace Hope;
 /// </summary>
 public partial class AudioManager : Node
 {
-    private const int SfxPoolSize = 8;
-
     public static AudioManager? Instance { get; private set; }
 
     private AudioStreamPlayer? _musicPlayer;
@@ -30,13 +29,15 @@ public partial class AudioManager : Node
 
     public override void _Ready()
     {
-        _musicPlayer = new AudioStreamPlayer { Bus = "Master" };
+        var bus = ParamsConfig.AudioMasterBus;
+        _musicPlayer = new AudioStreamPlayer { Bus = bus };
         AddChild(_musicPlayer);
 
-        _sfxPool = new AudioStreamPlayer[SfxPoolSize];
-        for (var i = 0; i < SfxPoolSize; i++)
+        var poolSize = (int)ParamsConfig.AudioSfxPoolSize;
+        _sfxPool = new AudioStreamPlayer[poolSize];
+        for (var i = 0; i < poolSize; i++)
         {
-            _sfxPool[i] = new AudioStreamPlayer { Bus = "Master" };
+            _sfxPool[i] = new AudioStreamPlayer { Bus = bus };
             AddChild(_sfxPool[i]);
         }
     }
@@ -66,8 +67,14 @@ public partial class AudioManager : Node
             return;
         }
 
+        var poolSize = _sfxPool.Length;
+        if (poolSize == 0)
+        {
+            return;
+        }
+
         var player = _sfxPool[_sfxIndex];
-        _sfxIndex = (_sfxIndex + 1) % SfxPoolSize;
+        _sfxIndex = (_sfxIndex + 1) % poolSize;
 
         player.Stream = stream;
         player.Play();

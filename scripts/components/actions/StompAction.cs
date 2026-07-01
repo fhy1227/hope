@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Core;
 
 namespace Hope.Components.Actions;
@@ -9,13 +10,6 @@ namespace Hope.Components.Actions;
 /// </summary>
 public sealed class StompAction : IPlayerAction
 {
-    private const float WindUpTime = 0.1f;
-    private const float RecoveryTime = 0.05f;
-    private const float Radius = 80f;
-    private const float DamageMultiplier = 0.6f;
-    private const float KnockbackSpeed = 120f;
-    private const float CooldownTime = 3f;
-
     /// <summary>内部阶段：空闲 → 前摇 → 恢复 → 冷却。</summary>
     private enum Phase { Idle, WindUp, Recovery, Cooldown }
 
@@ -55,10 +49,10 @@ public sealed class StompAction : IPlayerAction
     public void Enter(PlayerActionContext ctx)
     {
         _phase = Phase.WindUp;
-        _timer = WindUpTime;
+        _timer = ParamsConfig.StompWindupTime;
         _hitApplied = false;
         ctx.Player.Velocity = Vector2.Zero;
-        ctx.Player.SetActionVisual(new Color(0.75f, 0.85f, 1f, 1f), 0.85f);
+        ctx.Player.SetActionVisual(ParamsConfig.ColorStompEnter, ParamsConfig.StompVisualScale);
         ctx.Controller.NotifyActionStarted(Id);
     }
 
@@ -72,7 +66,7 @@ public sealed class StompAction : IPlayerAction
             {
                 ApplyStomp(ctx);
                 _phase = Phase.Recovery;
-                _timer = RecoveryTime;
+                _timer = ParamsConfig.StompRecoveryTime;
             }
 
             return;
@@ -117,18 +111,22 @@ public sealed class StompAction : IPlayerAction
     private void ApplyStomp(PlayerActionContext ctx)
     {
         _hitApplied = true;
-        CombatPulse.HitCount(ctx.Player, Radius, ctx.GetDamage(DamageMultiplier), KnockbackSpeed);
-        ctx.Player.FlashActionRelease(new Color(0.6f, 0.8f, 1f));
-        ctx.Player.SetActionVisual(Colors.White, 1.15f);
+        CombatPulse.HitCount(
+            ctx.Player,
+            ParamsConfig.StompRadius,
+            ctx.GetDamage(ParamsConfig.StompDamageMul),
+            ParamsConfig.StompKnockbackSpeed);
+        ctx.Player.FlashActionRelease(ParamsConfig.ColorStompRelease);
+        ctx.Player.SetActionVisual(Colors.White, ParamsConfig.StompReleaseVisualScale);
     }
 
-    /// <summary>恢复结束：重置视觉与速度，进入 3s 冷却。</summary>
+    /// <summary>恢复结束：重置视觉与速度，进入冷却。</summary>
     private void Finish(PlayerActionContext ctx)
     {
         ctx.Player.ResetActionVisual();
         ctx.Player.Velocity = Vector2.Zero;
         _phase = Phase.Cooldown;
-        _cooldown = CooldownTime;
+        _cooldown = ParamsConfig.StompCooldown;
         ctx.Controller.NotifyActionEnded(Id);
     }
 }

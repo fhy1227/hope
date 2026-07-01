@@ -7,9 +7,6 @@ namespace Hope.Core;
 /// </summary>
 public static class ItemStatMapping
 {
-    /// <summary>ilvl 达到此值时底材 stat 为配置原值；低于此时按比例衰减。</summary>
-    public const int ReferenceItemLevel = 50;
-
     /// <summary>
     /// 将底材 stat 写入加成表；传奇品质对伤害类主属性有额外倍率。
     /// </summary>
@@ -55,6 +52,6 @@ public static class ItemStatMapping
             return 1f;
         }
 
-        return itemLevel / (float)ReferenceItemLevel;
+        return itemLevel / ParamsConfig.ItemReferenceLevel;
     }
 }

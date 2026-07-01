@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Core;
 using Hope.Persistence;
 
@@ -9,7 +10,7 @@ namespace Hope.UI;
 /// </summary>
 public partial class MainMenu : Control
 {
-    private const int DefaultSlotIndex = 0;
+    private static int DefaultSlotIndex => (int)ParamsConfig.SaveDefaultSlotIndex;
 
     private SettingsPanel _settingsPanel = null!;
     private Button _continueButton = null!;

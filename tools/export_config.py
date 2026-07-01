@@ -4,8 +4,10 @@
 配置表导出工具 v1.0
 
 功能:
-  1. 读取 tools/config/ 下所有 .xlsx 文件
+  1. 读取 tools/config/ 下所有 .xlsx 文件（跳过 params.xlsx）
   2. 导出 JSON 配置到 assets/config/
+
+params.xlsx 由 .cursor/skills/generate-params-config 单独生成 ParamsConfig.cs，不走本脚本。
 
 模板格式说明 (以 item.xlsx 为例):
   Row 1: 字段名 (field_name)
@@ -56,6 +58,7 @@ if sys.stdout.encoding and sys.stdout.encoding.upper() != "UTF-8":
 ROOT = Path(__file__).resolve().parent.parent  # E:/_project/hope
 XLSX_DIR = ROOT / "tools" / "config"
 OUTPUT_JSON_DIR = ROOT / "assets" / "config"
+SKIP_XLSX = frozenset({"params.xlsx"})
 
 
 def parse_value(raw, type_str: str, tag: str):
@@ -301,9 +304,14 @@ def main():
 
     print(f"\n 找到 {len(xlsx_files)} 个 xlsx 文件:")
     for f in xlsx_files:
-        print(f"    - {f.name}")
+        if f.name in SKIP_XLSX:
+            print(f"    - {f.name}  (跳过: 由 generate_params_config.py 处理)")
+        else:
+            print(f"    - {f.name}")
 
     for f in xlsx_files:
+        if f.name in SKIP_XLSX:
+            continue
         process_xlsx(f)
 
     print("\n" + "=" * 50)

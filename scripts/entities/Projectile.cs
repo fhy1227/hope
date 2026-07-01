@@ -1,5 +1,6 @@
 using Godot;
 using Hope.Components;
+using Hope.Config;
 using Hope.Core;
 
 namespace Hope.Entities;
@@ -10,13 +11,13 @@ namespace Hope.Entities;
 public partial class Projectile : Area2D
 {
     [Export]
-    public float Speed { get; set; } = 450f;
+    public float Speed { get; set; } = ParamsConfig.ProjectileSpeedDefault;
 
     [Export]
-    public int Damage { get; set; } = 1;
+    public int Damage { get; set; } = (int)ParamsConfig.ProjectileDamageDefault;
 
     [Export]
-    public float Lifetime { get; set; } = 2f;
+    public float Lifetime { get; set; } = ParamsConfig.ProjectileLifetime;
 
     private Vector2 _direction = Vector2.Right;
     private float _life;

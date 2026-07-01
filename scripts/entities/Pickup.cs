@@ -12,7 +12,7 @@ public partial class Pickup : Area2D
 {
     /// <summary> 金币数量（ItemConfigId == 0 时生效） </summary>
     [Export]
-    public int GoldAmount { get; set; } = 1;
+    public int GoldAmount { get; set; } = (int)ParamsConfig.PickupGoldDefault;
 
     /// <summary> 物品配置ID（>0 时为物品拾取） </summary>
     [Export]
@@ -25,8 +25,8 @@ public partial class Pickup : Area2D
     /// <summary> 带随机词条的完整物品实例（D4 掉落；优先于 ItemConfigId） </summary>
     public Core.ItemInstance? DropInstance { get; set; }
 
-    [Export] public float MagnetRange  { get; set; } = 80f;
-    [Export] public float MagnetSpeed  { get; set; } = 280f;
+    [Export] public float MagnetRange  { get; set; } = ParamsConfig.PickupMagnetRange;
+    [Export] public float MagnetSpeed  { get; set; } = ParamsConfig.PickupMagnetSpeed;
 
     private Node2D _target;
     private bool   _magnetized;
@@ -62,7 +62,7 @@ public partial class Pickup : Area2D
         if (!_magnetized)
             return;
 
-        if (distance <= 8f)
+        if (distance <= ParamsConfig.PickupCollectDistance)
         {
             Collect();
             return;

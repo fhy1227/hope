@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Godot;
+using Hope.Config;
 using Hope.Core;
 using Hope.Entities;
 
@@ -11,7 +11,7 @@ namespace Hope.Components;
 public partial class WeaponSlot : Node2D
 {
     [Export]
-    public Vector2 SlotOffset { get; set; } = Vector2.Right * 20f;
+    public Vector2 SlotOffset { get; set; } = Vector2.Right * ParamsConfig.WeaponSlotOffset;
 
     private Node2D _pivot = null!;
     private Sprite2D _iconVisual = null!;
@@ -158,26 +158,27 @@ public partial class WeaponSlot : Node2D
         }
 
         return _weapon.Type == WeaponType.Ranged
-            ? _numeric![NumericType.WeaponRange] * (_weapon.Range / 340f)
+            ? _numeric![NumericType.WeaponRange] * (_weapon.Range / ParamsConfig.WeaponRangedRangeRef)
             : GetMeleeRange();
     }
 
     /// <summary>近战射程随 RunStats.WeaponRange 同比缩放（默认 320 为基准）。</summary>
     private float GetMeleeRange()
     {
-        const float baseWeaponRange = 320f;
-        return _weapon!.Range * (_numeric![NumericType.WeaponRange] / baseWeaponRange);
+        return _weapon!.Range * (_numeric![NumericType.WeaponRange] / ParamsConfig.WeaponMeleeRangeRef);
     }
 
     private float GetAttackInterval()
     {
-        var speed = Mathf.Max(_numeric![NumericType.AttackSpeed] * _weapon!.AttackSpeedScale, 0.1f);
+        var speed = Mathf.Max(
+            _numeric![NumericType.AttackSpeed] * _weapon!.AttackSpeedScale,
+            ParamsConfig.WeaponMinAttackSpeed);
         return 1f / speed;
     }
 
     private int GetDamage()
     {
-        return Mathf.Max(1, Mathf.RoundToInt(_numeric![NumericType.Damage] * _weapon!.DamageScale));
+        return Mathf.Max((int)ParamsConfig.PlayerMinDamage, Mathf.RoundToInt(_numeric![NumericType.Damage] * _weapon!.DamageScale));
     }
 
     private Node2D? FindNearestEnemy()
@@ -246,22 +247,22 @@ public partial class WeaponSlot : Node2D
         var tween = CreateTween();
         if (_weapon.MeleeStyle == MeleeStyle.Swing)
         {
-            tween.TweenProperty(_pivot, "rotation", baseAngle + Mathf.DegToRad(55f), 0.07)
+            tween.TweenProperty(_pivot, "rotation", baseAngle + Mathf.DegToRad(ParamsConfig.WeaponSwingAnglePeakDeg), ParamsConfig.WeaponSwingTween1)
                 .SetTrans(Tween.TransitionType.Quad)
                 .SetEase(Tween.EaseType.Out);
-            tween.TweenProperty(_pivot, "rotation", baseAngle - Mathf.DegToRad(25f), 0.09)
+            tween.TweenProperty(_pivot, "rotation", baseAngle - Mathf.DegToRad(ParamsConfig.WeaponSwingAngleTroughDeg), ParamsConfig.WeaponSwingTween2)
                 .SetTrans(Tween.TransitionType.Quad)
                 .SetEase(Tween.EaseType.InOut);
-            tween.TweenProperty(_pivot, "rotation", baseAngle, 0.05);
+            tween.TweenProperty(_pivot, "rotation", baseAngle, ParamsConfig.WeaponSwingTween3);
         }
         else
         {
             var startPos = Vector2.Zero;
-            var thrust = Vector2.FromAngle(baseAngle) * 22f;
-            tween.TweenProperty(_pivot, "position", thrust, 0.06)
+            var thrust = Vector2.FromAngle(baseAngle) * ParamsConfig.WeaponThrustDistance;
+            tween.TweenProperty(_pivot, "position", thrust, ParamsConfig.WeaponThrustTweenOut)
                 .SetTrans(Tween.TransitionType.Quad)
                 .SetEase(Tween.EaseType.Out);
-            tween.TweenProperty(_pivot, "position", startPos, 0.08)
+            tween.TweenProperty(_pivot, "position", startPos, ParamsConfig.WeaponThrustTweenBack)
                 .SetTrans(Tween.TransitionType.Quad)
                 .SetEase(Tween.EaseType.In);
         }
@@ -285,13 +286,13 @@ public partial class WeaponSlot : Node2D
 
         if (weapon.MeleeStyle == MeleeStyle.Thrust)
         {
-            rectangle.Size = new Vector2(range * 0.85f, 14f);
-            _meleeShape.Position = new Vector2(range * 0.42f, 0f);
+            rectangle.Size = new Vector2(range * ParamsConfig.WeaponThrustHitboxWidthRatio, ParamsConfig.WeaponThrustHitboxHeight);
+            _meleeShape.Position = new Vector2(range * ParamsConfig.WeaponThrustHitboxPosRatio, 0f);
         }
         else
         {
-            rectangle.Size = new Vector2(range * 0.75f, 22f);
-            _meleeShape.Position = new Vector2(range * 0.38f, 0f);
+            rectangle.Size = new Vector2(range * ParamsConfig.WeaponSwingHitboxWidthRatio, ParamsConfig.WeaponSwingHitboxHeight);
+            _meleeShape.Position = new Vector2(range * ParamsConfig.WeaponSwingHitboxPosRatio, 0f);
         }
     }
 

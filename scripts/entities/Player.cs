@@ -1,6 +1,7 @@
 using Godot;
 using Hope.Components;
 using Hope.Components.Actions;
+using Hope.Config;
 using Hope.Core;
 using Hope.Entities;
 
@@ -23,7 +24,7 @@ public partial class Player : CharacterBody2D
 
 	/// <summary>当前面朝方向：移动时取速度，否则取上次移动输入。</summary>
 	public Vector2 FacingDirection =>
-		Velocity.LengthSquared() > 4f
+		Velocity.LengthSquared() > ParamsConfig.PlayerFacingVelThresholdSq
 			? Velocity.Normalized()
 			: _actions.LastMoveDirection;
 
@@ -72,7 +73,7 @@ public partial class Player : CharacterBody2D
 	public int GetActionDamage(float multiplier = 1f)
 	{
 		var numeric = _statsComponent.GetNumeric();
-		return Mathf.Max(1, Mathf.RoundToInt(numeric[NumericType.Damage] * multiplier));
+		return Mathf.Max((int)ParamsConfig.PlayerMinDamage, Mathf.RoundToInt(numeric[NumericType.Damage] * multiplier));
 	}
 
 	public void SetActionVisual(Color color, float scaleMultiplier = 1f)
@@ -109,7 +110,7 @@ public partial class Player : CharacterBody2D
 
 		visual.Modulate = color;
 		var tween = CreateTween();
-		tween.TweenProperty(visual, "modulate", Colors.White, 0.12);
+		tween.TweenProperty(visual, "modulate", Colors.White, ParamsConfig.PlayerActionFlashDuration);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -147,7 +148,7 @@ public partial class Player : CharacterBody2D
 
 		_actions.OnPlayerHit();
 		_statsComponent.TakeContactDamage(amount);
-		_invincibilityTimer = 0.4f;
+		_invincibilityTimer = ParamsConfig.PlayerHitInvincibility;
 		FlashDamage();
 		return true;
 	}
@@ -160,9 +161,9 @@ public partial class Player : CharacterBody2D
 			return;
 		}
 
-		visual.Modulate = new Color(1f, 0.45f, 0.45f);
+		visual.Modulate = ParamsConfig.ColorPlayerDamage;
 		var tween = CreateTween();
-		tween.TweenProperty(visual, "modulate", Colors.White, 0.15);
+		tween.TweenProperty(visual, "modulate", Colors.White, ParamsConfig.PlayerDamageFlashDuration);
 	}
 
 	private void OnDied()
@@ -171,7 +172,7 @@ public partial class Player : CharacterBody2D
 		var visual = GetNodeOrNull<CanvasItem>("Visual");
 		if (visual != null)
 		{
-			visual.Modulate = new Color(1f, 1f, 1f, 0.35f);
+			visual.Modulate = new Color(1f, 1f, 1f, ParamsConfig.PlayerDeathVisualAlpha);
 		}
 	}
 

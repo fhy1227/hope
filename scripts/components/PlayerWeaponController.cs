@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Core;
 using Hope.Systems;
 
@@ -9,7 +10,7 @@ namespace Hope.Components;
 /// </summary>
 public partial class PlayerWeaponController : Node2D
 {
-    private const int DefaultWeaponId = 1030;
+    private static int DefaultWeaponId => (int)ParamsConfig.WeaponDefaultConfigId;
 
     [Export]
     public PackedScene? ProjectileScene { get; set; }

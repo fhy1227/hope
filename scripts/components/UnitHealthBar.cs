@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 
 namespace Hope.Components;
 
@@ -11,16 +12,16 @@ public partial class UnitHealthBar : Node2D
     public NodePath HealthComponentPath { get; set; } = new("../HealthComponent");
 
     [Export]
-    public Vector2 BarSize { get; set; } = new(28f, 4f);
+    public Vector2 BarSize { get; set; } = new(ParamsConfig.HealthBarWidth, ParamsConfig.HealthBarHeight);
 
     [Export]
-    public float YOffset { get; set; } = -18f;
+    public float YOffset { get; set; } = ParamsConfig.HealthBarYOffset;
 
     [Export]
-    public Color FillColor { get; set; } = new(0.35f, 0.9f, 0.45f);
+    public Color FillColor { get; set; } = ParamsConfig.ColorHealthBarFill;
 
     [Export]
-    public Color BackgroundColor { get; set; } = new(0.1f, 0.1f, 0.12f, 0.9f);
+    public Color BackgroundColor { get; set; } = ParamsConfig.ColorHealthBarBg;
 
     [Export]
     public bool HideWhenFull { get; set; }
