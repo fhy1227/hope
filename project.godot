@@ -24,6 +24,7 @@ AudioManager="*res://scripts/autoload/AudioManager.cs"
 InventoryManager="*res://scripts/systems/InventoryManager.cs"
 EquipManager="*res://scripts/systems/EquipManager.cs"
 PersistenceMgr="*res://scripts/persistence/PersistenceMgr.cs"
+SteamManager="*res://scripts/steam/SteamManager.cs"
 
 [dotnet]
 
@@ -31,7 +32,7 @@ project/assembly_name="hope"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/TileMapDual/plugin.cfg", "res://addons/codeandweb.texturepacker/plugin.cfg")
+enabled=PackedStringArray("res://addons/TileMapDual/plugin.cfg", "res://addons/codeandweb.texturepacker/plugin.cfg", "res://addons/godotsteam/plugin.cfg")
 
 [input]
 
@@ -91,3 +92,14 @@ parry={
 2d_physics/layer_2="enemy"
 2d_physics/layer_3="projectile"
 2d_physics/layer_4="pickup"
+
+[steam]
+
+initialization/app_data/app_type=0
+initialization/app_data/app_id=480
+initialization/app_data/demo_id=0
+initialization/app_data/playtest_id=0
+initialization/app_data/tool_id=0
+initialization/processes/initialize_on_startup=false
+initialization/processes/embed_callbacks=false
+multiplayer_peer/max_channels=4
