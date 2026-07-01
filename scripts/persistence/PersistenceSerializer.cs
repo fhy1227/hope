@@ -9,7 +9,7 @@ namespace Hope.Persistence;
 /// </summary>
 public static class PersistenceSerializer
 {
-    /// <summary>与 <c>character.json</c> 读写共用的 JSON 选项。</summary>
+    /// <summary>与角色存档文件读写共用的 JSON 选项。</summary>
     public static JsonSerializerOptions JsonOptions { get; } = new()
     {
         WriteIndented = true,

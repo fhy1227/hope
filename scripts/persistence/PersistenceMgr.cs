@@ -205,7 +205,7 @@ public partial class PersistenceMgr : Node
         return true;
     }
 
-    /// <summary>读取 meta.json 中的上次游玩栏位；-1 表示无记录。</summary>
+    /// <summary>读取 meta 中的上次游玩栏位；-1 表示无记录。</summary>
     public int GetLastPlayedSlotIndex()
     {
         if (DevSkipPersistence)

@@ -5,7 +5,7 @@ using Hope.Config;
 namespace Hope.Persistence;
 
 /// <summary>
-/// 角色局外存档根对象，对应 <c>user://saves/slot_N/character.json</c>。
+/// 角色局外存档根对象，对应 <c>user://saves/slot_N/character</c>。
 /// </summary>
 public class CharacterSaveData
 {
