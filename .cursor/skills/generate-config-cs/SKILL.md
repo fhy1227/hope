@@ -1,6 +1,6 @@
 ---
 name: generate-config-cs
-description: 从 tools/config/ 下的 xlsx 配置表生成 Hope.Config 命名空间的 C# 配置类（参考 ItemConfig.cs）。Use when the user asks to generate config C# types, create *Config.cs from xlsx, or work with config table schema (table/json/comma tags).
+description: 从 tools/config/ 下的 xlsx 配置表生成 Hope.Config 命名空间的 C# 配置类（参考 ItemConfig.cs）。跳过 params.xlsx（见 generate-params-config）。Use when the user asks to generate config C# types, create *Config.cs from xlsx, or work with config table schema (table/json/comma tags).
 ---
 
 # 生成配置 C# 类型
@@ -18,10 +18,21 @@ description: 从 tools/config/ 下的 xlsx 配置表生成 Hope.Config 命名空
 
 示例：`tools/config/item.xlsx` → `scripts/config/ItemConfig.cs`
 
+## 排除表
+
+以下 xlsx **不要**用本技能生成，有专用流程：
+
+| 文件 | 使用技能 |
+|------|----------|
+| `tools/config/params.xlsx` | [generate-params-config](../generate-params-config/SKILL.md) → `ParamsConfig.cs`（静态参数，非 `IConfigData` 行表） |
+
+批量处理 `tools/config/*.xlsx` 时跳过 `params.xlsx`。
+
 ## 工作流程
 
 ```
 任务进度:
+- [ ] 0. 若为 params.xlsx → 转用 generate-params-config，停止本流程
 - [ ] 1. 读取 xlsx 表头（Row 1-5）
 - [ ] 2. 确定类名与输出路径
 - [ ] 3. 生成属性与 XML 注释（含必须的 `Id` 主键字段）
@@ -241,3 +252,4 @@ else if (dict["extra"].VariantType == Variant.Type.String
 
 - 导出逻辑：[tools/export_config.py](tools/export_config.py)
 - 详细标签说明：[reference.md](reference.md)
+- 全局参数表：[generate-params-config](../generate-params-config/SKILL.md)
