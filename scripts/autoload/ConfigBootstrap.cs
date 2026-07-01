@@ -25,6 +25,7 @@ public partial class ConfigBootstrap : Node
 		PrintTable(ConfigManager.GetAll<ItemConfig>());
 		PrintTable(ConfigManager.GetAll<QualityConfig>());
 		PrintTable(ConfigManager.GetAll<EquipSlotConfig>());
+		PrintTable(ConfigManager.GetAll<AffixConfig>());
 		PrintTable(ConfigManager.GetAll<DropTableConfig>());
 		GD.Print("[ConfigBootstrap] ===== 测试完毕 =====");
 	}

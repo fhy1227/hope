@@ -2,6 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Hope.Config;
+using Hope.Core;
+using Hope.Persistence;
 
 namespace Hope.Systems;
 
@@ -9,7 +11,8 @@ namespace Hope.Systems;
 /// 背包管理 - Autoload 单例
 /// 负责：添加/移除物品、背包容量、通知 UI 更新
 /// </summary>
-public partial class InventoryManager : Node
+[PersistedData]
+public partial class InventoryManager : Node, IPersistedDataParticipant
 {
     private static InventoryManager _instance;
     public static InventoryManager Instance => _instance;
@@ -54,6 +57,7 @@ public partial class InventoryManager : Node
 
         _items.Add(item);
         EmitSignal(SignalName.InventoryChanged);
+        PersistenceMgr.Instance?.MarkDirty();
         return true;
     }
 
@@ -82,6 +86,7 @@ public partial class InventoryManager : Node
                     if (count <= 0)
                     {
                         EmitSignal(SignalName.InventoryChanged);
+                        PersistenceMgr.Instance?.MarkDirty();
                         EmitSignal(SignalName.ItemObtained, existing);
                         return true;
                     }
@@ -120,6 +125,10 @@ public partial class InventoryManager : Node
 
         if (modified)
             EmitSignal(SignalName.InventoryChanged);
+
+        if (modified)
+            PersistenceMgr.Instance?.MarkDirty();
+
         return true;
     }
 
@@ -141,6 +150,7 @@ public partial class InventoryManager : Node
         }
 
         EmitSignal(SignalName.InventoryChanged);
+        PersistenceMgr.Instance?.MarkDirty();
         return true;
     }
 
@@ -170,6 +180,9 @@ public partial class InventoryManager : Node
         if (modified)
             EmitSignal(SignalName.InventoryChanged);
 
+        if (modified)
+            PersistenceMgr.Instance?.MarkDirty();
+
         return modified;
     }
 
@@ -196,6 +209,7 @@ public partial class InventoryManager : Node
         }
 
         EmitSignal(SignalName.InventoryChanged);
+        PersistenceMgr.Instance?.MarkDirty();
         return count <= 0;
     }
 
@@ -229,11 +243,55 @@ public partial class InventoryManager : Node
     }
 
     /// <summary>
-    /// 清空背包（新对局时调用）
+    /// 清空背包（删档 / 新角色流程调用；进战斗关禁止调用）。
     /// </summary>
     public void Clear()
     {
         _items.Clear();
         EmitSignal(SignalName.InventoryChanged);
     }
+
+    /// <summary>从存档恢复背包内容。</summary>
+    public void LoadFromSave(IReadOnlyList<ItemSaveData> items)
+    {
+        _items.Clear();
+        if (items == null)
+        {
+            EmitSignal(SignalName.InventoryChanged);
+            return;
+        }
+
+        foreach (var save in items)
+        {
+            if (save == null)
+            {
+                continue;
+            }
+
+            _items.Add(save.ToInstance());
+        }
+
+        EmitSignal(SignalName.InventoryChanged);
+        GD.Print($"[InventoryManager] 读档: {_items.Count} 件物品");
+    }
+
+    /// <summary>导出背包为存档数据。</summary>
+    public List<ItemSaveData> ExportToSave()
+    {
+        var result = new List<ItemSaveData>(_items.Count);
+        foreach (var item in _items)
+        {
+            result.Add(ItemSaveData.FromInstance(item));
+        }
+
+        return result;
+    }
+
+    void IPersistedDataParticipant.ApplySaveData(CharacterSaveData data) =>
+        LoadFromSave(data.Inventory);
+
+    void IPersistedDataParticipant.CollectSaveData(CharacterSaveData data) =>
+        data.Inventory = ExportToSave();
+
+    void IPersistedDataParticipant.ClearPersistedState() => Clear();
 }

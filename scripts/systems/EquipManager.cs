@@ -5,6 +5,7 @@ using System.Linq;
 using Hope.Components;
 using Hope.Config;
 using Hope.Core;
+using Hope.Persistence;
 using Hope.Entities;
 
 namespace Hope.Systems;
@@ -13,7 +14,8 @@ namespace Hope.Systems;
 /// 装备管理 - Autoload 单例
 /// 负责：穿戴/卸下装备、计算属性加成并应用到 RunStats
 /// </summary>
-public partial class EquipManager : Node
+[PersistedData]
+public partial class EquipManager : Node, IPersistedDataParticipant
 {
     public static EquipManager Instance { get; private set; }
 
@@ -126,6 +128,7 @@ public partial class EquipManager : Node
         GD.Print($"[EquipManager] 穿戴: {item.Config.NameKey} (槽位 {slotType})");
         EmitSignal(SignalName.EquipmentChanged);
         RecalcBonus();
+        PersistenceMgr.Instance?.MarkDirty();
         return true;
     }
 
@@ -146,6 +149,7 @@ public partial class EquipManager : Node
                 GD.Print($"[EquipManager] 卸下: {item.Config.NameKey}");
                 EmitSignal(SignalName.EquipmentChanged);
                 RecalcBonus();
+                PersistenceMgr.Instance?.MarkDirty();
                 return true;
             }
         }
@@ -167,6 +171,7 @@ public partial class EquipManager : Node
         GD.Print($"[EquipManager] 卸下: {item.Config.NameKey}");
         EmitSignal(SignalName.EquipmentChanged);
         RecalcBonus();
+        PersistenceMgr.Instance?.MarkDirty();
         return true;
     }
 
@@ -243,7 +248,7 @@ public partial class EquipManager : Node
     // ── 对局重置 ─────────────────────────────────────────────────────
 
     /// <summary>
-    /// 清空所有装备（新对局 / 回主菜单时调用）
+    /// 清空所有装备（删档 / 新角色流程调用；进战斗关禁止调用）。
     /// </summary>
     public void Clear()
     {
@@ -256,4 +261,63 @@ public partial class EquipManager : Node
         EmitSignal(SignalName.EquipmentChanged);
         GD.Print("[EquipManager] 已清空所有装备");
     }
+
+    /// <summary>从存档恢复装备栏；会重算属性加成。</summary>
+    public void LoadFromSave(IReadOnlyDictionary<int, List<ItemSaveData>> equipped)
+    {
+        foreach (var kv in _equipped)
+        {
+            kv.Value.Clear();
+        }
+
+        if (equipped != null)
+        {
+            foreach (var (slotType, items) in equipped)
+            {
+                if (!_equipped.ContainsKey(slotType))
+                {
+                    _equipped[slotType] = [];
+                }
+
+                foreach (var save in items)
+                {
+                    if (save == null)
+                    {
+                        continue;
+                    }
+
+                    _equipped[slotType].Add(save.ToInstance());
+                }
+            }
+        }
+
+        RecalcBonus();
+        EmitSignal(SignalName.EquipmentChanged);
+        GD.Print("[EquipManager] 读档: 装备栏已恢复");
+    }
+
+    /// <summary>导出装备栏为存档数据（各槽位独立副本）。</summary>
+    public Dictionary<int, List<ItemSaveData>> ExportToSave()
+    {
+        var result = new Dictionary<int, List<ItemSaveData>>();
+        foreach (var (slotType, items) in _equipped)
+        {
+            if (items.Count == 0)
+            {
+                continue;
+            }
+
+            result[slotType] = items.ConvertAll(ItemSaveData.FromInstance);
+        }
+
+        return result;
+    }
+
+    void IPersistedDataParticipant.ApplySaveData(CharacterSaveData data) =>
+        LoadFromSave(data.Equipped);
+
+    void IPersistedDataParticipant.CollectSaveData(CharacterSaveData data) =>
+        data.Equipped = ExportToSave();
+
+    void IPersistedDataParticipant.ClearPersistedState() => Clear();
 }

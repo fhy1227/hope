@@ -1,0 +1,22 @@
+namespace Hope.Persistence;
+
+/// <summary>
+/// 存档格式版本与路径常量。
+/// </summary>
+public static class SaveSchema
+{
+    public const int CurrentVersion = 1;
+    public const int MaxProfileSlots = 3;
+    public const string SavesRoot = "user://saves/";
+    public const string MetaFileName = "meta.json";
+    public const string CharacterFileName = "character.json";
+    public const string CharacterTempFileName = "character.json.tmp";
+
+    public static string GetSlotDirectory(int slotIndex) => $"{SavesRoot}slot_{slotIndex}/";
+
+    public static string GetCharacterPath(int slotIndex) =>
+        $"{GetSlotDirectory(slotIndex)}{CharacterFileName}";
+
+    public static string GetCharacterTempPath(int slotIndex) =>
+        $"{GetSlotDirectory(slotIndex)}{CharacterTempFileName}";
+}

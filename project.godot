@@ -23,6 +23,7 @@ GameManager="*res://scripts/autoload/GameManager.cs"
 AudioManager="*res://scripts/autoload/AudioManager.cs"
 InventoryManager="*res://scripts/systems/InventoryManager.cs"
 EquipManager="*res://scripts/systems/EquipManager.cs"
+PersistenceMgr="*res://scripts/persistence/PersistenceMgr.cs"
 
 [dotnet]
 

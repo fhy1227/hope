@@ -1,0 +1,56 @@
+{
+  "_key": "id",
+  "_count": 5,
+  "_dict": {
+    "1": {
+      "id": 1,
+      "affix_key": "affix.vitality",
+      "modifier_type": 100,
+      "min_per_level": 1.0,
+      "max_per_level": 2.0,
+      "slot_mask": [
+        5
+      ]
+    },
+    "2": {
+      "id": 2,
+      "affix_key": "affix.might",
+      "modifier_type": 102,
+      "min_per_level": 2.0,
+      "max_per_level": 0.01,
+      "slot_mask": [
+        0
+      ]
+    },
+    "3": {
+      "id": 3,
+      "affix_key": "affix.swiftness",
+      "modifier_type": 104,
+      "min_per_level": 2.0,
+      "max_per_level": 0.005,
+      "slot_mask": [
+        0
+      ]
+    },
+    "4": {
+      "id": 4,
+      "affix_key": "affix.precision",
+      "modifier_type": 110,
+      "min_per_level": 2.0,
+      "max_per_level": 0.01,
+      "slot_mask": [
+        0
+      ]
+    },
+    "5": {
+      "id": 5,
+      "affix_key": "affix.fortitude",
+      "modifier_type": 111,
+      "min_per_level": 1.0,
+      "max_per_level": 1.0,
+      "slot_mask": [
+        3
+      ]
+    }
+  }
+}

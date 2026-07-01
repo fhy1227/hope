@@ -39,12 +39,19 @@ theme_override_font_sizes/font_size = 48
 text = "HOPE"
 horizontal_alignment = 1
 
-[node name="StartButton" type="Button" parent="CenterContainer/VBox" unique_id=2056031461]
+[node name="ContinueButton" type="Button" parent="CenterContainer/VBox" unique_id=2056031460]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "开始游戏"
+text = "继续游戏"
+
+[node name="NewGameButton" type="Button" parent="CenterContainer/VBox" unique_id=2056031461]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "新游戏"
 
 [node name="SettingsButton" type="Button" parent="CenterContainer/VBox" unique_id=1887370735]
 unique_name_in_owner = true

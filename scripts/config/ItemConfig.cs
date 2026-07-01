@@ -84,6 +84,16 @@ public partial class ItemConfig : IConfigData
     /// </summary>
     public int SellPrice { get; set; }
 
+    /// <summary>
+    /// aspect_id
+    /// </summary>
+    public string AspectId { get; set; }
+
+    /// <summary>
+    /// is_drop_base
+    /// </summary>
+    public bool IsDropBase { get; set; }
+
     public void FromDict(GodotDictionary dict)
     {
         Id = (int)dict["id"];
@@ -101,5 +111,9 @@ public partial class ItemConfig : IConfigData
         StatArmor = (int)dict["stat_armor"];
         StackLimit = (int)dict["stack_limit"];
         SellPrice = (int)dict["sell_price"];
+        AspectId = dict["aspect_id"].VariantType == Variant.Type.Nil
+            ? ""
+            : (string)dict["aspect_id"];
+        IsDropBase = (bool)dict["is_drop_base"];
     }
 }

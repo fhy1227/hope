@@ -13,8 +13,8 @@ alwaysApply: true
 2. 新 UI 挂到既定 `CanvasLayer`（`UiLayers.Hud/Overlay/Pause/Transition/Debug`），禁止随意新建层
 3. 跨模块用 `EventBus` 或 `Main.Instance`，禁止 `GetParent().GetParent()`
 4. 实体用 `PackedScene.Instantiate<T>()`，禁止 `new Enemy()` 等
-5. 关卡不拥有玩家；玩家由 `RunManager` 生成到 `Entities`，位置取自 `BaseLevel.SpawnPoint`
-6. 局内 Autoload 状态必须在 `Main.ResetRunState()` 重置
+5. 关卡不拥有玩家；玩家由关卡协调器生成到 `Entities`，位置取自 `BaseLevel.SpawnPoint`（Demo 为 `RunManager`）
+6. 角色级 Autoload 数据（背包、装备、法典）由 `SaveManager` 局外存档；**禁止**在进战斗时清空背包。战斗临时状态仅在 `Main.ResetCombatState()` 清理
 7. 场景路径写入 `ScenePaths`；配置改 xlsx 不改生成文件
 
 ## 目录速查

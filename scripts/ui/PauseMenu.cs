@@ -1,5 +1,6 @@
 using Godot;
 using Hope.Core;
+using Hope.Persistence;
 
 namespace Hope.UI;
 
@@ -46,6 +47,7 @@ public partial class PauseMenu : Control
     private void OnMainMenuPressed()
     {
         GameManager.Instance?.Resume();
+        PersistenceMgr.Instance?.FlushSave();
         GameManager.Instance?.ChangeScene(ScenePaths.MainMenu);
     }
 }

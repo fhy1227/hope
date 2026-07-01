@@ -6,14 +6,14 @@ using Hope.Config;
 namespace Hope.DropSystem;
 
 /// <summary>
-/// D4 底材选择：按槽位过滤 + Smart Loot 加权。
+/// D4 底材选择：按槽位过滤 + Smart Loot 加权；仅 is_drop_base 条目参与随机池。
 /// </summary>
 public static class BaseItemPicker
 {
     public static ItemConfig? Pick(DropContext ctx, int itemLevel, int slotType)
     {
         var pool = ConfigManager.GetAll<ItemConfig>()
-            .Where(i => i.SlotType == slotType && i.SlotType > 0 && i.LevelReq <= itemLevel)
+            .Where(i => i.IsDropBase && i.SlotType == slotType && i.LevelReq <= itemLevel)
             .ToList();
 
         if (pool.Count == 0)
@@ -35,7 +35,7 @@ public static class BaseItemPicker
     public static int RollSlotType(DropContext ctx)
     {
         var slots = ConfigManager.GetAll<ItemConfig>()
-            .Where(i => i.SlotType > 0)
+            .Where(i => i.IsDropBase && i.SlotType > 0)
             .Select(i => i.SlotType)
             .Distinct()
             .ToList();

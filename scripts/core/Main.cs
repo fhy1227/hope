@@ -4,8 +4,8 @@ using Hope.Systems;
 namespace Hope.Core;
 
 /// <summary>
-/// 主游戏场景（<c>scenes/main.tscn</c>）根协调者：持有世界与 UI 层引用，重置局内 Autoload 状态。
-/// 不处理玩家移动、攻击等玩法细节；跨模块访问入口为 <see cref="Instance"/>。
+/// 主游戏场景（<c>scenes/main.tscn</c>）根协调者：持有世界与 UI 层引用，清理战斗临时状态。
+/// 背包与装备由 <see cref="Hope.Persistence.PersistenceMgr"/> 局外持久化，进关时不重置。
 /// </summary>
 public partial class Main : Node
 {
@@ -40,22 +40,21 @@ public partial class Main : Node
     {
         if (Instance == this)
         {
+            Hope.Persistence.PersistenceMgr.Instance?.FlushSave();
             Instance = null;
         }
     }
 
     public override void _Ready()
     {
-        ResetRunState();
+        ResetCombatState();
     }
 
     /// <summary>
-    /// 新对局进入主场景时清空背包与装备（Autoload 局内状态重置入口）。
-    /// 新增局内 Autoload 时须在此注册 Clear/Reset。
+    /// 进入战斗场景时清理临时战斗状态；不清理背包、装备（见存档方案）。
     /// </summary>
-    public void ResetRunState()
+    public void ResetCombatState()
     {
-        InventoryManager.Instance?.Clear();
-        EquipManager.Instance?.Clear();
+        // 地面 Pickup、波次计数等由场景重载或 RunManager 自行管理。
     }
 }

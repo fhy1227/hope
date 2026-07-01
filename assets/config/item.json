@@ -1,6 +1,6 @@
 {
   "_key": "id",
-  "_count": 28,
+  "_count": 32,
   "_dict": {
     "1030": {
       "id": 1030,
@@ -17,7 +17,9 @@
       "stat_crit": 0.0,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 35
+      "sell_price": 35,
+      "aspect_id": null,
+      "is_drop_base": true
     },
     "1031": {
       "id": 1031,
@@ -34,7 +36,9 @@
       "stat_crit": 0.0,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 40
+      "sell_price": 40,
+      "aspect_id": null,
+      "is_drop_base": true
     },
     "1032": {
       "id": 1032,
@@ -51,7 +55,9 @@
       "stat_crit": 0.2,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 38
+      "sell_price": 38,
+      "aspect_id": null,
+      "is_drop_base": true
     },
     "1033": {
       "id": 1033,
@@ -68,7 +74,9 @@
       "stat_crit": 0.0,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 80
+      "sell_price": 80,
+      "aspect_id": null,
+      "is_drop_base": true
     },
     "2001": {
       "id": 2001,
@@ -85,7 +93,9 @@
       "stat_crit": 0.0,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 180
+      "sell_price": 180,
+      "aspect_id": "aspect.roll_haste",
+      "is_drop_base": false
     },
     "2002": {
       "id": 2002,
@@ -102,7 +112,9 @@
       "stat_crit": 0.0,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 180
+      "sell_price": 180,
+      "aspect_id": "aspect.roll_distance",
+      "is_drop_base": false
     },
     "2003": {
       "id": 2003,
@@ -119,7 +131,9 @@
       "stat_crit": 0.0,
       "stat_armor": 2,
       "stack_limit": 0,
-      "sell_price": 180
+      "sell_price": 180,
+      "aspect_id": "aspect.roll_phantom",
+      "is_drop_base": false
     },
     "2004": {
       "id": 2004,
@@ -136,7 +150,9 @@
       "stat_crit": 0.05,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 180
+      "sell_price": 180,
+      "aspect_id": "aspect.roll_momentum",
+      "is_drop_base": false
     },
     "2005": {
       "id": 2005,
@@ -153,7 +169,9 @@
       "stat_crit": 0.08,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 180
+      "sell_price": 180,
+      "aspect_id": "aspect.roll_afterimage",
+      "is_drop_base": false
     },
     "2006": {
       "id": 2006,
@@ -170,7 +188,9 @@
       "stat_crit": 0.1,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 220
+      "sell_price": 220,
+      "aspect_id": "aspect.shadow_step",
+      "is_drop_base": false
     },
     "2011": {
       "id": 2011,
@@ -187,7 +207,9 @@
       "stat_crit": 0.0,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 185
+      "sell_price": 185,
+      "aspect_id": "aspect.charge_focus",
+      "is_drop_base": false
     },
     "2012": {
       "id": 2012,
@@ -204,7 +226,9 @@
       "stat_crit": 0.05,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 185
+      "sell_price": 185,
+      "aspect_id": "aspect.charge_power",
+      "is_drop_base": false
     },
     "2013": {
       "id": 2013,
@@ -221,7 +245,9 @@
       "stat_crit": 0.0,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 185
+      "sell_price": 185,
+      "aspect_id": "aspect.charge_wave",
+      "is_drop_base": false
     },
     "2014": {
       "id": 2014,
@@ -238,7 +264,9 @@
       "stat_crit": 0.0,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 185
+      "sell_price": 185,
+      "aspect_id": "aspect.charge_flow",
+      "is_drop_base": false
     },
     "2015": {
       "id": 2015,
@@ -255,7 +283,9 @@
       "stat_crit": 0.0,
       "stat_armor": 5,
       "stack_limit": 0,
-      "sell_price": 185
+      "sell_price": 185,
+      "aspect_id": "aspect.charge_unbroken",
+      "is_drop_base": false
     },
     "2016": {
       "id": 2016,
@@ -272,7 +302,9 @@
       "stat_crit": 0.0,
       "stat_armor": 0,
       "stack_limit": 0,
-      "sell_price": 240
+      "sell_price": 240,
+      "aspect_id": "aspect.primal_surge",
+      "is_drop_base": false
     },
     "2021": {
       "id": 2021,
@@ -289,7 +321,9 @@
       "stat_crit": 0.0,
       "stat_armor": 8,
       "stack_limit": 0,
-      "sell_price": 190
+      "sell_price": 190,
+      "aspect_id": "aspect.stomp_haste",
+      "is_drop_base": false
     },
     "2022": {
       "id": 2022,
@@ -306,7 +340,9 @@
       "stat_crit": 0.0,
       "stat_armor": 10,
       "stack_limit": 0,
-      "sell_price": 190
+      "sell_price": 190,
+      "aspect_id": "aspect.stomp_crater",
+      "is_drop_base": false
     },
     "2023": {
       "id": 2023,
@@ -323,7 +359,9 @@
       "stat_crit": 0.0,
       "stat_armor": 12,
       "stack_limit": 0,
-      "sell_price": 190
+      "sell_price": 190,
+      "aspect_id": "aspect.stomp_force",
+      "is_drop_base": false
     },
     "2024": {
       "id": 2024,
@@ -340,7 +378,9 @@
       "stat_crit": 0.05,
       "stat_armor": 6,
       "stack_limit": 0,
-      "sell_price": 190
+      "sell_price": 190,
+      "aspect_id": "aspect.stomp_sunder",
+      "is_drop_base": false
     },
     "2025": {
       "id": 2025,
@@ -357,7 +397,9 @@
       "stat_crit": 0.0,
       "stat_armor": 8,
       "stack_limit": 0,
-      "sell_price": 190
+      "sell_price": 190,
+      "aspect_id": "aspect.stomp_quake",
+      "is_drop_base": false
     },
     "2026": {
       "id": 2026,
@@ -374,7 +416,9 @@
       "stat_crit": 0.0,
       "stat_armor": 15,
       "stack_limit": 0,
-      "sell_price": 250
+      "sell_price": 250,
+      "aspect_id": "aspect.titan_stomp",
+      "is_drop_base": false
     },
     "2031": {
       "id": 2031,
@@ -391,7 +435,9 @@
       "stat_crit": 0.08,
       "stat_armor": 10,
       "stack_limit": 0,
-      "sell_price": 195
+      "sell_price": 195,
+      "aspect_id": "aspect.parry_patience",
+      "is_drop_base": false
     },
     "2032": {
       "id": 2032,
@@ -408,7 +454,9 @@
       "stat_crit": 0.1,
       "stat_armor": 5,
       "stack_limit": 0,
-      "sell_price": 195
+      "sell_price": 195,
+      "aspect_id": "aspect.parry_riposte",
+      "is_drop_base": false
     },
     "2033": {
       "id": 2033,
@@ -425,7 +473,9 @@
       "stat_crit": 0.05,
       "stat_armor": 8,
       "stack_limit": 0,
-      "sell_price": 195
+      "sell_price": 195,
+      "aspect_id": "aspect.parry_lock",
+      "is_drop_base": false
     },
     "2034": {
       "id": 2034,
@@ -442,7 +492,9 @@
       "stat_crit": 0.12,
       "stat_armor": 6,
       "stack_limit": 0,
-      "sell_price": 195
+      "sell_price": 195,
+      "aspect_id": "aspect.parry_recovery",
+      "is_drop_base": false
     },
     "2035": {
       "id": 2035,
@@ -459,7 +511,9 @@
       "stat_crit": 0.15,
       "stat_armor": 8,
       "stack_limit": 0,
-      "sell_price": 195
+      "sell_price": 195,
+      "aspect_id": "aspect.parry_perfect_master",
+      "is_drop_base": false
     },
     "2036": {
       "id": 2036,
@@ -476,7 +530,85 @@
       "stat_crit": 0.0,
       "stat_armor": 12,
       "stack_limit": 0,
-      "sell_price": 260
+      "sell_price": 260,
+      "aspect_id": "aspect.aegis_counter",
+      "is_drop_base": false
+    },
+    "1041": {
+      "id": 1041,
+      "name_key": "item.helm_leather",
+      "desc_key": "item.helm_leather.desc",
+      "icon": "res://assets/icons/equit/armor_leather.png",
+      "type": 2,
+      "rarity": 1,
+      "slot_type": 2,
+      "level_req": 0,
+      "stat_hp": 0,
+      "stat_damage": 0.0,
+      "stat_speed": 0.0,
+      "stat_crit": 0.0,
+      "stat_armor": 5,
+      "stack_limit": 0,
+      "sell_price": 20,
+      "aspect_id": null,
+      "is_drop_base": true
+    },
+    "1042": {
+      "id": 1042,
+      "name_key": "item.chest_leather",
+      "desc_key": "item.chest_leather.desc",
+      "icon": "res://assets/icons/equit/armor_leather.png",
+      "type": 3,
+      "rarity": 1,
+      "slot_type": 3,
+      "level_req": 0,
+      "stat_hp": 0,
+      "stat_damage": 0.0,
+      "stat_speed": 0.0,
+      "stat_crit": 0.0,
+      "stat_armor": 8,
+      "stack_limit": 0,
+      "sell_price": 25,
+      "aspect_id": null,
+      "is_drop_base": true
+    },
+    "1043": {
+      "id": 1043,
+      "name_key": "item.boots_leather",
+      "desc_key": "item.boots_leather.desc",
+      "icon": "res://assets/icons/equit/armor_leather_boots.png",
+      "type": 4,
+      "rarity": 1,
+      "slot_type": 4,
+      "level_req": 0,
+      "stat_hp": 0,
+      "stat_damage": 0.0,
+      "stat_speed": 0.0,
+      "stat_crit": 0.0,
+      "stat_armor": 3,
+      "stack_limit": 0,
+      "sell_price": 22,
+      "aspect_id": null,
+      "is_drop_base": true
+    },
+    "1044": {
+      "id": 1044,
+      "name_key": "item.amulet_simple",
+      "desc_key": "item.amulet_simple.desc",
+      "icon": "res://assets/icons/equit/armor_cloth.png",
+      "type": 5,
+      "rarity": 1,
+      "slot_type": 5,
+      "level_req": 0,
+      "stat_hp": 5,
+      "stat_damage": 0.0,
+      "stat_speed": 0.0,
+      "stat_crit": 0.0,
+      "stat_armor": 0,
+      "stack_limit": 0,
+      "sell_price": 18,
+      "aspect_id": null,
+      "is_drop_base": true
     }
   }
 }

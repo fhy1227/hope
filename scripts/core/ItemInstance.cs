@@ -30,6 +30,9 @@ public partial class ItemInstance : Resource
     /// <summary>随机附加词条列表，由 <see cref="EquipDropGenerator"/> 生成。</summary>
     public List<RolledAffix> Affixes { get; set; } = [];
 
+    /// <summary>威能 ID；预设传奇底材来自 item.aspect_id，随机传奇待铭印。</summary>
+    public string AspectId { get; set; } = "";
+
     /// <summary>
     /// 延迟从 <see cref="ConfigManager"/> 读取的配置；ConfigId 无效时 PrintErr 并可能返回 null。
     /// </summary>
@@ -66,7 +69,7 @@ public partial class ItemInstance : Resource
         }
 
         var legendaryMul = EffectiveRarity >= 4 ? EquipDropGenerator.LegendaryStatMultiplier : 1f;
-        ItemStatMapping.ApplyBaseStats(Config, bonus, legendaryMul);
+        ItemStatMapping.ApplyBaseStats(Config, bonus, ItemLevel, legendaryMul);
 
         foreach (var affix in Affixes)
         {

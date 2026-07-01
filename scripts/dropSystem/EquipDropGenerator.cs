@@ -1,4 +1,5 @@
 using Godot;
+using Hope.Config;
 using Hope.Core;
 
 namespace Hope.DropSystem;
@@ -11,8 +12,9 @@ namespace Hope.DropSystem;
 /// 2. 物品等级 — ilvl ≈ 怪物等级 ± 波动
 /// 3. 稀有度掷骰 — quality.drop_weight + MF 偏向 + 5% 升档
 /// 4. 槽位掷骰 — Smart Loot 倾向玩家可用槽
-/// 5. 底材选择 — 同槽位、level_req ≤ ilvl 的 item 池
-/// 6. 词条生成 — Magic×1 / Rare×4 / Legendary×2 + 底材加成
+/// 5. 底材选择 — is_drop_base 池，level_req ≤ ilvl
+/// 6. 词条生成 — quality.affix_count，按 slot_mask 过滤
+/// 7. 威能 — 预设底材 aspect_id 或品质 has_aspect（随机池待 aspect.xlsx）
 /// </summary>
 public static class EquipDropGenerator
 {
@@ -48,7 +50,8 @@ public static class EquipDropGenerator
         }
 
         var affixCount = AffixPool.GetAffixCount(rarity);
-        var affixes = AffixPool.RollAffixes(rarity, itemLevel, affixCount);
+        var affixes = AffixPool.RollAffixes(slotType, itemLevel, affixCount);
+        var aspectId = ResolveAspectId(baseItem, rarity);
 
         var instance = new ItemInstance
         {
@@ -56,9 +59,10 @@ public static class EquipDropGenerator
             ItemLevel = itemLevel,
             RolledRarity = rarity,
             Affixes = affixes,
+            AspectId = aspectId,
         };
 
-        GD.Print($"[EquipDropGenerator] 掉落: {baseItem.NameKey} ilvl={itemLevel} rarity={rarity} affixes={affixes.Count}");
+        GD.Print($"[EquipDropGenerator] 掉落: {baseItem.NameKey} ilvl={itemLevel} rarity={rarity} affixes={affixes.Count} aspect={aspectId}");
 
         return new EquipDropResult
         {
@@ -66,5 +70,18 @@ public static class EquipDropGenerator
             ItemLevel = itemLevel,
             Rarity = rarity,
         };
+    }
+
+    /// <summary>预设传奇底材使用配置 aspect_id；随机传奇在 has_aspect 时留空待 aspect 池掷骰。</summary>
+    private static string ResolveAspectId(ItemConfig baseItem, int rarity)
+    {
+        if (!string.IsNullOrEmpty(baseItem.AspectId))
+        {
+            return baseItem.AspectId;
+        }
+
+        // 随机底材 + 传奇品质：威能池掷骰待 aspect.xlsx 接入
+        var quality = ConfigManager.Get<QualityConfig>(rarity);
+        return quality is { HasAspect: true } ? "" : "";
     }
 }
