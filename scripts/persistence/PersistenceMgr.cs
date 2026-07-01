@@ -112,14 +112,14 @@ public partial class PersistenceMgr : Node
             return false;
         }
 
-        using var file = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read);
-        if (file == null)
+        var json = ReadEncryptedText(path, out var readError);
+        if (json == null)
         {
-            GD.PrintErr($"[PersistenceMgr] 无法读取: {path}");
+            GD.PrintErr($"[PersistenceMgr] 无法读取: {path} ({readError ?? "未知错误"})");
             return false;
         }
 
-        ActiveCharacter = PersistenceSerializer.DeserializeCharacter(file.GetAsText(), out var error);
+        ActiveCharacter = PersistenceSerializer.DeserializeCharacter(json, out var error);
         if (ActiveCharacter == null)
         {
             GD.PrintErr($"[PersistenceMgr] 解析失败: {error ?? "存档内容为空"}");
@@ -219,15 +219,15 @@ public partial class PersistenceMgr : Node
             return -1;
         }
 
-        using var file = Godot.FileAccess.Open(metaPath, Godot.FileAccess.ModeFlags.Read);
-        if (file == null)
+        var json = ReadEncryptedText(metaPath, out _);
+        if (json == null)
         {
             return -1;
         }
 
         try
         {
-            var meta = JsonSerializer.Deserialize<MetaSaveData>(file.GetAsText(), PersistenceSerializer.JsonOptions);
+            var meta = JsonSerializer.Deserialize<MetaSaveData>(json, PersistenceSerializer.JsonOptions);
             return meta?.LastSlotIndex ?? -1;
         }
         catch
@@ -270,15 +270,10 @@ public partial class PersistenceMgr : Node
         var finalPath = SaveSchema.GetCharacterPath(slotIndex);
         var json = PersistenceSerializer.SerializeCharacter(data);
 
-        using (var temp = Godot.FileAccess.Open(tempPath, Godot.FileAccess.ModeFlags.Write))
+        if (!WriteEncryptedFile(tempPath, json))
         {
-            if (temp == null)
-            {
-                GD.PrintErr($"[PersistenceMgr] 无法写入临时文件: {tempPath}");
-                return false;
-            }
-
-            temp.StoreString(json);
+            GD.PrintErr($"[PersistenceMgr] 无法写入临时文件: {tempPath}");
+            return false;
         }
 
         if (Godot.FileAccess.FileExists(finalPath))
@@ -327,8 +322,56 @@ public partial class PersistenceMgr : Node
         };
 
         var metaPath = SaveSchema.SavesRoot + SaveSchema.MetaFileName;
-        using var file = Godot.FileAccess.Open(metaPath, Godot.FileAccess.ModeFlags.Write);
-        file?.StoreString(JsonSerializer.Serialize(meta, PersistenceSerializer.JsonOptions));
+        WriteEncryptedFile(metaPath, JsonSerializer.Serialize(meta, PersistenceSerializer.JsonOptions));
+    }
+
+    private static string? ReadEncryptedText(string path, out string? error)
+    {
+        error = null;
+        if (!Godot.FileAccess.FileExists(path))
+        {
+            error = "文件不存在";
+            return null;
+        }
+
+        using var file = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Read);
+        if (file == null)
+        {
+            error = "无法打开文件";
+            return null;
+        }
+
+        var length = (long)file.GetLength();
+        if (length <= 0)
+        {
+            error = "文件为空";
+            return null;
+        }
+
+        return SaveCrypto.Decrypt(file.GetBuffer(length), out error);
+    }
+
+    private static bool WriteEncryptedFile(string path, string plaintext)
+    {
+        byte[] payload;
+        try
+        {
+            payload = SaveCrypto.Encrypt(plaintext);
+        }
+        catch (Exception ex)
+        {
+            GD.PrintErr($"[PersistenceMgr] 加密失败: {ex.Message}");
+            return false;
+        }
+
+        using var file = Godot.FileAccess.Open(path, Godot.FileAccess.ModeFlags.Write);
+        if (file == null)
+        {
+            return false;
+        }
+
+        file.StoreBuffer(payload);
+        return true;
     }
 
     private sealed class MetaSaveData
