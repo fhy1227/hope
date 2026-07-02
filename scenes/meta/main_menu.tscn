@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://cmainmenu01"]
+
+[ext_resource type="Script" uid="uid://brce878rehlpb" path="res://scripts/meta/ui/MainMenu.cs" id="1_menu"]
+[ext_resource type="PackedScene" uid="uid://csettings01" path="res://scenes/meta/settings_panel.tscn" id="2_settings"]
+
+[node name="MainMenu" type="Control" unique_id=442732521]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Background" type="ColorRect" parent="." unique_id=521791493]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.1, 0.14, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1157690487]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer" unique_id=1021570461]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBox" unique_id=1887035395]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "HOPE"
+horizontal_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="CenterContainer/VBox" unique_id=2056031460]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "继续游戏"
+
+[node name="NewGameButton" type="Button" parent="CenterContainer/VBox" unique_id=2056031461]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "新游戏"
+
+[node name="SettingsButton" type="Button" parent="CenterContainer/VBox" unique_id=1887370735]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "设置"
+
+[node name="ExitButton" type="Button" parent="CenterContainer/VBox" unique_id=1057405386]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "退出"
+
+[node name="SettingsPanel" parent="." unique_id=446077313 instance=ExtResource("2_settings")]
+unique_name_in_owner = true
+layout_mode = 1

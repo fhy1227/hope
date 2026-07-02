@@ -10,7 +10,7 @@ description: 从 tools/config/params.xlsx 生成 Hope.Config.ParamsConfig 静态
 | | 路径 |
 |---|------|
 | **输入** | `tools/config/params.xlsx` |
-| **输出** | `scripts/config/ParamsConfig.cs` |
+| **输出** | `scripts/framework/config/ParamsConfig.cs` |
 | **生成脚本** | [scripts/generate_params_config.py](scripts/generate_params_config.py) |
 
 ## xlsx 表结构
@@ -56,7 +56,7 @@ Row 5 注释写入 XML `/// <summary>` 第二行（可选）。
 任务进度:
 - [ ] 1. 确认 params.xlsx 表头与数据行
 - [ ] 2. 运行生成脚本
-- [ ] 3. 检查 scripts/config/ParamsConfig.cs
+- [ ] 3. 检查 scripts/framework/config/ParamsConfig.cs
 - [ ] 4. 运行 tools/export_config.py 导出 params.json（可选，供 ConfigManager 行数据）
 ```
 
@@ -71,7 +71,7 @@ python .cursor/skills/generate-params-config/scripts/generate_params_config.py
 ```bash
 python .cursor/skills/generate-params-config/scripts/generate_params_config.py \
   --xlsx tools/config/params.xlsx \
-  --out scripts/config/ParamsConfig.cs
+  --out scripts/framework/config/ParamsConfig.cs
 ```
 
 ## 输出模板
@@ -117,7 +117,7 @@ public static partial class ParamsConfig
 
 ## 生成后检查
 
-- [ ] 文件位于 `scripts/config/ParamsConfig.cs`
+- [ ] 文件位于 `scripts/framework/config/ParamsConfig.cs`
 - [ ] 每个有效 `name_key` 对应一个 `const` 或 `static readonly Color`
 - [ ] 未实现 `IConfigData`（与 `*Config.cs` 行表不同）
 - [ ] 修改 xlsx 后重新运行脚本，**不要**手改生成文件

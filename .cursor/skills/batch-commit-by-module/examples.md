@@ -6,14 +6,14 @@
 
 | # | Commit | 文件范围 | 说明 |
 |---|--------|----------|------|
-| 1 | `feat(config): item quality and equip slot tables` | `tools/config/quality.xlsx`, `equip_slot.xlsx`, `assets/config/quality.json`, `equip_slot.json`, `scripts/config/QualityConfig.cs`, `EquipSlotConfig.cs`, `ConfigBootstrap.cs`（仅注册项） | 配置可独立编译 |
+| 1 | `feat(config): item quality and equip slot tables` | `tools/config/quality.xlsx`, `equip_slot.xlsx`, `assets/config/quality.json`, `equip_slot.json`, `scripts/framework/config/QualityConfig.cs`, `EquipSlotConfig.cs`, `ConfigBootstrap.cs`（仅注册项） | 配置可独立编译 |
 | 2 | `feat(config): drop table for enemy loot` | `drop_table` 三件套 + `DropTableConfig.cs` + Bootstrap | 依赖 item/quality 配置 |
-| 3 | `feat(core): item instance model` | `scripts/core/ItemInstance.cs` | 纯数据，无场景 |
+| 3 | `feat(core): item instance model` | `scripts/framework/core/ItemInstance.cs` | 纯数据，无场景 |
 | 4 | `feat(systems): drop resolution` | `DropTableResolver.cs` | 依赖配置与 ItemInstance |
 | 5 | `feat(systems): inventory and equip managers` | `InventoryManager.cs`, `EquipManager.cs` | 依赖 ItemInstance、配置 |
 | 6 | `feat(entities): item pickup and enemy drops` | `ItemPickup.cs`, `Enemy.cs`, `Pickup.cs`, `enemy.tscn`, `pickup.tscn` | 掉落链路 |
-| 7 | `feat(ui): inventory and equip panel` | `InventoryUI.cs`, `inventory_ui.tscn`, `GameHud.cs`, `game_hud.tscn` | UI 依赖管理器 |
-| 8 | `feat(run): wire inventory into main loop` | `RunManager.cs`, `EnemySpawner.cs`, `main.tscn`, `project.godot` | 最后集成 |
+| 7 | `feat(ui): inventory and equip panel` | `InventoryUI.cs`, `scenes/gameplay/combat/inventory_ui.tscn`, `GameHud.cs`, `scenes/gameplay/combat/game_hud.tscn` | UI 依赖管理器 |
+| 8 | `feat(run): wire inventory into main loop` | `RunManager.cs`, `EnemySpawner.cs`, `combat.tscn`, `project.godot` | 最后集成 |
 
 每批执行：
 

@@ -9,19 +9,19 @@ alwaysApply: false
 假设代码读者为**初级开发者**。新增或扩展功能时，必须为**新写的**类、公开/Protected 成员、以及非 trivial 的私有方法添加**中文 XML 注释**（`///`），说明「是什么、为什么、怎么用」。
 
 > 本规则在**新增代码**时优先于「仅注释非显而易见逻辑」。不要求批量补全历史文件。
-> **例外**：`scripts/config/*Config.cs` 等工具链生成文件勿手改注释。
+> **例外**：`scripts/framework/config/*Config.cs` 等工具链生成文件勿手改注释。
 
 ## 类
 
 - 职责边界（做什么 / 不做什么）
 - 在架构中的位置（Autoload、组件、系统、UI 等）
-- 关键协作对象或生命周期（如 `Main.Instance`、`EventBus`、所属 `CanvasLayer`）
+- 关键协作对象或生命周期（如 `Combat.Instance`、`EventBus`、所属 `CanvasLayer`）
 
 ```csharp
 /// <summary>
-/// 主游戏场景根协调者：持有世界与 UI 层引用，重置局内系统，不微操玩法细节。
+/// 战斗对局场景根协调者：持有世界与 UI 层引用，重置战斗临时状态，不微操玩法细节。
 /// </summary>
-public partial class Main : Node { }
+public partial class Combat : Node { }
 ```
 
 ## 属性 / 字段

@@ -7,16 +7,24 @@ alwaysApply: true
 
 修改场景结构、新增 UI 层、Autoload、或跨模块引用前，**必须先阅读** `docs/ARCHITECTURE.md`。
 
+## 三层目录
+
+| 层 | scenes | scripts | 职责 |
+|----|--------|---------|------|
+| **gameplay** | `scenes/gameplay/` | `scripts/gameplay/` | 战斗对局：关卡、实体、波次、战斗 UI |
+| **meta** | `scenes/meta/` | `scripts/meta/` | 局外：主菜单、设置、背包/装备管理器 |
+| **framework** | — | `scripts/framework/` | 基础设施：Autoload、配置、存档、Steam |
+
 ## 硬性规则
 
-1. 对局根场景为 `scenes/main.tscn`，协调脚本 `Main.cs`（`Main.Instance`）
-2. 新 UI 挂到既定 `CanvasLayer`（`UiLayers.Hud/Overlay/Pause/Transition/Debug`），禁止随意新建层
-3. 跨模块用 `EventBus` 或 `Main.Instance`，禁止 `GetParent().GetParent()`
+1. 战斗对局根场景为 `scenes/gameplay/combat.tscn`，协调脚本 `scripts/gameplay/Combat.cs`（`Combat.Instance`）；游戏入口为 `scenes/meta/main_menu.tscn`
+2. 新战斗 UI 挂到 `combat.tscn` 既定 `CanvasLayer`（`UiLayers.Hud/Overlay/Pause/Transition/Debug`）
+3. 跨模块用 `EventBus` 或 `Combat.Instance`，禁止 `GetParent().GetParent()`
 4. 实体用 `PackedScene.Instantiate<T>()`，禁止 `new Enemy()` 等
-5. 关卡不拥有玩家；玩家由关卡协调器生成到 `Entities`，位置取自 `BaseLevel.SpawnPoint`（Demo 为 `RunManager`）
-6. 角色级 Autoload 数据（背包、装备、法典）由 `SaveManager` 局外存档；**禁止**在进战斗时清空背包。战斗临时状态仅在 `Main.ResetCombatState()` 清理
+5. 关卡不拥有玩家；玩家由 `RunManager` 生成到 `Entities`，位置取自 `BaseLevel.SpawnPoint`
+6. 角色级数据（背包、装备）在 `scripts/meta/systems/`，由 `PersistenceMgr` 局外存档；**禁止**进战斗时清空。战斗临时状态仅在 `Combat.ResetCombatState()` 清理
 7. 场景路径写入 `ScenePaths`；配置改 xlsx 不改生成文件
 
 ## 目录速查
 
-`components/` 组件 · `dropSystem/` 掉落 · `levels/` 关卡 · `systems/` 系统 · `ui/` 界面 · `core/Main.cs` 协调入口
+`gameplay/` 战斗 · `meta/` 局外 · `framework/` 基础设施

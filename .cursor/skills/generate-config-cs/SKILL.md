@@ -12,11 +12,11 @@ description: 从 tools/config/ 下的 xlsx 配置表生成 Hope.Config 命名空
 | | 路径 |
 |---|------|
 | **输入** | `tools/config/{name}.xlsx` |
-| **输出** | `scripts/config/{Name}Config.cs` |
+| **输出** | `scripts/framework/config/{Name}Config.cs` |
 
 生成的 `.cs` 文件**必须**写入项目 `scripts/` 下的 `config/` 目录，不要放到其他位置。
 
-示例：`tools/config/item.xlsx` → `scripts/config/ItemConfig.cs`
+示例：`tools/config/item.xlsx` → `scripts/framework/config/ItemConfig.cs`
 
 ## 排除表
 
@@ -37,7 +37,7 @@ description: 从 tools/config/ 下的 xlsx 配置表生成 Hope.Config 命名空
 - [ ] 2. 确定类名与输出路径
 - [ ] 3. 生成属性与 XML 注释（含必须的 `Id` 主键字段）
 - [ ] 4. 生成 FromDict 反序列化逻辑
-- [ ] 5. 写入 `scripts/config/{Name}Config.cs`（输出目录固定为 `scripts/config/`）
+- [ ] 5. 写入 `scripts/framework/config/{Name}Config.cs`（输出目录固定为 `scripts/framework/config/`）
 ```
 
 ### Step 1: 读取 xlsx 表头
@@ -77,7 +77,7 @@ for c in range(1, ws.max_column + 1):
 | `hero_skill.xlsx` | `HeroSkillConfig` |
 
 - 文件名 snake_case → PascalCase + `Config` 后缀
-- 输出目录：`scripts/config/`（即 `scripts/` 下的 `config` 子目录）
+- 输出目录：`scripts/framework/config/`（即 `scripts/` 下的 `config` 子目录）
 - 输出文件：`{Name}Config.cs`
 - 命名空间：`Hope.Config`
 - JSON 表名 = 类名去掉 `Config` 后转 snake_case（与 `ConfigManager` 一致）
@@ -113,7 +113,7 @@ Id = (int)dict["id"];
 
 ### Step 3: 文件模板
 
-以 [scripts/config/ItemConfig.cs](scripts/config/ItemConfig.cs) 为基准：
+以 [scripts/framework/config/ItemConfig.cs](scripts/framework/config/ItemConfig.cs) 为基准：
 
 ```csharp
 using Godot;
@@ -245,7 +245,7 @@ else if (dict["extra"].VariantType == Variant.Type.String
 - [ ] 所有非 ignore 字段均有属性 + `FromDict` 赋值
 - [ ] `table` / `json` 字段使用 Godot 集合并处理 Array/String 双分支
 - [ ] `comma` 字段使用 C# 数组并遍历 `GodotArray`
-- [ ] 文件已写入 `scripts/config/`，未放到其他目录
+- [ ] 文件已写入 `scripts/framework/config/`，未放到其他目录
 - [ ] 不修改 `ConfigManager.cs`（除非用户明确要求）
 
 ## 参考

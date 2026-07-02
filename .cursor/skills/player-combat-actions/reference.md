@@ -4,7 +4,7 @@
 
 | 文件 | 用途 |
 |------|------|
-| `scripts/core/PlayerActionId.cs` | 行为枚举 |
+| `scripts/gameplay/combat/PlayerActionId.cs` | 行为枚举 |
 | `scripts/components/actions/IPlayerAction.cs` | 行为接口 |
 | `scripts/components/actions/PlayerActionContext.cs` | 运行时上下文 |
 | `scripts/components/actions/PlayerActionController.cs` | 调度、输入、格挡入口 |
@@ -15,7 +15,7 @@
 | `scripts/components/actions/CombatPulse.cs` | 范围伤害 + 击退 |
 | `scripts/entities/Player.cs` | 移动层、受击、视觉反馈 |
 | `scripts/entities/Enemy.cs` | ApplyStun / ApplyKnockback / 接触伤害 |
-| `scenes/characters/player.tscn` | PlayerActionController 节点 |
+| `scenes/gameplay/characters/player.tscn` | PlayerActionController 节点 |
 | `tools/config/item.xlsx` | 传奇底材 2001–2036 |
 
 ## 输入映射（project.godot）

@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bec7ds7r6b4js"]
+
+[ext_resource type="Script" uid="uid://bkw0bpphmxsxp" path="res://scripts/gameplay/Combat.cs" id="1_combat"]
+[ext_resource type="PackedScene" uid="uid://cgameworld01" path="res://scenes/gameplay/game_world.tscn" id="2_gw"]
+[ext_resource type="PackedScene" uid="uid://cgamehud01" path="res://scenes/gameplay/game_hud.tscn" id="3_hud"]
+[ext_resource type="PackedScene" uid="uid://cshoppanel1" path="res://scenes/gameplay/shop_panel.tscn" id="4_shop"]
+[ext_resource type="PackedScene" uid="uid://c74ugq7y80vmi" path="res://scenes/gameplay/inventory_ui.tscn" id="5_inv"]
+[ext_resource type="PackedScene" uid="uid://cpausemenu01" path="res://scenes/gameplay/pause_menu.tscn" id="6_pause"]
+[ext_resource type="PackedScene" uid="uid://cdeathdialog1" path="res://scenes/gameplay/death_dialog.tscn" id="7_death"]
+
+[node name="Combat" type="Node" unique_id=153546318]
+process_mode = 3
+script = ExtResource("1_combat")
+
+[node name="GameWorld" parent="." unique_id=1933404234 instance=ExtResource("2_gw")]
+unique_name_in_owner = true
+process_mode = 1
+
+[node name="UI_Hud" type="CanvasLayer" parent="." unique_id=1729780759]
+unique_name_in_owner = true
+
+[node name="GameHud" parent="UI_Hud" unique_id=2125650655 instance=ExtResource("3_hud")]
+
+[node name="UI_Overlay" type="CanvasLayer" parent="." unique_id=1771293050]
+unique_name_in_owner = true
+process_mode = 3
+layer = 2
+
+[node name="ShopPanel" parent="UI_Overlay" unique_id=1848091781 instance=ExtResource("4_shop")]
+layout_mode = 3
+
+[node name="InventoryUI" parent="UI_Overlay" unique_id=1761240067 instance=ExtResource("5_inv")]
+
+[node name="UI_Pause" type="CanvasLayer" parent="." unique_id=461079159]
+unique_name_in_owner = true
+process_mode = 3
+layer = 3
+
+[node name="PauseMenu" parent="UI_Pause" unique_id=888560577 instance=ExtResource("6_pause")]
+
+[node name="DeathDialog" parent="UI_Pause" unique_id=647091508 instance=ExtResource("7_death")]
+
+[node name="UI_Transition" type="CanvasLayer" parent="." unique_id=1042483453]
+unique_name_in_owner = true
+process_mode = 3
+layer = 4
+
+[node name="UI_Debug" type="CanvasLayer" parent="." unique_id=710246770]
+process_mode = 3
+layer = 10

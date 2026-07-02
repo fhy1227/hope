@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://xfnydu135qea"]
+
+[ext_resource type="Script" uid="uid://djawes35d68bd" path="res://scripts/gameplay/world/CircleFlashEffect.cs" id="1_script"]
+
+[node name="CircleFlashEffect" type="Node2D"]
+z_index = 2
+script = ExtResource("1_script")

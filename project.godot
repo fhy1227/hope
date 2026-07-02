@@ -17,14 +17,14 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-ConfigBootstrap="*res://scripts/autoload/ConfigBootstrap.cs"
-EventBus="*res://scripts/autoload/EventBus.cs"
-GameManager="*res://scripts/autoload/GameManager.cs"
-AudioManager="*res://scripts/autoload/AudioManager.cs"
-InventoryManager="*res://scripts/systems/InventoryManager.cs"
-EquipManager="*res://scripts/systems/EquipManager.cs"
-PersistenceMgr="*res://scripts/persistence/PersistenceMgr.cs"
-SteamManager="*res://scripts/steam/SteamManager.cs"
+ConfigBootstrap="*res://scripts/framework/autoload/ConfigBootstrap.cs"
+EventBus="*res://scripts/framework/autoload/EventBus.cs"
+GameManager="*res://scripts/framework/autoload/GameManager.cs"
+AudioManager="*res://scripts/framework/autoload/AudioManager.cs"
+InventoryManager="*res://scripts/meta/systems/InventoryManager.cs"
+EquipManager="*res://scripts/meta/systems/EquipManager.cs"
+PersistenceMgr="*res://scripts/framework/persistence/PersistenceMgr.cs"
+SteamManager="*res://scripts/framework/steam/SteamManager.cs"
 
 [dotnet]
 

@@ -46,12 +46,12 @@ git log -5 --oneline
 
 | 模块类型 | 通常包含 | 示例 |
 |----------|----------|------|
-| 配置表 | `tools/config/*.xlsx` + `assets/config/*.json` + `scripts/config/*Config.cs` + `ConfigBootstrap` 注册 | quality、drop_table |
-| 核心数据 | `scripts/core/*` | ItemInstance、ScenePaths |
-| 系统/管理器 | `scripts/systems/*`、相关 autoload | InventoryManager、DropTableResolver |
-| 实体/组件 | `scripts/entities/*`、`scripts/components/*` + 对应 `scenes/entities/*` | Enemy、Pickup、ItemPickup |
-| UI | `scripts/ui/*` + `scenes/ui/*` | InventoryUI、game_hud |
-| 场景集成 | `scenes/main.tscn`、`project.godot`（Autoload/组注册） | 挂接新系统到主场景 |
+| 配置表 | `tools/config/*.xlsx` + `assets/config/*.json` + `scripts/framework/config/*Config.cs` + `ConfigBootstrap` 注册 | quality、drop_table |
+| 核心数据 | `scripts/framework/core/*` | ItemInstance、ScenePaths |
+| 系统/管理器 | `scripts/gameplay/systems/*`、`scripts/meta/systems/*` | RunManager、InventoryManager |
+| 实体/组件 | `scripts/gameplay/entities/*`、`scripts/gameplay/components/*` | Enemy、Pickup |
+| UI | `scripts/gameplay/ui/*` + `scenes/gameplay/combat/*`（战斗）/ `scripts/meta/ui/*` + `scenes/meta/ui/*`（局外） | GameHud、MainMenu |
+| 场景集成 | `scenes/gameplay/combat/combat.tscn`、`project.godot` | 挂接战斗系统 |
 | 工具/技能 | `.cursor/skills/*`、纯工具脚本 | 与运行时无关的可单独一批 |
 
 **依赖顺序（先提交被依赖方）**：
@@ -76,8 +76,8 @@ git log -5 --oneline
 
 | # | 模块 | 文件 | 验证 |
 |---|------|------|------|
-| 1 | feat(config): quality 品质配置 | tools/config/quality.xlsx, assets/config/quality.json, scripts/config/QualityConfig.cs | build |
-| 2 | feat(core): 物品实例 | scripts/core/ItemInstance.cs | build |
+| 1 | feat(config): quality 品质配置 | tools/config/quality.xlsx, assets/config/quality.json, scripts/framework/config/QualityConfig.cs | build |
+| 2 | feat(core): 物品实例 | scripts/framework/core/ItemInstance.cs | build |
 | ... | | | |
 
 预计 N 批；每批通过后 `dotnet build`。
@@ -143,7 +143,7 @@ if ($sha) { git update-ref "refs/backup/pre-batch-commit-$(Get-Date -Format 'yyy
 - def5678 feat(core): 物品实例
 
 剩余未提交:
-- scripts/ui/InventoryUI.cs
+- scripts/gameplay/ui/InventoryUI.cs
 - ...
 
 备份 ref: refs/backup/pre-batch-commit-...

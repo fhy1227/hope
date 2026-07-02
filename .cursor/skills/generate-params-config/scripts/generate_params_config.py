@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Generate scripts/config/ParamsConfig.cs from tools/config/params.xlsx."""
+"""Generate scripts/framework/config/ParamsConfig.cs from tools/config/params.xlsx."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ except ImportError:
 
 ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_XLSX = ROOT / "tools" / "config" / "params.xlsx"
-DEFAULT_OUT = ROOT / "scripts" / "config" / "ParamsConfig.cs"
+DEFAULT_OUT = ROOT / "scripts" / "framework" / "config" / "ParamsConfig.cs"
 
 CSHARP_RESERVED = {
     "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char",

@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://cgameworld01"]
+
+[ext_resource type="Script" uid="uid://h45l0y8tes8c" path="res://scripts/gameplay/world/GameWorld.cs" id="1_gw"]
+[ext_resource type="Script" uid="uid://b43damithbfsh" path="res://scripts/gameplay/systems/LevelManager.cs" id="2_level_mgr"]
+[ext_resource type="Script" uid="uid://dg41xmuojjjs5" path="res://scripts/gameplay/RunManager.cs" id="3_run"]
+[ext_resource type="Script" uid="uid://61fqjics7pgb" path="res://scripts/gameplay/systems/WaveManager.cs" id="4_wave"]
+[ext_resource type="Script" uid="uid://ci0hslfev0sie" path="res://scripts/gameplay/systems/EnemySpawner.cs" id="5_spawner"]
+[ext_resource type="PackedScene" uid="uid://cplayer001" path="res://scenes/gameplay/characters/player.tscn" id="6_player"]
+[ext_resource type="PackedScene" uid="uid://cenemy001" path="res://scenes/gameplay/entities/enemy.tscn" id="7_enemy"]
+[ext_resource type="PackedScene" uid="uid://cpickup001" path="res://scenes/gameplay/entities/pickup.tscn" id="8_pickup"]
+[ext_resource type="PackedScene" uid="uid://carena01" path="res://scenes/gameplay/levels/arena.tscn" id="9_arena"]
+[ext_resource type="Script" uid="uid://bjc143ujxfasp" path="res://scripts/gameplay/systems/DamageNumberSpawner.cs" id="10_dmg_spawn"]
+[ext_resource type="PackedScene" uid="uid://cdmgnumber01" path="res://scenes/gameplay/entities/damage_number.tscn" id="11_dmg_num"]
+
+[node name="GameWorld" type="Node2D"]
+script = ExtResource("1_gw")
+
+[node name="LevelManager" type="Node" parent="."]
+script = ExtResource("2_level_mgr")
+InitialLevelScene = ExtResource("9_arena")
+
+[node name="Levels" type="Node2D" parent="."]
+
+[node name="Entities" type="Node2D" parent="."]
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Effects" type="Node2D" parent="."]
+
+[node name="Projectiles" type="Node2D" parent="Effects"]
+
+[node name="DamageNumbers" type="Node" parent="Effects"]
+script = ExtResource("10_dmg_spawn")
+DamageNumberScene = ExtResource("11_dmg_num")
+
+[node name="Pickups" type="Node2D" parent="."]
+
+[node name="RunManager" type="Node" parent="."]
+script = ExtResource("3_run")
+PlayerScene = ExtResource("6_player")
+PickupScene = ExtResource("8_pickup")
+
+[node name="WaveManager" type="Node" parent="RunManager"]
+script = ExtResource("4_wave")
+
+[node name="EnemySpawner" type="Node" parent="RunManager"]
+script = ExtResource("5_spawner")
+EnemyScene = ExtResource("7_enemy")
+EnemyContainerPath = NodePath("../../Enemies")
+BaseSpawnInterval = 1.2

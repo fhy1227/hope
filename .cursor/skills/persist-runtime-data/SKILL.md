@@ -19,10 +19,10 @@ description: >-
 | 适用 | 不适用 |
 |------|--------|
 | 背包、装备、金币（角色级）、材料、法典 | 敌人、弹道、地面 Pickup |
-| 跨场景保留的 Autoload 状态 | 仅 `main.tscn` 内 `RunManager.RunStats` 等局内状态 |
+| 跨场景保留的 Autoload 状态 | 仅 `combat.tscn` 内 `RunManager.RunStats` 等局内状态 |
 | 删档需清空的数据 | 战斗 Buff、冷却、波次计数 |
 
-局内状态进关重置 → `Main.ResetCombatState()`；角色数据 → 本 skill。
+局内状态进关重置 → `Combat.ResetCombatState()`；角色数据 → 本 skill。
 
 ## 硬规则
 
@@ -103,8 +103,8 @@ public partial class WalletManager : Node, IPersistedDataParticipant
 `project.godot`（参与者在前，`PersistenceMgr` 在后）：
 
 ```ini
-WalletManager="*res://scripts/systems/WalletManager.cs"
-PersistenceMgr="*res://scripts/persistence/PersistenceMgr.cs"
+WalletManager="*res://scripts/gameplay/systems/WalletManager.cs"
+PersistenceMgr="*res://scripts/framework/persistence/PersistenceMgr.cs"
 ```
 
 ### Step 4: 验证
@@ -141,8 +141,8 @@ PersistenceMgr.Save()
 
 ## 参考实现
 
-- `scripts/systems/InventoryManager.cs` — `List<ItemSaveData>` ↔ 背包
-- `scripts/systems/EquipManager.cs` — `Dictionary<int, List<ItemSaveData>>` ↔ 装备栏
+- `scripts/meta/systems/InventoryManager.cs` — `List<ItemSaveData>` ↔ 背包
+- `scripts/meta/systems/EquipManager.cs` — `Dictionary<int, List<ItemSaveData>>` ↔ 装备栏
 
 ## 常见错误
 
