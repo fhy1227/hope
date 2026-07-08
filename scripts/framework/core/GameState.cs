@@ -12,6 +12,12 @@ public enum GameState
     /// <summary>主菜单等非对局界面。</summary>
     Menu,
 
-    /// <summary>战斗场景（<c>scenes/gameplay/combat/combat.tscn</c>）内流程。</summary>
+    /// <summary>主城 Hub：局外成长、选副本。</summary>
+    Hub,
+
+    /// <summary>战斗场景（<c>scenes/gameplay/combat.tscn</c>）内流程。</summary>
     Combat,
+
+    /// <summary>副本结算界面。</summary>
+    Settlement,
 }

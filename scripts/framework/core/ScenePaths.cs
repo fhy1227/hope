@@ -9,6 +9,12 @@ public static class ScenePaths
     /// <summary>主菜单 UI 场景。</summary>
     public const string MainMenu = "res://scenes/meta/main_menu.tscn";
 
+    /// <summary>主城 Hub 场景。</summary>
+    public const string Hub = "res://scenes/meta/hub.tscn";
+
+    /// <summary>副本结算场景。</summary>
+    public const string Settlement = "res://scenes/meta/settlement.tscn";
+
     /// <summary>战斗对局根场景，挂载 <see cref="Combat"/>。</summary>
     public const string Combat = "res://scenes/gameplay/combat.tscn";
 

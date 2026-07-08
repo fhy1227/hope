@@ -46,6 +46,12 @@ public partial class EventBus : Node
     [Signal]
     public delegate void LevelChangedEventHandler(string levelPath);
 
+    [Signal]
+    public delegate void DungeonCompletedEventHandler();
+
+    [Signal]
+    public delegate void BossDefeatedEventHandler();
+
     public static EventBus? Instance { get; private set; }
 
     public override void _EnterTree()
@@ -125,5 +131,15 @@ public partial class EventBus : Node
     public void EmitLevelChanged(string levelPath)
     {
         EmitSignal(SignalName.LevelChanged, levelPath);
+    }
+
+    public void EmitDungeonCompleted()
+    {
+        EmitSignal(SignalName.DungeonCompleted);
+    }
+
+    public void EmitBossDefeated()
+    {
+        EmitSignal(SignalName.BossDefeated);
     }
 }

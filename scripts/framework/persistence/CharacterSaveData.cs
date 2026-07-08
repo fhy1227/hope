@@ -51,6 +51,30 @@ public class CharacterSaveData
     [JsonPropertyName("defeated_bosses")]
     public List<string> DefeatedBosses { get; set; } = [];
 
+    [JsonPropertyName("current_dungeon_id")]
+    public int CurrentDungeonId { get; set; }
+
+    [JsonPropertyName("cleared_dungeons")]
+    public List<int> ClearedDungeons { get; set; } = [];
+
+    [JsonPropertyName("total_runs_completed")]
+    public int TotalRunsCompleted { get; set; }
+
+    [JsonPropertyName("total_deaths")]
+    public int TotalDeaths { get; set; }
+
+    [JsonPropertyName("highest_wave_reached")]
+    public int HighestWaveReached { get; set; }
+
+    [JsonPropertyName("base_max_health")]
+    public int BaseMaxHealth { get; set; } = (int)ParamsConfig.RunMaxHealth;
+
+    [JsonPropertyName("base_damage")]
+    public int BaseDamage { get; set; } = (int)ParamsConfig.RunDamage;
+
+    [JsonPropertyName("base_speed")]
+    public int BaseSpeed { get; set; } = (int)ParamsConfig.RunSpeed;
+
     /// <summary>新建角色时的默认装备（双持武士刀）。</summary>
     public static CharacterSaveData CreateDefault(string characterName)
     {

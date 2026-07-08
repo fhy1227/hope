@@ -24,6 +24,7 @@ AudioManager="*res://scripts/framework/autoload/AudioManager.cs"
 InventoryManager="*res://scripts/meta/systems/InventoryManager.cs"
 EquipManager="*res://scripts/meta/systems/EquipManager.cs"
 PersistenceMgr="*res://scripts/framework/persistence/PersistenceMgr.cs"
+DungeonManager="*res://scripts/meta/systems/DungeonManager.cs"
 SteamManager="*res://scripts/framework/steam/SteamManager.cs"
 
 [dotnet]

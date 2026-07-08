@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://csettlement01"]
+
+[ext_resource type="Script" path="res://scripts/meta/ui/SettlementUI.cs" id="1_settlement"]
+
+[node name="Settlement" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_settlement")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.06, 0.1, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+theme_override_constants/separation = 16
+custom_minimum_size = Vector2(400, 0)
+
+[node name="TitleLabel" type="Label" parent="Center/Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "结算"
+horizontal_alignment = 1
+
+[node name="StatsLabel" type="Label" parent="Center/Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "统计"
+horizontal_alignment = 1
+
+[node name="RewardLabel" type="Label" parent="Center/Panel"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "奖励"
+horizontal_alignment = 1
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="HubButton" type="Button" parent="Center/Panel/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "返回主城"
+
+[node name="RetryButton" type="Button" parent="Center/Panel/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+text = "再来一次"

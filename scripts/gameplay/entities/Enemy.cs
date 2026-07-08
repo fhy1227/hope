@@ -19,6 +19,9 @@ public partial class Enemy : CharacterBody2D
     [Export]
     public string EnemyType { get; set; } = ParamsConfig.EnemyTypeNormal;
 
+    /// <summary>敌人等级，用于经验计算。</summary>
+    public int EnemyLevel { get; set; } = 1;
+
     private HealthComponent _health;
     private EnemyStatsComponent _statsComponent;
     private Node2D _target;

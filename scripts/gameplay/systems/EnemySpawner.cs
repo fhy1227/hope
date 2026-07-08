@@ -1,11 +1,12 @@
 using Godot;
+using Hope.Components;
 using Hope.Config;
 using Hope.Entities;
 
 namespace Hope.Systems;
 
 /// <summary>
-/// 在玩家周围环形刷怪，随波次提高密度。
+/// 在玩家周围环形刷怪，随波次提高密度；副本模式下支持 Boss 生成。
 /// </summary>
 public partial class EnemySpawner : Node
 {
@@ -33,6 +34,7 @@ public partial class EnemySpawner : Node
 	private int _wave;
 	private bool _active;
 	private bool _gamePaused;
+	private float _spawnIntervalMin = ParamsConfig.SpawnIntervalMin;
 
 	public override void _Ready()
 	{
@@ -42,6 +44,14 @@ public partial class EnemySpawner : Node
 	public void BindPlayer(Node2D player)
 	{
 		_player = player;
+	}
+
+	/// <summary>应用副本刷怪参数。</summary>
+	public void ApplyDungeonSettings(DungeonConfig dungeon)
+	{
+		BaseSpawnInterval = dungeon.SpawnIntervalBase;
+		_spawnIntervalMin = dungeon.SpawnIntervalMin;
+		MaxAliveEnemies = dungeon.MaxEnemiesPerWave;
 	}
 
 	public void BeginWave(int wave)
@@ -59,6 +69,31 @@ public partial class EnemySpawner : Node
 	public void SetPaused(bool paused)
 	{
 		_gamePaused = paused;
+	}
+
+	/// <summary>生成 Boss 实体（单次，不持续刷怪）。</summary>
+	public void SpawnBoss(int bossConfigId, int baseLevel)
+	{
+		_active = false;
+		if (EnemyScene == null || _player == null)
+		{
+			return;
+		}
+
+		var enemy = EnemyScene.Instantiate<Enemy>();
+		enemy.GlobalPosition = GetSpawnPosition();
+		enemy.EnemyType = ParamsConfig.EnemyTypeBoss;
+		enemy.GoldDrop = (int)(ParamsConfig.EnemyGoldDropDefault * 5f * (1 + baseLevel * 0.2f));
+		enemy.EnemyLevel = baseLevel;
+		enemy.SetTarget(_player);
+		enemy.EnemyKilled += OnEnemyKilled;
+		_enemyContainer.AddChild(enemy);
+
+		var health = enemy.GetNode<HealthComponent>("HealthComponent");
+		var bossHp = (int)(ParamsConfig.HealthDefaultMax * (5 + baseLevel * 2));
+		health.SetMaxHealth(bossHp, refill: true);
+
+		GD.Print($"[EnemySpawner] Boss spawned (config={bossConfigId}, hp={bossHp})");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -88,7 +123,7 @@ public partial class EnemySpawner : Node
 	{
 		return Mathf.Max(
 			BaseSpawnInterval - _wave * ParamsConfig.SpawnIntervalWaveReduce,
-			ParamsConfig.SpawnIntervalMin);
+			_spawnIntervalMin);
 	}
 
 	private int CountAliveEnemies()

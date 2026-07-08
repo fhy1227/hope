@@ -70,7 +70,7 @@ public partial class MainMenu : Control
             return;
         }
 
-        GameManager.Instance?.ChangeScene(ScenePaths.Combat);
+        GameManager.Instance?.ChangeScene(ScenePaths.Hub);
     }
 
     private void OnNewGamePressed()
@@ -88,7 +88,7 @@ public partial class MainMenu : Control
         }
 
         RefreshContinueButton();
-        GameManager.Instance?.ChangeScene(ScenePaths.Combat);
+        GameManager.Instance?.ChangeScene(ScenePaths.Hub);
     }
 
     private void OnSettingsPressed()

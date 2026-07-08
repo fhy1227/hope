@@ -406,15 +406,7 @@ public partial class InventoryUI : Control
         }
     }
 
-    public static Color GetQualityColor(int rarity) => rarity switch
-    {
-        1 => ParamsConfig.ColorQualityWhite,
-        2 => ParamsConfig.ColorQualityBlue,
-        3 => ParamsConfig.ColorQualityYellow,
-        4 => ParamsConfig.ColorQualityOrange,
-        5 => ParamsConfig.ColorQualityGold,
-        _ => Colors.White,
-    };
+    public static Color GetQualityColor(int rarity) => QualityColors.GetColor(rarity);
 
     public static Color GetQualityBackgroundColor(int rarity)
     {

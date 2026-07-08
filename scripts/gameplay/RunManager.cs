@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
 using Godot;
 using Hope.Config;
 using Hope.Core;
 using Hope.Entities;
 using Hope.Levels;
+using Hope.Persistence;
 
 namespace Hope.Systems;
 
 /// <summary>
-/// 土豆兄弟式单局循环：战斗波次 -> 商店 -> 下一波。
+/// 土豆兄弟式单局循环；副本模式下为有限波次 + Boss + 结算。
 /// </summary>
 public partial class RunManager : Node
 {
@@ -38,6 +37,28 @@ public partial class RunManager : Node
 	private RunPhase _phase = RunPhase.Combat;
 	private CombatState _combatState = CombatState.Playing;
 
+	private DungeonConfig? _dungeon;
+	private bool _isDungeonMode;
+	private bool _isBossWaveActive;
+	private int _goldBeforeRun;
+	private int _runGoldEarned;
+	private int _runExpEarned;
+	private int _totalKills;
+	private float _goldMultiplier = 1f;
+	private float _expMultiplier = 1f;
+
+	/// <summary>本局是否通关（仅副本模式有意义）。</summary>
+	public bool IsVictory { get; private set; }
+
+	/// <summary>本局击杀总数。</summary>
+	public int TotalKills => _totalKills;
+
+	/// <summary>本局赚取金币（不含进本前已有）。</summary>
+	public int RunGoldEarned => _runGoldEarned;
+
+	/// <summary>本局赚取经验。</summary>
+	public int RunExpEarned => _runExpEarned;
+
 	public RunStats Stats => _stats;
 	public RunPhase Phase => _phase;
 	/// <summary>当前战斗状态（进行中/暂停/结束）。</summary>
@@ -63,6 +84,19 @@ public partial class RunManager : Node
 		_enemySpawner.EnemyDefeated += OnEnemyDefeated;
 		Hope.EventBus.Instance!.PlayerDied += OnPlayerDied;
 
+		_dungeon = DungeonManager.Instance?.CurrentDungeon;
+		_isDungeonMode = _dungeon != null;
+
+		if (_isDungeonMode)
+		{
+			RunSessionData.IsDungeonRun = true;
+			ApplyDungeonSetup();
+		}
+		else
+		{
+			InitStatsFromSave();
+		}
+
 		SetCombatState(CombatState.Playing);
 		SpawnPlayer();
 		StartNextWave();
@@ -74,6 +108,43 @@ public partial class RunManager : Node
 		{
 			Hope.EventBus.Instance.PlayerDied -= OnPlayerDied;
 		}
+	}
+
+	private void ApplyDungeonSetup()
+	{
+		if (_dungeon == null)
+		{
+			return;
+		}
+
+		_goldMultiplier = _dungeon.GoldMultiplier;
+		_expMultiplier = _dungeon.ExpMultiplier;
+
+		_waveManager.Initialize(_dungeon);
+		_enemySpawner.ApplyDungeonSettings(_dungeon);
+
+		if (!string.IsNullOrEmpty(_dungeon.ScenePath))
+		{
+			_levelManager?.LoadLevel(_dungeon.ScenePath);
+		}
+
+		InitStatsFromSave();
+	}
+
+	private void InitStatsFromSave()
+	{
+		var save = PersistenceMgr.Instance?.ActiveCharacter;
+		if (save == null)
+		{
+			return;
+		}
+
+		_goldBeforeRun = save.Gold;
+		_stats.MaxHealth = save.BaseMaxHealth;
+		_stats.Damage = save.BaseDamage;
+		_stats.Speed = save.BaseSpeed;
+		_stats.Gold = save.Gold;
+		Hope.EventBus.Instance?.EmitGoldChanged(_stats.Gold);
 	}
 
 	/// <summary>Esc 切换战斗暂停状态；仅在进行中与暂停间切换。</summary>
@@ -228,29 +299,77 @@ public partial class RunManager : Node
 
 	private void StartNextWave()
 	{
-		SetPhase(RunPhase.Combat);
 		_stats.Wave += 1;
+
+		if (_isDungeonMode && _dungeon != null && _stats.Wave >= _dungeon.BossWave)
+		{
+			StartBossWave();
+			return;
+		}
+
+		SetPhase(RunPhase.Combat);
+		_isBossWaveActive = false;
 		_waveManager.StartWave(_stats.Wave);
 		_enemySpawner.BeginWave(_stats.Wave);
+	}
+
+	private void StartBossWave()
+	{
+		SetPhase(RunPhase.Combat);
+		_isBossWaveActive = true;
+		_waveManager.StartBossWave(_stats.Wave);
+		_enemySpawner.SpawnBoss(_dungeon!.BossConfigId, _dungeon.BaseEnemyLevel);
 	}
 
 	private void OnWaveCompleted(int wave)
 	{
 		_enemySpawner?.Stop();
+
+		if (_isDungeonMode && _dungeon != null && wave >= _dungeon.TotalWaves)
+		{
+			return;
+		}
+
 		SetPhase(RunPhase.Shop);
 	}
 
 	private void OnEnemyDefeated(int gold, Vector2 position, string enemyType)
 	{
+		_totalKills += 1;
+
+		var scaledGold = Mathf.RoundToInt(gold * _goldMultiplier);
+		if (_isDungeonMode)
+		{
+			var enemyLevel = _dungeon?.BaseEnemyLevel ?? 1;
+			_runExpEarned += ExpSystem.CalculateKillExp(enemyType, enemyLevel, _expMultiplier);
+		}
+
+		if (enemyType == ParamsConfig.EnemyTypeBoss && _isBossWaveActive)
+		{
+			OnBossDefeated();
+		}
+
 		if (PickupScene == null)
 		{
-			AddGold(gold);
+			AddGold(scaledGold);
 			ApplyDropTable(enemyType, position);
 			return;
 		}
 
-		SpawnGoldPickup(gold, position);
+		SpawnGoldPickup(scaledGold, position);
 		ApplyDropTable(enemyType, position);
+	}
+
+	private void OnBossDefeated()
+	{
+		_waveManager?.Stop();
+		_enemySpawner?.Stop();
+		IsVictory = true;
+		SetPhase(RunPhase.Victory);
+		SetCombatState(CombatState.GameOver);
+		Hope.EventBus.Instance?.EmitBossDefeated();
+		Hope.EventBus.Instance?.EmitDungeonCompleted();
+		ScheduleSettlementTransition();
 	}
 
 	private void SpawnGoldPickup(int gold, Vector2 position)
@@ -258,6 +377,7 @@ public partial class RunManager : Node
 		var pickup = PickupScene!.Instantiate<Pickup>();
 		pickup.GlobalPosition = position;
 		pickup.GoldAmount = gold;
+		pickup.RefreshAppearance();
 		pickup.SetTarget(_player);
 		pickup.Collected += OnPickupCollected;
 		Callable.From(() => _pickupContainer.AddChild(pickup)).CallDeferred();
@@ -280,6 +400,7 @@ public partial class RunManager : Node
 		pickup.ItemConfigId = drop.ItemId;
 		pickup.ItemCount = drop.Count;
 		pickup.DropInstance = drop.Instance;
+		pickup.RefreshAppearance();
 		pickup.SetTarget(_player);
 		Callable.From(() => _pickupContainer.AddChild(pickup)).CallDeferred();
 	}
@@ -292,6 +413,7 @@ public partial class RunManager : Node
 	public void AddGold(int amount)
 	{
 		_stats.Gold += amount;
+		_runGoldEarned += amount;
 		Hope.EventBus.Instance?.EmitGoldChanged(_stats.Gold);
 	}
 
@@ -301,6 +423,31 @@ public partial class RunManager : Node
 		_enemySpawner.Stop();
 		SetPhase(RunPhase.GameOver);
 		SetCombatState(CombatState.GameOver);
+
+		if (_isDungeonMode)
+		{
+			ScheduleSettlementTransition();
+		}
+	}
+
+	private void ScheduleSettlementTransition()
+	{
+		GetTree().CreateTimer(1.5f).Timeout += GoToSettlement;
+	}
+
+	private void GoToSettlement()
+	{
+		RunSessionData.Capture(
+			IsVictory,
+			_waveManager?.CurrentWave ?? _stats.Wave,
+			_totalKills,
+			_runGoldEarned,
+			_runExpEarned,
+			_goldBeforeRun,
+			_dungeon);
+
+		GetTree().Paused = false;
+		GameManager.Instance?.ChangeScene(ScenePaths.Settlement);
 	}
 
 	private void SetPhase(RunPhase phase)
@@ -319,7 +466,8 @@ public partial class RunManager : Node
 			_combatState == CombatState.Paused
 			|| _combatState == CombatState.GameOver
 			|| _phase == RunPhase.Shop
-			|| _phase == RunPhase.GameOver;
+			|| _phase == RunPhase.GameOver
+			|| _phase == RunPhase.Victory;
 
 		if (shouldPause)
 		{

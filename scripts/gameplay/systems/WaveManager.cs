@@ -4,7 +4,7 @@ using Hope.Config;
 namespace Hope.Systems;
 
 /// <summary>
-/// 单波倒计时，时间结束后发出 WaveCompleted。
+/// 单波倒计时，时间结束后发出 WaveCompleted；副本 Boss 波无倒计时。
 /// </summary>
 public partial class WaveManager : Node
 {
@@ -19,15 +19,25 @@ public partial class WaveManager : Node
 	public bool IsRunning { get; private set; }
 
 	private bool _gamePaused;
+	private bool _bossWaveMode;
+	private DungeonConfig? _dungeon;
 
 	public void SetPaused(bool paused)
 	{
 		_gamePaused = paused;
 	}
 
+	/// <summary>应用副本波次参数。</summary>
+	public void Initialize(DungeonConfig dungeon)
+	{
+		_dungeon = dungeon;
+		WaveDuration = dungeon.WaveTimeBase;
+		DurationGrowthPerWave = dungeon.WaveTimeIncrement;
+	}
+
 	public override void _Process(double delta)
 	{
-		if (!IsRunning || _gamePaused)
+		if (!IsRunning || _gamePaused || _bossWaveMode)
 		{
 			return;
 		}
@@ -43,11 +53,23 @@ public partial class WaveManager : Node
 
 	public void StartWave(int wave)
 	{
+		_bossWaveMode = false;
 		CurrentWave = wave;
 		TimeRemaining = WaveDuration + DurationGrowthPerWave * (wave - 1);
 		IsRunning = true;
 		Hope.EventBus.Instance?.EmitWaveStarted(wave, TimeRemaining);
 		Hope.EventBus.Instance?.EmitWaveTimerChanged(TimeRemaining);
+	}
+
+	/// <summary>Boss 波：无倒计时，由 Boss 击杀触发通关。</summary>
+	public void StartBossWave(int wave)
+	{
+		_bossWaveMode = true;
+		CurrentWave = wave;
+		TimeRemaining = 0f;
+		IsRunning = false;
+		Hope.EventBus.Instance?.EmitWaveStarted(wave, 0f);
+		Hope.EventBus.Instance?.EmitWaveTimerChanged(0f);
 	}
 
 	public void Stop()

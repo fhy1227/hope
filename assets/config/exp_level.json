@@ -1,0 +1,166 @@
+{
+  "_key": "id",
+  "_count": 20,
+  "_dict": {
+    "1": {
+      "id": 1,
+      "exp_required": 100,
+      "reward_hp": 6,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "2": {
+      "id": 2,
+      "exp_required": 300,
+      "reward_hp": 7,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "3": {
+      "id": 3,
+      "exp_required": 600,
+      "reward_hp": 8,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "4": {
+      "id": 4,
+      "exp_required": 1000,
+      "reward_hp": 9,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "5": {
+      "id": 5,
+      "exp_required": 1500,
+      "reward_hp": 10,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "6": {
+      "id": 6,
+      "exp_required": 2100,
+      "reward_hp": 11,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "7": {
+      "id": 7,
+      "exp_required": 2800,
+      "reward_hp": 12,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "8": {
+      "id": 8,
+      "exp_required": 3600,
+      "reward_hp": 13,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "9": {
+      "id": 9,
+      "exp_required": 4500,
+      "reward_hp": 14,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "10": {
+      "id": 10,
+      "exp_required": 5500,
+      "reward_hp": 15,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "11": {
+      "id": 11,
+      "exp_required": 6600,
+      "reward_hp": 16,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "12": {
+      "id": 12,
+      "exp_required": 7800,
+      "reward_hp": 17,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "13": {
+      "id": 13,
+      "exp_required": 9100,
+      "reward_hp": 18,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "14": {
+      "id": 14,
+      "exp_required": 10500,
+      "reward_hp": 19,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "15": {
+      "id": 15,
+      "exp_required": 12000,
+      "reward_hp": 20,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "16": {
+      "id": 16,
+      "exp_required": 13600,
+      "reward_hp": 21,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "17": {
+      "id": 17,
+      "exp_required": 15300,
+      "reward_hp": 22,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "18": {
+      "id": 18,
+      "exp_required": 17100,
+      "reward_hp": 23,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "19": {
+      "id": 19,
+      "exp_required": 19000,
+      "reward_hp": 24,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    },
+    "20": {
+      "id": 20,
+      "exp_required": 21000,
+      "reward_hp": 25,
+      "reward_damage": 1,
+      "reward_speed": 5,
+      "reward_gold": 50
+    }
+  }
+}

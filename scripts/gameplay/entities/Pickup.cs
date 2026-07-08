@@ -1,5 +1,6 @@
 using Godot;
 using Hope.Config;
+using Hope.Core;
 
 namespace Hope.Entities;
 
@@ -23,7 +24,7 @@ public partial class Pickup : Area2D
     public int ItemCount { get; set; } = 1;
 
     /// <summary> 带随机词条的完整物品实例（D4 掉落；优先于 ItemConfigId） </summary>
-    public Core.ItemInstance? DropInstance { get; set; }
+    public ItemInstance? DropInstance { get; set; }
 
     [Export] public float MagnetRange  { get; set; } = ParamsConfig.PickupMagnetRange;
     [Export] public float MagnetSpeed  { get; set; } = ParamsConfig.PickupMagnetSpeed;
@@ -34,9 +35,37 @@ public partial class Pickup : Area2D
 
     public override void _Ready()
     {
-        CollisionLayer = Hope.Core.CollisionLayers.Pickup;
-        CollisionMask = Hope.Core.CollisionLayers.Player;
+        CollisionLayer = CollisionLayers.Pickup;
+        CollisionMask = CollisionLayers.Player;
         BodyEntered += OnBodyEntered;
+        RefreshAppearance();
+    }
+
+    /// <summary>根据金币/物品品质更新 <c>Visual</c> 颜色；生成拾取物后也可手动调用。</summary>
+    public void RefreshAppearance()
+    {
+        if (GetNodeOrNull<Polygon2D>("Visual") is not Polygon2D visual)
+        {
+            return;
+        }
+
+        visual.Color = ResolvePickupColor();
+    }
+
+    private Color ResolvePickupColor()
+    {
+        if (DropInstance != null)
+        {
+            return QualityColors.GetColor(DropInstance.EffectiveRarity);
+        }
+
+        if (ItemConfigId > 0)
+        {
+            var cfg = ConfigManager.Get<ItemConfig>(ItemConfigId);
+            return QualityColors.GetColor(cfg?.Rarity ?? 1);
+        }
+
+        return QualityColors.GoldPickup;
     }
 
     public void SetTarget(Node2D target) => _target = target;
@@ -73,7 +102,7 @@ public partial class Pickup : Area2D
 
     private void OnBodyEntered(Node2D body)
     {
-        if (body is Hope.Entities.Player)
+        if (body is Player)
             Collect();
     }
 
@@ -88,11 +117,11 @@ public partial class Pickup : Area2D
             bool ok;
             if (DropInstance != null)
             {
-                ok = Hope.Systems.InventoryManager.Instance?.AddItemInstance(DropInstance) ?? false;
+                ok = Systems.InventoryManager.Instance?.AddItemInstance(DropInstance) ?? false;
             }
             else
             {
-                ok = Hope.Systems.InventoryManager.Instance?.AddItem(ItemConfigId, ItemCount) ?? false;
+                ok = Systems.InventoryManager.Instance?.AddItem(ItemConfigId, ItemCount) ?? false;
             }
 
             if (ok)

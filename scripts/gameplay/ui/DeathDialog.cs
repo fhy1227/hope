@@ -1,6 +1,7 @@
 using Godot;
 using Hope.Core;
 using Hope.Persistence;
+using Hope.Systems;
 
 namespace Hope.UI;
 
@@ -34,7 +35,9 @@ public partial class DeathDialog : Control
 
 	private void OnRunPhaseChanged(int phase)
 	{
-		var show = (RunPhase)phase == RunPhase.GameOver;
+		var runPhase = (RunPhase)phase;
+		var show = runPhase == RunPhase.GameOver
+		           && DungeonManager.Instance?.CurrentDungeon == null;
 		Visible = show;
 		MouseFilter = show ? MouseFilterEnum.Stop : MouseFilterEnum.Ignore;
 	}

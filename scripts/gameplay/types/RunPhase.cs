@@ -12,6 +12,9 @@ public enum RunPhase
     /// <summary>波间商店：选择升级、购买后进入下一波。</summary>
     Shop,
 
-    /// <summary>本局结束（胜利或失败），不再刷怪。</summary>
+    /// <summary>本局结束（玩家死亡）。</summary>
     GameOver,
+
+    /// <summary>副本通关（击败 Boss）。</summary>
+    Victory,
 }
