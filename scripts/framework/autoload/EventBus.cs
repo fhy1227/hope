@@ -52,6 +52,12 @@ public partial class EventBus : Node
     [Signal]
     public delegate void BossDefeatedEventHandler();
 
+    [Signal]
+    public delegate void FateCardSelectedEventHandler(int cardId, string cardCode);
+
+    [Signal]
+    public delegate void FateChainActivatedEventHandler(int chainId, string chainName);
+
     public static EventBus? Instance { get; private set; }
 
     public override void _EnterTree()
@@ -141,5 +147,21 @@ public partial class EventBus : Node
     public void EmitBossDefeated()
     {
         EmitSignal(SignalName.BossDefeated);
+    }
+
+    /// <summary>广播命运卡牌被选择事件。</summary>
+    /// <param name="cardId">卡牌配置主键。</param>
+    /// <param name="cardCode">卡牌业务 ID（如 C01）。</param>
+    public void EmitFateCardSelected(int cardId, string cardCode)
+    {
+        EmitSignal(SignalName.FateCardSelected, cardId, cardCode);
+    }
+
+    /// <summary>广播命运连锁激活事件。</summary>
+    /// <param name="chainId">连锁配置主键。</param>
+    /// <param name="chainName">连锁显示名。</param>
+    public void EmitFateChainActivated(int chainId, string chainName)
+    {
+        EmitSignal(SignalName.FateChainActivated, chainId, chainName);
     }
 }

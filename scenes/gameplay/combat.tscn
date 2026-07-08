@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://c74ugq7y80vmi" path="res://scenes/gameplay/inventory_ui.tscn" id="5_inv"]
 [ext_resource type="PackedScene" uid="uid://cpausemenu01" path="res://scenes/gameplay/pause_menu.tscn" id="6_pause"]
 [ext_resource type="PackedScene" uid="uid://cdeathdialog1" path="res://scenes/gameplay/death_dialog.tscn" id="7_death"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/fate_card_panel.tscn" id="8_fate"]
 
 [node name="Combat" type="Node" unique_id=153546318]
 process_mode = 3
@@ -30,6 +31,8 @@ layer = 2
 layout_mode = 3
 
 [node name="InventoryUI" parent="UI_Overlay" unique_id=1761240067 instance=ExtResource("5_inv")]
+
+[node name="FateCardPanel" parent="UI_Overlay" instance=ExtResource("8_fate")]
 
 [node name="UI_Pause" type="CanvasLayer" parent="." unique_id=461079159]
 unique_name_in_owner = true

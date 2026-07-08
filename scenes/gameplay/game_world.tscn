@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://dg41xmuojjjs5" path="res://scripts/gameplay/RunManager.cs" id="3_run"]
 [ext_resource type="Script" uid="uid://61fqjics7pgb" path="res://scripts/gameplay/systems/WaveManager.cs" id="4_wave"]
 [ext_resource type="Script" uid="uid://ci0hslfev0sie" path="res://scripts/gameplay/systems/EnemySpawner.cs" id="5_spawner"]
+[ext_resource type="Script" path="res://scripts/gameplay/systems/FateCardManager.cs" id="12_fate_mgr"]
 [ext_resource type="PackedScene" uid="uid://cplayer001" path="res://scenes/gameplay/characters/player.tscn" id="6_player"]
 [ext_resource type="PackedScene" uid="uid://cenemy001" path="res://scenes/gameplay/entities/enemy.tscn" id="7_enemy"]
 [ext_resource type="PackedScene" uid="uid://cpickup001" path="res://scenes/gameplay/entities/pickup.tscn" id="8_pickup"]
@@ -48,3 +49,6 @@ script = ExtResource("5_spawner")
 EnemyScene = ExtResource("7_enemy")
 EnemyContainerPath = NodePath("../../Enemies")
 BaseSpawnInterval = 1.2
+
+[node name="FateCardManager" type="Node" parent="RunManager"]
+script = ExtResource("12_fate_mgr")

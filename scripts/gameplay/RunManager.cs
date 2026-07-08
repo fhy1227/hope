@@ -30,6 +30,7 @@ public partial class RunManager : Node
 	private WaveManager? _waveManager;
 	private EnemySpawner? _enemySpawner;
 	private LevelManager? _levelManager;
+	private FateCardManager? _fateCardManager;
 	private Node2D _playerContainer;
 	private Node2D _pickupContainer;
 	private Player _player;
@@ -77,6 +78,7 @@ public partial class RunManager : Node
 		_waveManager = GetNode<WaveManager>("WaveManager");
 		_enemySpawner = GetNode<EnemySpawner>("EnemySpawner");
 		_levelManager = GetNode<LevelManager>(LevelManagerPath);
+		_fateCardManager = GetNodeOrNull<FateCardManager>("FateCardManager");
 		_playerContainer = GetNode<Node2D>(PlayerContainerPath);
 		_pickupContainer = GetNode<Node2D>(PickupContainerPath);
 
@@ -209,6 +211,61 @@ public partial class RunManager : Node
 	}
 
 	/// <summary>
+	/// 获取当前命运织机三选一候选卡牌（供 UI 展示）。
+	/// </summary>
+	/// <returns>卡牌字典列表；每项包含 id/card_code/name/desc/rarity。</returns>
+	public Godot.Collections.Array<Godot.Collections.Dictionary> GetFateCardOptions()
+	{
+		var result = new Godot.Collections.Array<Godot.Collections.Dictionary>();
+		if (_fateCardManager == null || !_fateCardManager.IsEnabled)
+		{
+			return result;
+		}
+
+		foreach (var card in _fateCardManager.DrawCards(_stats.Wave))
+		{
+			result.Add(new Godot.Collections.Dictionary
+			{
+				["id"] = card.Id,
+				["card_code"] = card.CardCode,
+				["name"] = card.Name,
+				["desc"] = card.Desc,
+				["rarity"] = card.Rarity,
+			});
+		}
+
+		return result;
+	}
+
+	/// <summary>
+	/// 在命运织机阶段选择卡牌并进入商店。
+	/// </summary>
+	/// <param name="cardId">被选择的卡牌配置 Id。</param>
+	public void SelectFateCardAndEnterShop(int cardId)
+	{
+		if (_fateCardManager?.SelectCard(cardId, _stats) == true)
+		{
+			SyncPlayerStats(refillHealth: false);
+		}
+
+		SetPhase(RunPhase.Shop);
+	}
+
+	/// <summary>
+	/// 当命运织机不可用时跳过该阶段并直接进入商店。
+	/// </summary>
+	public void SkipFateCardAndEnterShop()
+	{
+		SetPhase(RunPhase.Shop);
+	}
+
+	/// <summary>获取本局已持有命运卡牌数量。</summary>
+	public int GetFateOwnedCount() => _fateCardManager?.OwnedCardIds.Count ?? 0;
+
+	/// <summary>获取本局已激活连锁数量。</summary>
+	public int GetFateChainCount() => _fateCardManager?.ActiveChainIds.Count ?? 0;
+
+	/// <summary>
 	/// 运行时切换关卡：卸载旧关卡、加载新关卡，并将玩家移到新生成点。
 	/// 会停止刷怪并清空当前敌人。
 	/// </summary>
@@ -327,6 +384,12 @@ public partial class RunManager : Node
 
 		if (_isDungeonMode && _dungeon != null && wave >= _dungeon.TotalWaves)
 		{
+			return;
+		}
+
+		if (_fateCardManager != null && _fateCardManager.IsEnabled)
+		{
+			SetPhase(RunPhase.FateCard);
 			return;
 		}
 
@@ -465,6 +528,7 @@ public partial class RunManager : Node
 		var shouldPause =
 			_combatState == CombatState.Paused
 			|| _combatState == CombatState.GameOver
+			|| _phase == RunPhase.FateCard
 			|| _phase == RunPhase.Shop
 			|| _phase == RunPhase.GameOver
 			|| _phase == RunPhase.Victory;

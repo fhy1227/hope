@@ -1,0 +1,86 @@
+{
+  "_key": "id",
+  "_count": 8,
+  "_dict": {
+    "1": {
+      "id": 1,
+      "chain_name": "狂战士",
+      "description": "生命低于 30% 时全属性 +40%",
+      "card_code_1": "R01",
+      "card_code_2": "R03",
+      "card_code_3": "R11",
+      "effect_type": "stat_damage",
+      "effect_value": 40.0
+    },
+    "2": {
+      "id": 2,
+      "chain_name": "掠夺者",
+      "description": "金币/经验/掉落收益 +50%",
+      "card_code_1": "C16",
+      "card_code_2": "R23",
+      "card_code_3": "C17",
+      "effect_type": "gold_gain_mult",
+      "effect_value": 50.0
+    },
+    "3": {
+      "id": 3,
+      "chain_name": "不灭之体",
+      "description": "最大生命 +60",
+      "card_code_1": "C01",
+      "card_code_2": "C02",
+      "card_code_3": "C30",
+      "effect_type": "stat_max_hp",
+      "effect_value": 60.0
+    },
+    "4": {
+      "id": 4,
+      "chain_name": "暴君",
+      "description": "伤害 +40%",
+      "card_code_1": "C04",
+      "card_code_2": "C29",
+      "card_code_3": "C30",
+      "effect_type": "stat_damage",
+      "effect_value": 40.0
+    },
+    "5": {
+      "id": 5,
+      "chain_name": "疾风",
+      "description": "移动速度 +30%",
+      "card_code_1": "C03",
+      "card_code_2": "C08",
+      "card_code_3": "R30",
+      "effect_type": "stat_move_speed",
+      "effect_value": 30.0
+    },
+    "6": {
+      "id": 6,
+      "chain_name": "完美防御",
+      "description": "最大生命 +40，护甲向效果池附加",
+      "card_code_1": "C30",
+      "card_code_2": "C26",
+      "card_code_3": "C12",
+      "effect_type": "stat_max_hp",
+      "effect_value": 40.0
+    },
+    "7": {
+      "id": 7,
+      "chain_name": "幸运星",
+      "description": "稀有掉落概率 +50%",
+      "card_code_1": "E04",
+      "card_code_2": "E07",
+      "card_code_3": "C20",
+      "effect_type": "drop_rarity_up",
+      "effect_value": 50.0
+    },
+    "8": {
+      "id": 8,
+      "chain_name": "神之怒",
+      "description": "每波第 10 秒全屏伤害触发标记",
+      "card_code_1": "E05",
+      "card_code_2": "R28",
+      "card_code_3": "E08",
+      "effect_type": "wave_nuke_once",
+      "effect_value": 100.0
+    }
+  }
+}

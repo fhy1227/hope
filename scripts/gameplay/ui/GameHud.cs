@@ -15,6 +15,8 @@ public partial class GameHud : Control
     private Label _timerLabel = null!;
     private Label _goldLabel = null!;
     private Label _phaseLabel = null!;
+    private Label _fateOwnedLabel = null!;
+    private Label _fateChainLabel = null!;
 
     private Label _statHpLabel = null!;
     private Label _statDamageLabel = null!;
@@ -34,6 +36,8 @@ public partial class GameHud : Control
         _timerLabel = GetNode<Label>("%TimerLabel");
         _goldLabel = GetNode<Label>("%GoldLabel");
         _phaseLabel = GetNode<Label>("%PhaseLabel");
+        _fateOwnedLabel = GetNode<Label>("%FateOwnedLabel");
+        _fateChainLabel = GetNode<Label>("%FateChainLabel");
 
         _statHpLabel = GetNode<Label>("%StatHpLabel");
         _statDamageLabel = GetNode<Label>("%StatDamageLabel");
@@ -63,6 +67,8 @@ public partial class GameHud : Control
         EventBus.Instance.WaveTimerChanged += OnWaveTimerChanged;
         EventBus.Instance.GoldChanged += OnGoldChanged;
         EventBus.Instance.RunPhaseChanged += OnRunPhaseChanged;
+        EventBus.Instance.FateCardSelected += OnFateProgressChanged;
+        EventBus.Instance.FateChainActivated += OnFateChainActivated;
     }
 
     public override void _ExitTree()
@@ -82,12 +88,15 @@ public partial class GameHud : Control
         EventBus.Instance.WaveTimerChanged -= OnWaveTimerChanged;
         EventBus.Instance.GoldChanged -= OnGoldChanged;
         EventBus.Instance.RunPhaseChanged -= OnRunPhaseChanged;
+        EventBus.Instance.FateCardSelected -= OnFateProgressChanged;
+        EventBus.Instance.FateChainActivated -= OnFateChainActivated;
     }
 
     private void BindRunManager()
     {
         _runManager = GetTree().GetFirstNodeInGroup("run_manager") as RunManager;
         RefreshStatsPanel();
+        RefreshFateSummary();
     }
 
     private void OnInventoryButtonPressed()
@@ -98,6 +107,19 @@ public partial class GameHud : Control
     private void OnEquipmentChanged()
     {
         RefreshStatsPanel();
+    }
+
+    private void RefreshFateSummary()
+    {
+        if (_runManager == null)
+        {
+            _fateOwnedLabel.Text = "卡牌 x0";
+            _fateChainLabel.Text = "连锁 x0";
+            return;
+        }
+
+        _fateOwnedLabel.Text = $"卡牌 x{_runManager.GetFateOwnedCount()}";
+        _fateChainLabel.Text = $"连锁 x{_runManager.GetFateChainCount()}";
     }
 
     private void RefreshStatsPanel()
@@ -200,14 +222,27 @@ public partial class GameHud : Control
         _phaseLabel.Text = (RunPhase)phase switch
         {
             RunPhase.Combat => "战斗中",
+            RunPhase.FateCard => "命运织机",
             RunPhase.Shop => "商店阶段",
             RunPhase.GameOver => "游戏结束",
             _ => string.Empty,
         };
 
-        if ((RunPhase)phase == RunPhase.Combat)
+        if ((RunPhase)phase == RunPhase.Combat || (RunPhase)phase == RunPhase.Shop)
         {
             RefreshStatsPanel();
         }
+
+        RefreshFateSummary();
+    }
+
+    private void OnFateProgressChanged(int cardId, string cardCode)
+    {
+        RefreshFateSummary();
+    }
+
+    private void OnFateChainActivated(int chainId, string chainName)
+    {
+        RefreshFateSummary();
     }
 }
