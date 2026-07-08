@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/gameplay/ui/FateCardPanel.cs" id="1_fate"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/ui/fate_card/fate_panel_bg.svg" id="3_bg"]
+[ext_resource type="Texture2D" path="res://assets/ui/fate_card/fate_emblem.svg" id="4_emblem"]
 
 [node name="FateCardPanel" type="PanelContainer"]
 layout_mode = 1
@@ -16,6 +19,19 @@ offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_fate")
+theme = ExtResource("2_theme")
+
+[node name="PanelArt" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_bg")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -28,11 +44,24 @@ theme_override_constants/margin_bottom = 16
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="TitleLabel" type="Label" parent="Margin/VBox"]
+[node name="HeaderRow" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="Emblem" type="TextureRect" parent="Margin/VBox/HeaderRow"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("4_emblem")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="Margin/VBox/HeaderRow"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
-horizontal_alignment = 1
+vertical_alignment = 1
 text = "命运织机"
 
 [node name="SummaryLabel" type="Label" parent="Margin/VBox"]

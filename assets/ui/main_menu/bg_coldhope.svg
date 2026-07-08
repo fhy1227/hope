@@ -1,0 +1,36 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="960" y1="0" x2="960" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1322"/>
+      <stop offset="1" stop-color="#1A2E47"/>
+    </linearGradient>
+    <radialGradient id="hope" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960 610) rotate(90) scale(500 920)">
+      <stop stop-color="#7CC9FF" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#7CC9FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B9E8FF" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#B9E8FF" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="vignette" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960 540) scale(1180 680)">
+      <stop offset="0.68" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000000"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <ellipse cx="960" cy="610" rx="920" ry="500" fill="url(#hope)"/>
+
+  <polygon points="120,1080 300,1080 250,690 170,660" fill="#263E5E" fill-opacity="0.55"/>
+  <polygon points="320,1080 510,1080 470,670 390,640" fill="#2A4466" fill-opacity="0.55"/>
+  <polygon points="560,1080 760,1080 730,650 640,620" fill="#2F4A6F" fill-opacity="0.55"/>
+  <polygon points="1220,1080 1400,1080 1360,670 1280,640" fill="#2A4466" fill-opacity="0.55"/>
+  <polygon points="1450,1080 1660,1080 1610,690 1520,660" fill="#263E5E" fill-opacity="0.55"/>
+  <polygon points="1700,1080 1860,1080 1820,730 1760,700" fill="#223853" fill-opacity="0.55"/>
+
+  <polygon points="300,0 520,0 450,1080 360,1080" fill="url(#beam)"/>
+  <polygon points="760,0 980,0 930,1080 840,1080" fill="url(#beam)"/>
+  <polygon points="1100,0 1300,0 1260,1080 1170,1080" fill="url(#beam)"/>
+
+  <rect x="0" y="0" width="1920" height="1080" fill="url(#vignette)" opacity="0.25"/>
+</svg>

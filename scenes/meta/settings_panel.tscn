@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://csettings01"]
 
 [ext_resource type="Script" path="res://scripts/meta/ui/SettingsPanel.cs" id="1_settings"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="2_theme"]
 
 [node name="SettingsPanel" type="PanelContainer"]
 anchors_preset = 8
@@ -15,6 +16,7 @@ offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_settings")
+theme = ExtResource("2_theme")
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 2

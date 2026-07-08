@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://fndpdp46a7e2"]
 
 [ext_resource type="Script" path="res://scripts/gameplay/ui/InventoryItemActionPopup.cs" id="1_popup"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="2_theme"]
 
 [node name="InventoryItemActionPopup" type="PanelContainer"]
 process_mode = 3
@@ -19,6 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_popup")
+theme = ExtResource("2_theme")
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 2

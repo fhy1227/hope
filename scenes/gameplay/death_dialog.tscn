@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cdeathdialog1"]
 
 [ext_resource type="Script" path="res://scripts/gameplay/ui/DeathDialog.cs" id="1_death"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="2_theme"]
 
 [node name="DeathDialog" type="Control"]
 layout_mode = 3
@@ -11,6 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 process_mode = 3
 script = ExtResource("1_death")
+theme = ExtResource("2_theme")
 
 [node name="Dimmer" type="ColorRect" parent="."]
 layout_mode = 1

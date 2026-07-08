@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cun3ty5lmeu0" path="res://scripts/gameplay/ui/InventoryUI.cs" id="1_inv"]
 [ext_resource type="PackedScene" uid="uid://fndpdp46a7e2" path="res://scenes/gameplay/inventory_item_action_popup.tscn" id="2_popup"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="3_theme"]
 
 [node name="InventoryUI" type="Control" unique_id=1463402532]
 process_mode = 3
@@ -14,6 +15,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_inv")
+theme = ExtResource("3_theme")
 
 [node name="Bg" type="ColorRect" parent="." unique_id=1015878552]
 layout_mode = 1

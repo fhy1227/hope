@@ -2,6 +2,13 @@
 
 [ext_resource type="Script" uid="uid://brce878rehlpb" path="res://scripts/meta/ui/MainMenu.cs" id="1_menu"]
 [ext_resource type="PackedScene" uid="uid://csettings01" path="res://scenes/meta/settings_panel.tscn" id="2_settings"]
+[ext_resource type="Texture2D" uid="uid://crdrhxoqy76" path="res://assets/ui/main_menu/bg_coldhope.svg" id="3_bg"]
+[ext_resource type="Texture2D" uid="uid://oad4jvnfql47" path="res://assets/ui/main_menu/logo_emblem.svg" id="4_logo"]
+[ext_resource type="Texture2D" uid="uid://bkpqockgl41al" path="res://assets/ui/main_menu/icon_continue.svg" id="5_continue"]
+[ext_resource type="Texture2D" uid="uid://drnyjr0t6dg8k" path="res://assets/ui/main_menu/icon_new_game.svg" id="6_new_game"]
+[ext_resource type="Texture2D" uid="uid://dbgiqckfqnh4m" path="res://assets/ui/main_menu/icon_settings.svg" id="7_settings_icon"]
+[ext_resource type="Texture2D" uid="uid://dre6m7r8ilmq4" path="res://assets/ui/main_menu/icon_exit.svg" id="8_exit"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="99_theme"]
 
 [node name="MainMenu" type="Control" unique_id=442732521]
 layout_mode = 3
@@ -10,6 +17,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("99_theme")
 script = ExtResource("1_menu")
 
 [node name="Background" type="ColorRect" parent="." unique_id=521791493]
@@ -19,7 +27,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.08, 0.1, 0.14, 1)
+color = Color(0.03, 0.05, 0.08, 1)
+
+[node name="BackgroundArt" type="TextureRect" parent="Background" unique_id=521791494]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_bg")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1157690487]
 layout_mode = 1
@@ -33,39 +52,60 @@ grow_vertical = 2
 layout_mode = 2
 theme_override_constants/separation = 16
 
+[node name="Logo" type="TextureRect" parent="CenterContainer/VBox" unique_id=1057405385]
+custom_minimum_size = Vector2(220, 220)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("4_logo")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBox" unique_id=1887035395]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.95, 1, 1)
 theme_override_font_sizes/font_size = 48
 text = "HOPE"
 horizontal_alignment = 1
 
 [node name="ContinueButton" type="Button" parent="CenterContainer/VBox" unique_id=2056031460]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(260, 54)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.9, 0.97, 1, 1)
 text = "继续游戏"
+icon = ExtResource("5_continue")
+expand_icon = true
 
 [node name="NewGameButton" type="Button" parent="CenterContainer/VBox" unique_id=2056031461]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(260, 54)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.9, 0.97, 1, 1)
 text = "新游戏"
+icon = ExtResource("6_new_game")
+expand_icon = true
 
 [node name="SettingsButton" type="Button" parent="CenterContainer/VBox" unique_id=1887370735]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(260, 54)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.9, 0.97, 1, 1)
 text = "设置"
+icon = ExtResource("7_settings_icon")
+expand_icon = true
 
 [node name="ExitButton" type="Button" parent="CenterContainer/VBox" unique_id=1057405386]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(260, 54)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.9, 0.97, 1, 1)
 text = "退出"
+icon = ExtResource("8_exit")
+expand_icon = true
 
 [node name="SettingsPanel" parent="." unique_id=446077313 instance=ExtResource("2_settings")]
 unique_name_in_owner = true

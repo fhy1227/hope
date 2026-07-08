@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://cpausemenu01"]
 
 [ext_resource type="Script" path="res://scripts/gameplay/ui/PauseMenu.cs" id="1_pause"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="2_theme"]
 
 [node name="PauseMenu" type="Control"]
 layout_mode = 3
@@ -11,6 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 process_mode = 3
 script = ExtResource("1_pause")
+theme = ExtResource("2_theme")
 
 [node name="Dimmer" type="ColorRect" parent="."]
 layout_mode = 1

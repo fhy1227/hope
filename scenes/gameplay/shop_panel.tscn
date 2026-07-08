@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://cshoppanel1"]
 
 [ext_resource type="Script" path="res://scripts/gameplay/ui/ShopPanel.cs" id="1_shop"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="2_theme"]
 
 [node name="ShopPanel" type="PanelContainer"]
 layout_mode = 1
@@ -16,6 +17,7 @@ offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_shop")
+theme = ExtResource("2_theme")
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 2

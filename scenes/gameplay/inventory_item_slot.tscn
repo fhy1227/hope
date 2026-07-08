@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ys2pjrr3ihp5"]
 
 [ext_resource type="Script" path="res://scripts/gameplay/ui/InventoryItemSlot.cs" id="1_slot"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="2_theme"]
 
 [node name="InventoryItemSlot" type="Button"]
 custom_minimum_size = Vector2(90, 90)
@@ -9,3 +10,4 @@ size_flags_vertical = 3
 process_mode = 3
 expand_icon = true
 script = ExtResource("1_slot")
+theme = ExtResource("2_theme")
