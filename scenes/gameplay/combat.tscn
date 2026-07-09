@@ -8,6 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://cpausemenu01" path="res://scenes/gameplay/pause_menu.tscn" id="6_pause"]
 [ext_resource type="PackedScene" uid="uid://cdeathdialog1" path="res://scenes/gameplay/death_dialog.tscn" id="7_death"]
 [ext_resource type="PackedScene" path="res://scenes/gameplay/fate_card_panel.tscn" id="8_fate"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/skill_tree_panel.tscn" id="10_skilltree"]
+[ext_resource type="Script" path="res://scripts/gameplay/skill/CooldownManager.cs" id="11_cd"]
+[ext_resource type="Script" path="res://scripts/gameplay/skill/FuryResourceSystem.cs" id="12_fury"]
+[ext_resource type="Script" path="res://scripts/gameplay/skill/SkillCastingSystem.cs" id="13_cast"]
 
 [node name="Combat" type="Node" unique_id=153546318]
 process_mode = 3
@@ -16,6 +20,17 @@ script = ExtResource("1_combat")
 [node name="GameWorld" parent="." unique_id=1933404234 instance=ExtResource("2_gw")]
 unique_name_in_owner = true
 process_mode = 1
+
+[node name="SkillSystems" type="Node" parent="."]
+
+[node name="CooldownManager" type="Node" parent="SkillSystems"]
+script = ExtResource("11_cd")
+
+[node name="FuryResourceSystem" type="Node" parent="SkillSystems"]
+script = ExtResource("12_fury")
+
+[node name="SkillCastingSystem" type="Node" parent="SkillSystems"]
+script = ExtResource("13_cast")
 
 [node name="UI_Hud" type="CanvasLayer" parent="." unique_id=1729780759]
 unique_name_in_owner = true
@@ -33,6 +48,8 @@ layout_mode = 3
 [node name="InventoryUI" parent="UI_Overlay" unique_id=1761240067 instance=ExtResource("5_inv")]
 
 [node name="FateCardPanel" parent="UI_Overlay" instance=ExtResource("8_fate")]
+
+[node name="SkillTreePanel" parent="UI_Overlay" instance=ExtResource("10_skilltree")]
 
 [node name="UI_Pause" type="CanvasLayer" parent="." unique_id=461079159]
 unique_name_in_owner = true

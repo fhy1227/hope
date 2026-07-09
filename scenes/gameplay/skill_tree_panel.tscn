@@ -1,0 +1,128 @@
+[gd_scene format=3 uid="uid://cskilltree01"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/ui/skill/SkillTreePanel.cs" id="1_panel"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="2_theme"]
+
+[node name="SkillTreePanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_panel")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -300.0
+offset_right = 480.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "技能树"
+
+[node name="PointsLabel" type="Label" parent="Panel/VBox/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "可用点数: 0"
+
+[node name="CloseButton" type="Button" parent="Panel/VBox/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "关闭"
+
+[node name="TabBar" type="TabBar" parent="Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Body" type="HBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="CanvasScroll" type="ScrollContainer" parent="Panel/VBox/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_minimum_size = Vector2(520, 0)
+
+[node name="Canvas" type="Control" parent="Panel/VBox/Body/CanvasScroll"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(500, 420)
+layout_mode = 2
+
+[node name="Tooltip" type="PanelContainer" parent="Panel/VBox/Body"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+
+[node name="TooltipVBox" type="VBoxContainer" parent="Panel/VBox/Body/Tooltip"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="NameLabel" type="Label" parent="Panel/VBox/Body/Tooltip/TooltipVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "技能名"
+
+[node name="DescLabel" type="RichTextLabel" parent="Panel/VBox/Body/Tooltip/TooltipVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 80)
+fit_content = true
+text = "描述"
+
+[node name="StatsLabel" type="Label" parent="Panel/VBox/Body/Tooltip/TooltipVBox"]
+layout_mode = 2
+text = "数值"
+
+[node name="EnhancementBox" type="VBoxContainer" parent="Panel/VBox/Body/Tooltip/TooltipVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SlotPicker" type="OptionButton" parent="Panel/VBox/Body/Tooltip/TooltipVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="InvestButton" type="Button" parent="Panel/VBox/Body/Tooltip/TooltipVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "学习"
+
+[node name="RefundButton" type="Button" parent="Panel/VBox/Body/Tooltip/TooltipVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "重置"
+
+[node name="ResetButton" type="Button" parent="Panel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "重置所有技能点"

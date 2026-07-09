@@ -4,6 +4,7 @@ using Hope.Core;
 using Hope.Entities;
 using Hope.Levels;
 using Hope.Persistence;
+using Hope.SkillSystem;
 
 namespace Hope.Systems;
 
@@ -339,6 +340,7 @@ public partial class RunManager : Node
 		_playerContainer.AddChild(_player);
 		_player.Initialize(_stats);
 		_enemySpawner.BindPlayer(_player);
+		SkillCastingSystem.Instance?.BindPlayer(_player);
 	}
 
 	private Vector2 ResolveSpawnPosition() =>

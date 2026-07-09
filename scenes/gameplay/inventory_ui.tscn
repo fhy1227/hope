@@ -14,8 +14,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_inv")
 theme = ExtResource("3_theme")
+script = ExtResource("1_inv")
 
 [node name="Bg" type="ColorRect" parent="." unique_id=1015878552]
 layout_mode = 1
@@ -190,7 +190,7 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 16
 text = "  背 包"
 
-[node name="SellLowRarityButton" type="Button" parent="Center/MainPanel/MainVBox/Content/InvColumn"]
+[node name="SellLowRarityButton" type="Button" parent="Center/MainPanel/MainVBox/Content/InvColumn" unique_id=614278913]
 unique_name_in_owner = true
 process_mode = 3
 layout_mode = 2
@@ -224,5 +224,6 @@ layout_mode = 2
 text = "点击背包装备选择操作 | 点击已装备物品卸下 | I 键关闭"
 horizontal_alignment = 1
 
-[node name="ItemActionPopup" parent="." instance=ExtResource("2_popup")]
+[node name="ItemActionPopup" parent="." unique_id=575023717 instance=ExtResource("2_popup")]
 unique_name_in_owner = true
+anchors_preset = 0

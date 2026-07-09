@@ -1,0 +1,325 @@
+[gd_scene format=3 uid="uid://cskillbar01"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/ui/skill/SkillBarUI.cs" id="1_bar"]
+[ext_resource type="Script" path="res://scripts/gameplay/ui/skill/SkillSlotUI.cs" id="2_slot"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="3_theme"]
+
+[node name="SkillBar" type="Control"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -120.0
+offset_right = 220.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_bar")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
+
+[node name="FuryRow" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FuryLabel" type="Label" parent="VBox/FuryRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "怒气 0/100"
+
+[node name="FuryBar" type="ProgressBar" parent="VBox/FuryRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(280, 14)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+show_percentage = false
+
+[node name="Slots" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Slot0" type="PanelContainer" parent="VBox/Slots"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("2_slot")
+
+[node name="Icon" type="TextureRect" parent="VBox/Slots/Slot0"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="KeyLabel" type="Label" parent="VBox/Slots/Slot0"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 10
+text = "Z"
+
+[node name="RankLabel" type="Label" parent="VBox/Slots/Slot0"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="CooldownOverlay" type="ColorRect" parent="VBox/Slots/Slot0"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+color = Color(0, 0, 0, 0.55)
+mouse_filter = 2
+
+[node name="CooldownText" type="Label" parent="VBox/Slots/Slot0/CooldownOverlay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot1" type="PanelContainer" parent="VBox/Slots"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("2_slot")
+
+[node name="Icon" type="TextureRect" parent="VBox/Slots/Slot1"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="KeyLabel" type="Label" parent="VBox/Slots/Slot1"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "X"
+
+[node name="RankLabel" type="Label" parent="VBox/Slots/Slot1"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="CooldownOverlay" type="ColorRect" parent="VBox/Slots/Slot1"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+color = Color(0, 0, 0, 0.55)
+mouse_filter = 2
+
+[node name="CooldownText" type="Label" parent="VBox/Slots/Slot1/CooldownOverlay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot2" type="PanelContainer" parent="VBox/Slots"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("2_slot")
+
+[node name="Icon" type="TextureRect" parent="VBox/Slots/Slot2"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="KeyLabel" type="Label" parent="VBox/Slots/Slot2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "C"
+
+[node name="RankLabel" type="Label" parent="VBox/Slots/Slot2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="CooldownOverlay" type="ColorRect" parent="VBox/Slots/Slot2"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+color = Color(0, 0, 0, 0.55)
+mouse_filter = 2
+
+[node name="CooldownText" type="Label" parent="VBox/Slots/Slot2/CooldownOverlay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot3" type="PanelContainer" parent="VBox/Slots"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("2_slot")
+
+[node name="Icon" type="TextureRect" parent="VBox/Slots/Slot3"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="KeyLabel" type="Label" parent="VBox/Slots/Slot3"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "V"
+
+[node name="RankLabel" type="Label" parent="VBox/Slots/Slot3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="CooldownOverlay" type="ColorRect" parent="VBox/Slots/Slot3"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+color = Color(0, 0, 0, 0.55)
+mouse_filter = 2
+
+[node name="CooldownText" type="Label" parent="VBox/Slots/Slot3/CooldownOverlay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot4" type="PanelContainer" parent="VBox/Slots"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("2_slot")
+
+[node name="Icon" type="TextureRect" parent="VBox/Slots/Slot4"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="KeyLabel" type="Label" parent="VBox/Slots/Slot4"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "1"
+
+[node name="RankLabel" type="Label" parent="VBox/Slots/Slot4"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="CooldownOverlay" type="ColorRect" parent="VBox/Slots/Slot4"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+color = Color(0, 0, 0, 0.55)
+mouse_filter = 2
+
+[node name="CooldownText" type="Label" parent="VBox/Slots/Slot4/CooldownOverlay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot5" type="PanelContainer" parent="VBox/Slots"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+script = ExtResource("2_slot")
+
+[node name="Icon" type="TextureRect" parent="VBox/Slots/Slot5"]
+unique_name_in_owner = true
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="KeyLabel" type="Label" parent="VBox/Slots/Slot5"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "2"
+
+[node name="RankLabel" type="Label" parent="VBox/Slots/Slot5"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 10
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="CooldownOverlay" type="ColorRect" parent="VBox/Slots/Slot5"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+color = Color(0, 0, 0, 0.55)
+mouse_filter = 2
+
+[node name="CooldownText" type="Label" parent="VBox/Slots/Slot5/CooldownOverlay"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1

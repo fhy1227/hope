@@ -51,6 +51,7 @@ public partial class GameHud : Control
         CallDeferred(MethodName.BindRunManager);
 
         GetNode<Button>("%InventoryButton").Pressed += OnInventoryButtonPressed;
+        GetNode<Button>("%SkillTreeButton").Pressed += OnSkillTreeButtonPressed;
 
         if (EquipManager.Instance != null)
         {
@@ -102,6 +103,11 @@ public partial class GameHud : Control
     private void OnInventoryButtonPressed()
     {
         Combat.Instance?.OverlayLayer.GetNodeOrNull<InventoryUI>("InventoryUI")?.Toggle();
+    }
+
+    private void OnSkillTreeButtonPressed()
+    {
+        Combat.Instance?.OverlayLayer.GetNodeOrNull<SkillTreePanel>("SkillTreePanel")?.Toggle();
     }
 
     private void OnEquipmentChanged()

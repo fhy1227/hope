@@ -1,0 +1,2 @@
+# 技能定义资源目录
+# 可将 SkillDefinition .tres 文件放在 barbarian/ 等子目录下，SkillDB 会自动加载。

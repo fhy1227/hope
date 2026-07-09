@@ -53,4 +53,10 @@ public static class ScenePaths
 
     /// <summary>范围技能圆形闪光特效。</summary>
     public const string CircleFlashEffect = "res://scenes/gameplay/effects/circle_flash_effect.tscn";
+
+    /// <summary>技能树面板（加点、强化、重置）。</summary>
+    public const string SkillTreePanel = "res://scenes/gameplay/skill_tree_panel.tscn";
+
+    /// <summary>战斗 HUD 技能栏。</summary>
+    public const string SkillBar = "res://scenes/gameplay/skill_bar.tscn";
 }

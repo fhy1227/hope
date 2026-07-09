@@ -58,6 +58,36 @@ public partial class EventBus : Node
     [Signal]
     public delegate void FateChainActivatedEventHandler(int chainId, string chainName);
 
+    [Signal]
+    public delegate void SkillCastEventHandler(string skillId, int rank, Vector2 position);
+
+    [Signal]
+    public delegate void SkillHitEventHandler(string skillId, Node2D target, int damage);
+
+    [Signal]
+    public delegate void SkillEndedEventHandler(string skillId);
+
+    [Signal]
+    public delegate void SkillLearnedEventHandler(string skillId, int newRank);
+
+    [Signal]
+    public delegate void SkillRefundedEventHandler(string skillId);
+
+    [Signal]
+    public delegate void SkillEnhancementChosenEventHandler(string skillId, string enhancementId);
+
+    [Signal]
+    public delegate void SkillTreeResetEventHandler();
+
+    [Signal]
+    public delegate void SkillCooldownStartedEventHandler(string skillId, float duration);
+
+    [Signal]
+    public delegate void SkillCooldownEndedEventHandler(string skillId);
+
+    [Signal]
+    public delegate void SkillResourceChangedEventHandler(float current, float max);
+
     public static EventBus? Instance { get; private set; }
 
     public override void _EnterTree()
@@ -163,5 +193,55 @@ public partial class EventBus : Node
     public void EmitFateChainActivated(int chainId, string chainName)
     {
         EmitSignal(SignalName.FateChainActivated, chainId, chainName);
+    }
+
+    public void EmitSkillCast(string skillId, int rank, Vector2 position)
+    {
+        EmitSignal(SignalName.SkillCast, skillId, rank, position);
+    }
+
+    public void EmitSkillHit(string skillId, Node2D target, int damage)
+    {
+        EmitSignal(SignalName.SkillHit, skillId, target, damage);
+    }
+
+    public void EmitSkillEnded(string skillId)
+    {
+        EmitSignal(SignalName.SkillEnded, skillId);
+    }
+
+    public void EmitSkillLearned(string skillId, int newRank)
+    {
+        EmitSignal(SignalName.SkillLearned, skillId, newRank);
+    }
+
+    public void EmitSkillRefunded(string skillId)
+    {
+        EmitSignal(SignalName.SkillRefunded, skillId);
+    }
+
+    public void EmitSkillEnhancementChosen(string skillId, string enhancementId)
+    {
+        EmitSignal(SignalName.SkillEnhancementChosen, skillId, enhancementId);
+    }
+
+    public void EmitSkillTreeReset()
+    {
+        EmitSignal(SignalName.SkillTreeReset);
+    }
+
+    public void EmitSkillCooldownStarted(string skillId, float duration)
+    {
+        EmitSignal(SignalName.SkillCooldownStarted, skillId, duration);
+    }
+
+    public void EmitSkillCooldownEnded(string skillId)
+    {
+        EmitSignal(SignalName.SkillCooldownEnded, skillId);
+    }
+
+    public void EmitSkillResourceChanged(float current, float max)
+    {
+        EmitSignal(SignalName.SkillResourceChanged, current, max);
     }
 }

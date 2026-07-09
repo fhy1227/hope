@@ -1,4 +1,5 @@
 using Godot;
+using Hope.SkillSystem;
 using Hope.Systems;
 
 namespace Hope.Core;
@@ -55,6 +56,7 @@ public partial class Combat : Node
     /// </summary>
     public void ResetCombatState()
     {
-        // 地面 Pickup、波次计数等由场景重载或 RunManager 自行管理。
+        CooldownManager.Instance?.ClearAll();
+        FuryResourceSystem.Instance?.Reset();
     }
 }

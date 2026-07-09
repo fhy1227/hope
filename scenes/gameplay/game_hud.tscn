@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://rmf3t3ucw4vx" path="res://scripts/gameplay/ui/GameHud.cs" id="1_hud"]
 [ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="2_theme"]
+[ext_resource type="PackedScene" path="res://scenes/gameplay/skill_bar.tscn" id="3_skillbar"]
 
 [node name="GameHud" type="Control" unique_id=322809812]
 layout_mode = 3
@@ -61,6 +62,13 @@ process_mode = 3
 custom_minimum_size = Vector2(80, 32)
 layout_mode = 2
 text = "装备"
+
+[node name="SkillTreeButton" type="Button" parent="Margin/VBox"]
+unique_name_in_owner = true
+process_mode = 3
+custom_minimum_size = Vector2(80, 32)
+layout_mode = 2
+text = "技能 (K)"
 
 [node name="FateOwnedLabel" type="Label" parent="Margin/VBox"]
 unique_name_in_owner = true
@@ -137,3 +145,5 @@ text = "暴击 -"
 unique_name_in_owner = true
 layout_mode = 2
 text = "护甲 -"
+
+[node name="SkillBar" parent="." instance=ExtResource("3_skillbar")]

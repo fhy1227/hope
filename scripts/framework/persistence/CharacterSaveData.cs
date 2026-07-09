@@ -75,6 +75,9 @@ public class CharacterSaveData
     [JsonPropertyName("base_speed")]
     public int BaseSpeed { get; set; } = (int)ParamsConfig.RunSpeed;
 
+    [JsonPropertyName("skill_state")]
+    public SkillSaveData? SkillState { get; set; }
+
     /// <summary>新建角色时的默认装备（双持武士刀）。</summary>
     public static CharacterSaveData CreateDefault(string characterName)
     {
