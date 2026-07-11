@@ -644,6 +644,36 @@ public static partial class ParamsConfig
     public const float DropBossLevelBonus = 5f;
 
     /// <summary>
+    /// elite_spawn_chance_base
+    /// 精英怪基础生成概率
+    /// </summary>
+    public const float EliteSpawnChanceBase = 0.05f;
+
+    /// <summary>
+    /// elite_spawn_chance_per_wave
+    /// 精英怪每波额外生成概率
+    /// </summary>
+    public const float EliteSpawnChancePerWave = 0.01f;
+
+    /// <summary>
+    /// elite_hp_mult
+    /// 精英怪生命倍率
+    /// </summary>
+    public const float EliteHpMult = 2.5f;
+
+    /// <summary>
+    /// elite_gold_mult
+    /// 精英怪金币掉落倍率
+    /// </summary>
+    public const float EliteGoldMult = 2f;
+
+    /// <summary>
+    /// elite_scale
+    /// 精英怪体型缩放
+    /// </summary>
+    public const float EliteScale = 1.2f;
+
+    /// <summary>
     /// drop_rarity_upgrade_chance
     /// 稀有度升档概率
     /// </summary>

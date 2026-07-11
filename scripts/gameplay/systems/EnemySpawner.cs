@@ -168,7 +168,25 @@ public partial class EnemySpawner : Node
 		enemy.GlobalPosition = GetSpawnPosition();
 		enemy.SetTarget(_player);
 		enemy.EnemyKilled += OnEnemyKilled;
+
+		var eliteChance = ParamsConfig.EliteSpawnChanceBase + _wave * ParamsConfig.EliteSpawnChancePerWave;
+		var isElite = GD.Randf() < eliteChance;
+		if (isElite)
+		{
+			enemy.EnemyType = ParamsConfig.EnemyTypeElite;
+			enemy.GoldDrop = Mathf.RoundToInt(enemy.GoldDrop * ParamsConfig.EliteGoldMult);
+			enemy.Scale = Vector2.One * ParamsConfig.EliteScale;
+			enemy.Modulate = new Color(1.25f, 1.1f, 0.65f);
+		}
+
 		_enemyContainer.AddChild(enemy);
+
+		if (isElite)
+		{
+			var health = enemy.GetNode<HealthComponent>("HealthComponent");
+			var eliteHp = Mathf.Max(1, Mathf.RoundToInt(health.MaxHealth * ParamsConfig.EliteHpMult));
+			health.SetMaxHealth(eliteHp, refill: true);
+		}
 	}
 
 	private Vector2 GetSpawnPosition()
