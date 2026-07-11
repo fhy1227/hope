@@ -178,6 +178,11 @@ public partial class EquipManager : Node, IPersistedDataParticipant
     // ── 属性加成计算 ─────────────────────────────────────────────────
 
     /// <summary>
+    /// 重新计算装备属性加成（局外附魔等修改物品后调用）。
+    /// </summary>
+    public void RecalculateBonus() => RecalcBonus();
+
+    /// <summary>
     /// 重新计算装备属性加成
     /// </summary>
     private void RecalcBonus()

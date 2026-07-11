@@ -59,4 +59,7 @@ public static class ScenePaths
 
     /// <summary>战斗 HUD 技能栏。</summary>
     public const string SkillBar = "res://scenes/gameplay/skill_bar.tscn";
+
+    /// <summary>主城铁匠附魔面板。</summary>
+    public const string BlacksmithPanel = "res://scenes/meta/blacksmith_panel.tscn";
 }

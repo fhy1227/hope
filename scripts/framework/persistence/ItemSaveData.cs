@@ -63,6 +63,9 @@ public class ItemSaveData
             ItemLevel = item.ItemLevel,
             RolledRarity = item.RolledRarity,
             Affixes = item.Affixes.Select(AffixSaveData.FromRolled).ToList(),
+            TemperedAffixes = item.TemperedAffixes.Select(AffixSaveData.FromRolled).ToList(),
+            MasterworkLevel = item.MasterworkLevel,
+            EnchantCount = item.EnchantCount,
             AspectId = item.AspectId,
         };
     }
@@ -77,6 +80,9 @@ public class ItemSaveData
             ItemLevel = ItemLevel,
             RolledRarity = RolledRarity,
             Affixes = Affixes.Select(a => a.ToRolled()).ToList(),
+            TemperedAffixes = TemperedAffixes.Select(a => a.ToRolled()).ToList(),
+            MasterworkLevel = MasterworkLevel,
+            EnchantCount = EnchantCount,
             AspectId = AspectId,
         };
     }

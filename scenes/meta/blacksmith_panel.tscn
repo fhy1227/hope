@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://cblacksmith01"]
+
+[ext_resource type="Script" path="res://scripts/meta/ui/BlacksmithPanel.cs" id="1_bs"]
+[ext_resource type="Theme" path="res://assets/ui/theme/hope_unified_theme.tres" id="2_theme"]
+
+[node name="BlacksmithPanel" type="PanelContainer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -240.0
+offset_right = 300.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_bs")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "铁匠 · 附魔"
+
+[node name="CloseButton" type="Button" parent="VBox/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "关闭"
+
+[node name="ItemList" type="ItemList" parent="VBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DetailLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+text = "选择一件稀有及以上装备。"
+
+[node name="EnchantButton" type="Button" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "附魔"
+
+[node name="StatusLabel" type="Label" parent="VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3

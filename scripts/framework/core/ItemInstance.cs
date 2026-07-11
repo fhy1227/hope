@@ -33,6 +33,15 @@ public partial class ItemInstance : Resource
     /// <summary>威能 ID；预设传奇底材来自 item.aspect_id，随机传奇待铭印。</summary>
     public string AspectId { get; set; } = "";
 
+    /// <summary>淬炼词缀（与随机词缀独立计数）。</summary>
+    public List<RolledAffix> TemperedAffixes { get; set; } = [];
+
+    /// <summary>精工等级。</summary>
+    public int MasterworkLevel { get; set; }
+
+    /// <summary>已附魔次数（每件装备上限见 CraftingManager）。</summary>
+    public int EnchantCount { get; set; }
+
     /// <summary>
     /// 延迟从 <see cref="ConfigManager"/> 读取的配置；ConfigId 无效时 PrintErr 并可能返回 null。
     /// </summary>
@@ -74,6 +83,11 @@ public partial class ItemInstance : Resource
         ItemStatMapping.ApplyBaseStats(Config, bonus, ItemLevel, legendaryMul);
 
         foreach (var affix in Affixes)
+        {
+            bonus.Add(affix.NumericType, affix.ModifierType, affix.Value);
+        }
+
+        foreach (var affix in TemperedAffixes)
         {
             bonus.Add(affix.NumericType, affix.ModifierType, affix.Value);
         }
