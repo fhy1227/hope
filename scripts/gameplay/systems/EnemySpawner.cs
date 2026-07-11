@@ -71,7 +71,7 @@ public partial class EnemySpawner : Node
 		_gamePaused = paused;
 	}
 
-	/// <summary>生成 Boss 实体（单次，不持续刷怪）。</summary>
+	/// <summary>生成 Boss 实体（单次，不持续刷怪）；数值由 <see cref="BossConfig"/> 驱动。</summary>
 	public void SpawnBoss(int bossConfigId, int baseLevel)
 	{
 		_active = false;
@@ -80,20 +80,51 @@ public partial class EnemySpawner : Node
 			return;
 		}
 
+		var cfg = ConfigManager.Get<BossConfig>(bossConfigId);
+		var hpMult = cfg?.HpMult ?? 5f;
+		var damageMult = cfg?.DamageMult ?? 1f;
+		var scale = cfg?.Scale ?? 1f;
+		var goldMult = cfg?.GoldMult ?? 5f;
+		var tint = cfg?.TintColor ?? "#FFFFFF";
+		var bossName = cfg?.NameKey ?? $"Boss#{bossConfigId}";
+
 		var enemy = EnemyScene.Instantiate<Enemy>();
 		enemy.GlobalPosition = GetSpawnPosition();
 		enemy.EnemyType = ParamsConfig.EnemyTypeBoss;
-		enemy.GoldDrop = (int)(ParamsConfig.EnemyGoldDropDefault * 5f * (1 + baseLevel * 0.2f));
+		enemy.GoldDrop = (int)(ParamsConfig.EnemyGoldDropDefault * goldMult * (1 + baseLevel * 0.2f));
 		enemy.EnemyLevel = baseLevel;
+		enemy.Scale = Vector2.One * scale;
+		enemy.Modulate = ParseHexColor(tint);
+		enemy.AddToGroup("bosses");
 		enemy.SetTarget(_player);
 		enemy.EnemyKilled += OnEnemyKilled;
+
+		var stats = enemy.GetNode<EnemyStatsComponent>("EnemyStatsComponent");
+		stats.ContactDamage = ParamsConfig.EnemyContactDamageDefault * damageMult;
+
 		_enemyContainer.AddChild(enemy);
 
 		var health = enemy.GetNode<HealthComponent>("HealthComponent");
-		var bossHp = (int)(ParamsConfig.HealthDefaultMax * (5 + baseLevel * 2));
+		var bossHp = (int)(ParamsConfig.HealthDefaultMax * hpMult * (1 + baseLevel * 0.15f));
 		health.SetMaxHealth(bossHp, refill: true);
 
-		GD.Print($"[EnemySpawner] Boss spawned (config={bossConfigId}, hp={bossHp})");
+		GD.Print($"[EnemySpawner] Boss spawned: {bossName} (config={bossConfigId}, hp={bossHp})");
+	}
+
+	private static Color ParseHexColor(string hex)
+	{
+		if (string.IsNullOrWhiteSpace(hex))
+		{
+			return Colors.White;
+		}
+
+		var s = hex.TrimStart('#');
+		if (s.Length == 6 && Color.HtmlIsValid($"#{s}"))
+		{
+			return Color.FromHtml($"#{s}");
+		}
+
+		return Colors.White;
 	}
 
 	public override void _PhysicsProcess(double delta)

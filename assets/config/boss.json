@@ -1,0 +1,33 @@
+{
+  "_key": "id",
+  "_count": 3,
+  "_dict": {
+    "101": {
+      "id": 101,
+      "name_key": "洞穴守卫",
+      "hp_mult": 8.0,
+      "damage_mult": 1.2,
+      "scale": 1.3,
+      "gold_mult": 3.0,
+      "tint_color": "#8844FF"
+    },
+    "102": {
+      "id": 102,
+      "name_key": "森林巨兽",
+      "hp_mult": 10.0,
+      "damage_mult": 1.5,
+      "scale": 1.5,
+      "gold_mult": 4.0,
+      "tint_color": "#44AA44"
+    },
+    "103": {
+      "id": 103,
+      "name_key": "遗忘领主",
+      "hp_mult": 12.0,
+      "damage_mult": 1.8,
+      "scale": 1.7,
+      "gold_mult": 5.0,
+      "tint_color": "#CC2222"
+    }
+  }
+}
