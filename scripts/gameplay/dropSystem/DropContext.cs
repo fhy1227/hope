@@ -34,7 +34,17 @@ public readonly struct DropContext
     /// <summary> drop_table 指定稀有度（0=随机） </summary>
     public int ForcedRarity { get; init; }
 
-    public static DropContext FromWave(string enemyType, int wave, float tableDropRate, int forcedRarity = 0)
+    /// <summary> 副本掉落品质加成（提高 MF） </summary>
+    public int LootQualityBonus { get; init; }
+
+    private const float LootQualityMfPerPoint = 0.05f;
+
+    public static DropContext FromWave(
+        string enemyType,
+        int wave,
+        float tableDropRate,
+        int forcedRarity = 0,
+        int lootQualityBonus = 0)
     {
         var areaLevel = (int)(ParamsConfig.DropAreaLevelBase + (wave - 1) * ParamsConfig.DropAreaLevelPerWave);
         var (mf, rateMul, levelBonus) = EnemyTypeModifiers(enemyType);
@@ -44,12 +54,13 @@ public readonly struct DropContext
             EnemyType = enemyType,
             MonsterLevel = areaLevel + levelBonus,
             AreaLevel = areaLevel,
-            MagicFind = mf,
+            MagicFind = mf + lootQualityBonus * LootQualityMfPerPoint,
             DropRateMultiplier = rateMul,
             PreferredSlotTypes = [(int)ParamsConfig.DropWeaponSlotType],
             SmartLootChance = ParamsConfig.DropSmartLootChance,
             TableDropRate = tableDropRate,
             ForcedRarity = forcedRarity,
+            LootQualityBonus = lootQualityBonus,
         };
     }
 

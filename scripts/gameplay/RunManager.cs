@@ -403,6 +403,11 @@ public partial class RunManager : Node
 		_totalKills += 1;
 
 		var scaledGold = Mathf.RoundToInt(gold * _goldMultiplier);
+		var fateGoldMult = _fateCardManager?.GetEffectValue("gold_gain_mult") ?? 0f;
+		if (fateGoldMult > 0f)
+		{
+			scaledGold = Mathf.RoundToInt(scaledGold * (1f + fateGoldMult / 100f));
+		}
 		if (_isDungeonMode)
 		{
 			var enemyLevel = _dungeon?.BaseEnemyLevel ?? 1;
@@ -454,7 +459,8 @@ public partial class RunManager : Node
 			return;
 
 		var wave = _waveManager?.CurrentWave ?? _stats.Wave;
-		foreach (var drop in DropTableResolver.RollDrops(enemyType, wave))
+		var lootBonus = _dungeon?.LootQualityBonus ?? 0;
+		foreach (var drop in DropTableResolver.RollDrops(enemyType, wave, lootBonus))
 			SpawnItemPickup(drop, position);
 	}
 

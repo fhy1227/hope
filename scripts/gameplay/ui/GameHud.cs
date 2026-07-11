@@ -145,7 +145,7 @@ public partial class GameHud : Control
         _statRangeLabel.Text = FormatStatWithBonus("射程", stats.WeaponRange, bonus, NumericType.WeaponRange, "0");
         _statProjectileSpeedLabel.Text = FormatStatWithBonus("弹道", stats.ProjectileSpeed, bonus, NumericType.ProjectileSpeed, "0");
         _statCritLabel.Text = FormatBonusOnlyStat("暴击", bonus, NumericType.Crit);
-        _statArmorLabel.Text = FormatBonusOnlyStat("护甲", bonus, NumericType.Armor, "0");
+        _statArmorLabel.Text = FormatStatWithBonus("护甲", stats.Armor, bonus, NumericType.Armor, "0");
     }
 
     private static string FormatStatWithBonus(

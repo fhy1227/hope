@@ -172,6 +172,7 @@ public partial class NumericComponent : Node
         SetRaw(NumericType.MoveSpeed, stats.Speed);
         SetRaw(NumericType.WeaponRange, stats.WeaponRange);
         SetRaw(NumericType.ProjectileSpeed, stats.ProjectileSpeed);
+        SetRaw(NumericType.Armor, stats.Armor);
         InitOriNumeric();
     }
 
@@ -183,6 +184,7 @@ public partial class NumericComponent : Node
         stats.Speed = this[NumericType.MoveSpeed];
         stats.WeaponRange = this[NumericType.WeaponRange];
         stats.ProjectileSpeed = this[NumericType.ProjectileSpeed];
+        stats.Armor = (int)this[NumericType.Armor];
     }
 
     public void UpdateBaseFromRunStats(RunStats stats)
@@ -193,6 +195,7 @@ public partial class NumericComponent : Node
         _oriNumeric[NumericType.MoveSpeed] = stats.Speed;
         _oriNumeric[NumericType.WeaponRange] = stats.WeaponRange;
         _oriNumeric[NumericType.ProjectileSpeed] = stats.ProjectileSpeed;
+        _oriNumeric[NumericType.Armor] = stats.Armor;
     }
 
     public void InitFromConfig(int maxHealth, float moveSpeed, float damage, bool refillHealth = true)

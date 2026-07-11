@@ -29,6 +29,9 @@ public class RunStats
     /// <summary>本局累计金币。</summary>
     public int Gold { get; set; }
 
+    /// <summary>护甲（命运织机等对局成长；装备护甲另行叠加）。</summary>
+    public int Armor { get; set; }
+
     /// <summary>当前波次，从 1 起计。</summary>
     public int Wave { get; set; }
 
@@ -45,6 +48,7 @@ public class RunStats
             ProjectileSpeed = ProjectileSpeed,
             WeaponRange = WeaponRange,
             Gold = Gold,
+            Armor = Armor,
             Wave = Wave,
         };
     }

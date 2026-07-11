@@ -18,6 +18,7 @@ public partial class PlayerStatsComponent : Node
         NumericType.MoveSpeed,
         NumericType.WeaponRange,
         NumericType.ProjectileSpeed,
+        NumericType.Armor,
     ];
 
     [Export]

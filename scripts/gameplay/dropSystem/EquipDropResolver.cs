@@ -13,7 +13,7 @@ public static class EquipDropResolver
     /// <summary>
     /// 按敌型与波次结算装备掉落（item_id=0 的规则走 D4 算法）。
     /// </summary>
-    public static List<ItemInstance> RollEquipment(string enemyType, int wave)
+    public static List<ItemInstance> RollEquipment(string enemyType, int wave, int lootQualityBonus = 0)
     {
         var results = new List<ItemInstance>();
 
@@ -25,7 +25,7 @@ public static class EquipDropResolver
             if (entry.ItemId > 0)
                 continue;
 
-            var ctx = DropContext.FromWave(enemyType, wave, entry.DropRate, entry.Rarity);
+            var ctx = DropContext.FromWave(enemyType, wave, entry.DropRate, entry.Rarity, lootQualityBonus);
             var drops = RollEntry(ctx, entry.MinCount, entry.MaxCount);
 
             foreach (var item in drops)

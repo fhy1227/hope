@@ -4,6 +4,7 @@ using Hope.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 namespace Hope.Systems;
 
@@ -83,6 +84,7 @@ public partial class FateCardManager : Node
         _ownedCardCodes.Add(card.CardCode);
         AccumulateEffect(card.EffectType, card.EffectValue);
         ApplyStatLikeEffect(card.EffectType, card.EffectValue, stats);
+        ApplyExtraParams(card.ExtraParams, stats);
 
         EventBus.Instance?.EmitFateCardSelected(cardId, card.CardCode);
         TryActivateChains(stats);
@@ -254,10 +256,43 @@ public partial class FateCardManager : Node
             case "stat_move_speed":
                 stats.Speed *= 1f + (value / 100f);
                 break;
+            case "stat_armor":
+                stats.Armor += Mathf.RoundToInt(value);
+                break;
+            case "gold_gain_mult":
+                // 仅累加到 _effectAccumulators，由 RunManager 结算金币时读取
+                break;
             case "instant_gold":
                 stats.Gold += Mathf.RoundToInt(value);
                 EventBus.Instance?.EmitGoldChanged(stats.Gold);
                 break;
+        }
+    }
+
+    private void ApplyExtraParams(string extraParams, RunStats stats)
+    {
+        if (string.IsNullOrWhiteSpace(extraParams) || extraParams == "null")
+        {
+            return;
+        }
+
+        try
+        {
+            using var doc = JsonDocument.Parse(extraParams);
+            foreach (var prop in doc.RootElement.EnumerateObject())
+            {
+                if (!prop.Value.TryGetSingle(out var value))
+                {
+                    continue;
+                }
+
+                AccumulateEffect(prop.Name, value);
+                ApplyStatLikeEffect(prop.Name, value, stats);
+            }
+        }
+        catch (JsonException ex)
+        {
+            GD.PushWarning($"[FateCardManager] 无法解析 extra_params: {extraParams} ({ex.Message})");
         }
     }
 

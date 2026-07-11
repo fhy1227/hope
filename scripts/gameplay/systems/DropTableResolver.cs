@@ -20,9 +20,9 @@ public static class DropTableResolver
 	}
 
 	/// <summary>
-	/// 按 enemy_type 匹配掉落规则并掷骰，返回应掉落的物品列表。
+	/// 按敌型与波次结算掉落（item_id=0 走 D4 装备生成；item_id&gt;0 为固定物品）。
 	/// </summary>
-	public static List<DropResult> RollDrops(string enemyType, int wave = 1)
+	public static List<DropResult> RollDrops(string enemyType, int wave = 1, int lootQualityBonus = 0)
 	{
 		var results = new List<DropResult>();
 
@@ -33,7 +33,7 @@ public static class DropTableResolver
 
 			if (entry.ItemId == 0)
 			{
-				foreach (var instance in EquipDropResolver.RollEquipment(enemyType, wave))
+				foreach (var instance in EquipDropResolver.RollEquipment(enemyType, wave, lootQualityBonus))
 				{
 					results.Add(new DropResult
 					{
