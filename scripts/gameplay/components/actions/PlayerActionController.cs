@@ -133,10 +133,10 @@ public partial class PlayerActionController : Node
         EventBus.Instance?.EmitPlayerActionEnded((int)id);
     }
 
-    /// <summary>组装本帧 <see cref="PlayerActionContext"/>，含移动输入与缓存朝向。</summary>
+    /// <summary>组装本帧 <see cref="PlayerActionContext"/>，含鼠标移动方向与缓存朝向。</summary>
     private PlayerActionContext BuildContext()
     {
-        var input = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+        var input = PlayerMoveInput.GetDirection(_player);
         return new PlayerActionContext
         {
             Player = _player,

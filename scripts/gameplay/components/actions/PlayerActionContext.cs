@@ -15,7 +15,7 @@ public readonly struct PlayerActionContext
     /// <summary>调度本行为的 Controller，用于 Notify 与格挡转发。</summary>
     public PlayerActionController Controller { get; init; }
 
-    /// <summary>本帧移动输入向量（未归一化）；无输入时接近零向量。</summary>
+    /// <summary>本帧移动方向（归一化）；按住鼠标左键时朝鼠标世界坐标，否则为零向量。</summary>
     public Vector2 InputDirection { get; init; }
 
     /// <summary>最近一次有效移动方向（归一化）；无输入时用于决定默认朝向。</summary>

@@ -117,7 +117,7 @@ public partial class Player : CharacterBody2D
 	{
 		_invincibilityTimer = Mathf.Max(_invincibilityTimer - (float)delta, 0f);
 
-		var input = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+		var input = PlayerMoveInput.GetDirection(this);
 		_actions.SetLastMoveDirection(input);
 		_actions.UpdateActions(delta);
 
@@ -201,7 +201,7 @@ public partial class Player : CharacterBody2D
 
 		public void Update(double delta)
 		{
-			var input = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+			var input = PlayerMoveInput.GetDirection(_player);
 			if (input != Vector2.Zero)
 			{
 				_player.ChangePlayerState("move");
@@ -228,7 +228,7 @@ public partial class Player : CharacterBody2D
 
 		public void Update(double delta)
 		{
-			var input = Input.GetVector("move_left", "move_right", "move_up", "move_down");
+			var input = PlayerMoveInput.GetDirection(_player);
 			if (input == Vector2.Zero)
 			{
 				_player.ChangePlayerState("idle");
