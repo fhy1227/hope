@@ -13,7 +13,9 @@ public static class SkillEffectResolver
         SkillDefinition def,
         int rank,
         Node2D caster,
-        Vector2? aimPosition = null)
+        Vector2? aimPosition = null,
+        float radiusScale = 1f,
+        float rangeScale = 1f)
     {
         var effect = def.EffectResource;
         if (effect == null || caster == null)
@@ -23,7 +25,8 @@ public static class SkillEffectResolver
 
         var origin = caster.GlobalPosition;
         var aim = aimPosition ?? origin + Vector2.Right * 80f;
-        var radius = effect.Radius + (rank - 1) * 5f;
+        var radius = (effect.Radius + (rank - 1) * 5f) * radiusScale;
+        var range = effect.Range * rangeScale;
 
         var enemies = caster.GetTree().GetNodesInGroup("enemies")
             .OfType<Enemy>()
@@ -32,7 +35,7 @@ public static class SkillEffectResolver
 
         List<Enemy> hits = effect.HitShape switch
         {
-            EHitShape.SingleTarget => PickNearest(enemies, aim, effect.Range),
+            EHitShape.SingleTarget => PickNearest(enemies, aim, range),
             EHitShape.Cone => FilterCone(enemies, origin, aim - origin, radius, effect.ConeAngle),
             _ => FilterCircle(enemies, origin, radius),
         };

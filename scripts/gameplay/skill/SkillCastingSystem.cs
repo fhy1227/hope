@@ -1,5 +1,6 @@
 using Godot;
 using Hope.Components.Actions;
+using Hope.Config;
 using Hope.Core;
 using Hope.Entities;
 using Hope.Systems;
@@ -143,19 +144,24 @@ public partial class SkillCastingSystem : Node
             FuryResourceSystem.Instance?.Spend(resourceCost);
         }
 
-        var cooldown = effect.GetCooldown(rank);
+        var modifiers = SkillEnhancementResolver.Resolve(def.SkillId, manager.State);
+        var cooldown = Mathf.Max(0.1f, effect.GetCooldown(rank) + modifiers.CooldownDelta);
         if (cooldown > 0f)
         {
             CooldownManager.Instance?.StartCooldown(def.SkillId, cooldown, slotIndex);
         }
 
-        ExecuteEffect(def, rank, slotState.AssignedSlot);
+        ExecuteEffect(def, rank, slotState.AssignedSlot, modifiers);
 
         EventBus.Instance?.EmitSkillCast(def.SkillId, rank, _player.GlobalPosition);
         return ESkillCastResult.Success;
     }
 
-    private void ExecuteEffect(SkillDefinition def, int rank, int slotIndex)
+    private void ExecuteEffect(
+        SkillDefinition def,
+        int rank,
+        int slotIndex,
+        SkillEffectModifiers modifiers)
     {
         if (_player == null || def.EffectResource == null)
         {
@@ -164,24 +170,47 @@ public partial class SkillCastingSystem : Node
 
         var effect = def.EffectResource;
         var weaponDamage = _player.GetActionDamage(1f);
-        var damage = Mathf.Max(1, Mathf.RoundToInt(effect.GetFinalDamage(rank, weaponDamage)));
-
-        if (effect.FuryGenerated > 0f)
+        var damage = effect.GetFinalDamage(rank, weaponDamage) * modifiers.DamageMult;
+        if (modifiers.DoubleDamageChance > 0f && GD.Randf() < modifiers.DoubleDamageChance)
         {
-            FuryResourceSystem.Instance?.Generate(effect.FuryGenerated);
+            damage *= 2f;
+        }
+
+        var damageInt = Mathf.Max(1, Mathf.RoundToInt(damage));
+
+        var furyGen = effect.FuryGenerated + modifiers.FuryBonus;
+        if (furyGen > 0f)
+        {
+            FuryResourceSystem.Instance?.Generate(furyGen);
         }
 
         var aim = _player.GlobalPosition + _player.FacingDirection * 80f;
-        var targets = SkillEffectResolver.ResolveTargets(def, rank, _player, aim);
+        var scaledRadius = effect.Radius * modifiers.RadiusMult;
+        var knockback = effect.KnockbackForce + modifiers.KnockbackBonus;
+        var targets = SkillEffectResolver.ResolveTargets(
+            def, rank, _player, aim, modifiers.RadiusMult, modifiers.RangeMult);
 
         if (targets.Count > 0)
         {
             foreach (var enemy in targets)
             {
-                enemy.TakeDamage(damage);
-                EventBus.Instance?.EmitSkillHit(def.SkillId, enemy, damage);
+                var hitDamage = damageInt;
+                if (modifiers.EliteDamageMult > 1f
+                    && enemy.EnemyType == ParamsConfig.EnemyTypeElite)
+                {
+                    hitDamage = Mathf.Max(1, Mathf.RoundToInt(hitDamage * modifiers.EliteDamageMult));
+                }
 
-                if (effect.KnockbackForce > 0f)
+                if (modifiers.EliteDamageMult > 1f
+                    && enemy.EnemyType == ParamsConfig.EnemyTypeBoss)
+                {
+                    hitDamage = Mathf.Max(1, Mathf.RoundToInt(hitDamage * modifiers.EliteDamageMult));
+                }
+
+                enemy.TakeDamage(hitDamage);
+                EventBus.Instance?.EmitSkillHit(def.SkillId, enemy, hitDamage);
+
+                if (knockback > 0f)
                 {
                     var dir = enemy.GlobalPosition - _player.GlobalPosition;
                     if (dir.LengthSquared() < 0.01f)
@@ -189,20 +218,20 @@ public partial class SkillCastingSystem : Node
                         dir = Vector2.Right;
                     }
 
-                    enemy.ApplyKnockback(dir.Normalized(), effect.KnockbackForce);
+                    enemy.ApplyKnockback(dir.Normalized(), knockback);
                 }
             }
         }
         else if (effect.HitShape is EHitShape.Circle or EHitShape.Cone)
         {
-            CombatPulse.HitCount(_player, effect.Radius, damage, effect.KnockbackForce);
+            CombatPulse.HitCount(_player, scaledRadius, damageInt, knockback);
         }
 
-        SpawnHitVfx(effect);
+        SpawnHitVfx(effect, scaledRadius);
         EventBus.Instance?.EmitSkillEnded(def.SkillId);
     }
 
-    private void SpawnHitVfx(SkillEffectResource effect)
+    private void SpawnHitVfx(SkillEffectResource effect, float scaledRadius)
     {
         if (_player == null)
         {
@@ -220,7 +249,7 @@ public partial class SkillCastingSystem : Node
 
             Combat.Instance?.World.GetNodeOrNull("Effects")?.AddChild(fx);
             fx.GlobalPosition = _player.GlobalPosition;
-            fx.Scale = Vector2.One * effect.Radius / 80f * effect.HitEffectScale;
+            fx.Scale = Vector2.One * scaledRadius / 80f * effect.HitEffectScale;
         }
     }
 
